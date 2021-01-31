@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -45,7 +46,7 @@ public class Drivetrain extends SubsystemBase {
 
     this.navX = new SmartNavX(); 
 
-    this.odometry = new DifferentialDriveOdometry(this.navX.getRotation2d());
+    this.odometry = new DifferentialDriveOdometry(this.getRotation2d());
 
     this.setEncodersDistancePerPulse();
     this.resetEncoders();
@@ -85,7 +86,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void updateOdometry() {
-    this.odometry.update(this.navX.getRotation2d(), this.encoderLeft.getDistance(), this.encoderRight.getDistance());
+    this.odometry.update(this.getRotation2d(), this.encoderLeft.getDistance(), this.encoderRight.getDistance());
   }
 
   public Pose2d getPose() {
@@ -96,6 +97,35 @@ public class Drivetrain extends SubsystemBase {
     var driveWheelSpeeds = new DifferentialDriveWheelSpeeds(this.encoderLeft.getRate(), this.encoderRight.getRate());
     
     return driveWheelSpeeds;
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    this.resetEncoders();
+    this.odometry.resetPosition(pose, this.getRotation2d());
+  }
+
+  public Encoder getEncoderLeft() {
+    return this.encoderLeft;
+  }
+
+  public Encoder getEncoderRight() {
+    return this.encoderRight;
+  }
+
+  public void setMaxOutput(double maxOutput) {
+    this.drive.setMaxOutput(maxOutput);
+  }
+
+  public double getHeading() {
+    return this.getRotation2d().getDegrees();
+  }
+
+  public Rotation2d getRotation2d() {
+    return this.navX.getRotation2d();
+  }
+
+  public double getTurnRate() {
+    return this.navX.getRate();
   }
 
   @Override

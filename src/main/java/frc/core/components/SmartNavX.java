@@ -22,4 +22,8 @@ public class SmartNavX {
     public Rotation2d getRotation2d() {
         return this.ahrs.getRotation2d();
     }
+
+    public double getRate() {
+        return -this.ahrs.getRate();
+    }
 }

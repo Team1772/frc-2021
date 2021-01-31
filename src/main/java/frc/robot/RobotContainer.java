@@ -1,7 +1,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.subsystems.Drivetrain;
@@ -37,6 +40,16 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+    var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+      new SimpleMotorFeedforward(
+        DrivetrainConstants.ksVolts,
+        DrivetrainConstants.kvVoltSecondsPerMeter,
+        DrivetrainConstants.kaVoltSecondsSquaredPerMeter
+      ),
+      DrivetrainConstants.kDriveKinematics,
+      DrivetrainConstants.differentialDriveVoltageConstraintMaxVoltage
+    );
+
     return null;
   }
 }
