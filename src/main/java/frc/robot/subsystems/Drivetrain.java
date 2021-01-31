@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.OIConstants;
 
 public class Drivetrain extends SubsystemBase {
   private SpeedControllerGroup motorsRight, motorsLeft;
@@ -31,38 +30,34 @@ public class Drivetrain extends SubsystemBase {
       DrivetrainConstants.encoderLeftPort[0],
       DrivetrainConstants.encoderLeftPort[1]
     );
-
-    var isEncoderRightInverted = true;
+ 
     this.encoderRight = new Encoder(
       DrivetrainConstants.encoderRightPort[0],
       DrivetrainConstants.encoderRightPort[1],
-      isEncoderRightInverted
+      DrivetrainConstants.isEncoderRightInverted
     );
 
     this.setEncodersDistancePerPulse();
+    this.resetEncoders();
   }
 
   public void arcadeDrive(double forward, double rotation) {
     this.drive.arcadeDrive(forward, rotation);
-    System.out.println("Forward: " + forward);
   }
 
   public void resetEncoders() {
-    System.out.println("entrou aqui");
     this.encoderLeft.reset();
     this.encoderRight.reset();
   }
 
   public void setEncodersDistancePerPulse() {
-    double wheelCircumferenceCentimeters = (Units.inchesToMeters(DrivetrainConstants.wheelRadius) * 100) * 2 * Math.PI;
-    double pulsesRight = 498;
-    double pulsesLeft = 494;
+    var wheelCircumferenceCentimeters = (Units.inchesToMeters(DrivetrainConstants.wheelRadius) * 100) * 2 * Math.PI;
 
-    SmartDashboard.putNumber("wheel circumference", wheelCircumferenceCentimeters);
-    SmartDashboard.putNumber("wheel radius", Units.inchesToMeters(DrivetrainConstants.wheelRadius));
+    var distancePerPulseLeft = wheelCircumferenceCentimeters / (double) DrivetrainConstants.pulsesLeft;
+    var distancePerPulseRight = wheelCircumferenceCentimeters / (double) DrivetrainConstants.pulsesRight;
 
-    this.encoderLeft.setDistancePerPulse(wheelCircumferenceCentimeters / pulsesLeft);
-    this.encoderRight.setDistancePerPulse(wheelCircumferenceCentimeters / pulsesRight);
+    this.encoderLeft.setDistancePerPulse(distancePerPulseLeft);
+    this.encoderRight.setDistancePerPulse(distancePerPulseRight);
   }
 
   public double getAverageDistance() {
