@@ -4,15 +4,19 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.core.components.SmartNavX;
 import frc.robot.Constants.DrivetrainConstants;
 
 public class Drivetrain extends SubsystemBase {
-  private SpeedControllerGroup motorsRight, motorsLeft;
-  private DifferentialDrive drive;
-  private Encoder encoderRight, encoderLeft;
+  private final SpeedControllerGroup motorsRight, motorsLeft;
+  private final DifferentialDrive drive;
+  private final Encoder encoderRight, encoderLeft;
+  private final SmartNavX navX; 
+  private final DifferentialDriveOdometry odometry;
 
   public Drivetrain() {
     this.motorsRight = new SpeedControllerGroup(
@@ -36,6 +40,10 @@ public class Drivetrain extends SubsystemBase {
       DrivetrainConstants.encoderRightPort[1],
       DrivetrainConstants.isEncoderRightInverted
     );
+
+    this.navX = new SmartNavX(); 
+
+    this.odometry = new DifferentialDriveOdometry(this.navX.getRotation2d());
 
     this.setEncodersDistancePerPulse();
     this.resetEncoders();
@@ -64,6 +72,14 @@ public class Drivetrain extends SubsystemBase {
     var averageDistance = (this.encoderLeft.getDistance() + this.encoderRight.getDistance()) / 2.0;
     
     return averageDistance;
+  }
+
+  public double getAngle() {
+    return this.navX.getAngle();
+  }
+
+  public void reset() {
+    this.navX.reset();
   }
 
   @Override
