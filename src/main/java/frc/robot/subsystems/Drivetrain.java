@@ -128,6 +128,12 @@ public class Drivetrain extends SubsystemBase {
     return this.navX.getRate();
   }
 
+  public void tankDriveVolts(double rightVolts, double leftVolts) {
+    this.motorsLeft.setVoltage(leftVolts);
+    this.motorsRight.setVoltage(-(rightVolts));
+    this.drive.feed();
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Encoder left", encoderLeft.get());

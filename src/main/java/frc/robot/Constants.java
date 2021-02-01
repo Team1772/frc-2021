@@ -25,9 +25,23 @@ public final class Constants {
         public static final double kTrackwidthMeters = 0;
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
         public static final double differentialDriveVoltageConstraintMaxVoltage = 10;
+
+        //PID
+        public static final double kPDriveVelocity = 0;
+        public static final double kIDriveVelocity = 0;
+        public static final double kDDriveVelocity = 0;   
     }
 
     public static final class OIConstants {
         public static final int driverControllerPort = 0;
+    }
+
+    public static final class AutoConstants {
+        public static final double kMaxSpeedMetersPerSecond = 2;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 2;
+        public static final double kRamseteB = 2;
+        public static final double kRamseteZeta = 0.7;
+
+
     }
 }

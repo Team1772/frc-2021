@@ -24,6 +24,6 @@ public class SmartNavX {
     }
 
     public double getRate() {
-        return -this.ahrs.getRate();
+        return -(this.ahrs.getRate());
     }
 }
