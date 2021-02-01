@@ -21,6 +21,7 @@ public class Drivetrain extends SubsystemBase {
   private final SmartNavX navX; 
   private final DifferentialDriveOdometry odometry;
 
+  //constructor
   public Drivetrain() {
     this.motorsRight = new SpeedControllerGroup(
       new VictorSP(DrivetrainConstants.motorRightPort[0]), 
@@ -52,6 +53,7 @@ public class Drivetrain extends SubsystemBase {
     this.resetEncoders();
   }
 
+  //helpers
   public void arcadeDrive(double forward, double rotation) {
     this.drive.arcadeDrive(forward, rotation);
   }
@@ -61,16 +63,30 @@ public class Drivetrain extends SubsystemBase {
     this.encoderRight.reset();
   }
 
-  public void setEncodersDistancePerPulse() {
-    var wheelCircumferenceMeters = Units.inchesToMeters(DrivetrainConstants.wheelRadius) * 2 * Math.PI;
-
-    var distancePerPulseLeft = wheelCircumferenceMeters / (double) DrivetrainConstants.pulsesLeft;
-    var distancePerPulseRight = wheelCircumferenceMeters / (double) DrivetrainConstants.pulsesRight;
-
-    this.encoderLeft.setDistancePerPulse(distancePerPulseLeft);
-    this.encoderRight.setDistancePerPulse(distancePerPulseRight);
+  public void reset() {
+    this.navX.reset();
   }
 
+  public void updateOdometry() {
+    this.odometry.update(
+      this.getRotation2d(), 
+      this.encoderLeft.getDistance(), 
+      this.encoderRight.getDistance()
+    );
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    this.resetEncoders();
+    this.odometry.resetPosition(pose, this.getRotation2d());
+  }
+
+  public void tankDriveVolts(double rightVolts, double leftVolts) {
+    this.motorsLeft.setVoltage(leftVolts);
+    this.motorsRight.setVoltage(-(rightVolts));
+    this.drive.feed();
+  }
+
+  //getters
   public double getAverageDistance() {
     var averageDistance = (this.encoderLeft.getDistance() + this.encoderRight.getDistance()) / 2.0;
     
@@ -81,27 +97,17 @@ public class Drivetrain extends SubsystemBase {
     return this.navX.getAngle();
   }
 
-  public void reset() {
-    this.navX.reset();
-  }
-
-  public void updateOdometry() {
-    this.odometry.update(this.getRotation2d(), this.encoderLeft.getDistance(), this.encoderRight.getDistance());
-  }
-
   public Pose2d getPose() {
     return this.odometry.getPoseMeters();
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    var driveWheelSpeeds = new DifferentialDriveWheelSpeeds(this.encoderLeft.getRate(), this.encoderRight.getRate());
+    var driveWheelSpeeds = new DifferentialDriveWheelSpeeds(
+      this.encoderLeft.getRate(), 
+      this.encoderRight.getRate()
+    );
     
     return driveWheelSpeeds;
-  }
-
-  public void resetOdometry(Pose2d pose) {
-    this.resetEncoders();
-    this.odometry.resetPosition(pose, this.getRotation2d());
   }
 
   public Encoder getEncoderLeft() {
@@ -110,10 +116,6 @@ public class Drivetrain extends SubsystemBase {
 
   public Encoder getEncoderRight() {
     return this.encoderRight;
-  }
-
-  public void setMaxOutput(double maxOutput) {
-    this.drive.setMaxOutput(maxOutput);
   }
 
   public double getHeading() {
@@ -128,10 +130,19 @@ public class Drivetrain extends SubsystemBase {
     return this.navX.getRate();
   }
 
-  public void tankDriveVolts(double rightVolts, double leftVolts) {
-    this.motorsLeft.setVoltage(leftVolts);
-    this.motorsRight.setVoltage(-(rightVolts));
-    this.drive.feed();
+  //setters
+  public void setMaxOutput(double maxOutput) {
+    this.drive.setMaxOutput(maxOutput);
+  }
+
+  public void setEncodersDistancePerPulse() {
+    var wheelCircumferenceMeters = Units.inchesToMeters(DrivetrainConstants.wheelRadius) * 2 * Math.PI;
+
+    var distancePerPulseLeft = wheelCircumferenceMeters / (double) DrivetrainConstants.pulsesLeft;
+    var distancePerPulseRight = wheelCircumferenceMeters / (double) DrivetrainConstants.pulsesRight;
+
+    this.encoderLeft.setDistancePerPulse(distancePerPulseLeft);
+    this.encoderRight.setDistancePerPulse(distancePerPulseRight);
   }
 
   @Override

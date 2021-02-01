@@ -24,10 +24,13 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
 public class RobotContainer {
 
+  //subsystems
   private final Drivetrain drivetrain;
 
+  //controller
   private final XboxController driver;
 
+  //constructor
   public RobotContainer() {
     this.drivetrain = new Drivetrain();
 
@@ -37,6 +40,7 @@ public class RobotContainer {
     this.configureDefaultCommand();
   }
 
+  //configure commands
   private void configureDefaultCommand() {
     this.drivetrain.setDefaultCommand(
       new ArcadeDrive(
