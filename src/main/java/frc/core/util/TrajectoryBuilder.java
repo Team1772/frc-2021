@@ -1,17 +1,17 @@
 package frc.core.util;
 
-import java.util.List;
+import static java.util.Objects.isNull;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Constants.AutoConstants;
@@ -24,8 +24,6 @@ public class TrajectoryBuilder {
 
     //attributes
     private final SimpleMotorFeedforward simpleMotorFeedforward;
-    private final DifferentialDriveVoltageConstraint autoVoltageConstraint;
-    private final TrajectoryConfig trajectoryConfig;
     private final PIDController pidController;
     private final RamseteController ramseteController;
 
@@ -33,47 +31,18 @@ public class TrajectoryBuilder {
     private RamseteCommand ramseteCommand;
 
     //constructor
-    public TrajectoryBuilder() {
-        this.drivetrain = new Drivetrain();
-
+    public TrajectoryBuilder(Drivetrain drivetrain) {
+        this.drivetrain = drivetrain;
         this.simpleMotorFeedforward = new SimpleMotorFeedforward(
             DrivetrainConstants.ksVolts,
             DrivetrainConstants.kvVoltSecondsPerMeter,
             DrivetrainConstants.kaVoltSecondsSquaredPerMeter
         );
-
-        this.autoVoltageConstraint =  new DifferentialDriveVoltageConstraint(
-            this.simpleMotorFeedforward,
-            DrivetrainConstants.kDriveKinematics,
-            DrivetrainConstants.differentialDriveVoltageConstraintMaxVoltage
-        );
-
-        this.trajectoryConfig = new TrajectoryConfig(
-            AutoConstants.kMaxSpeedMetersPerSecond,
-            AutoConstants.kMaxAccelerationMetersPerSecondSquared
-        )
-        .setKinematics(DrivetrainConstants.kDriveKinematics)
-        .addConstraint(this.autoVoltageConstraint);
-
-        /* 
-         * this is a hard coded trajectory, 
-         * it must be instanciated to prevent NullPointerException.
-         * 
-         * You can use the method setTrajectory() for a custom trajectory
-         */
-        this.trajectory = TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, new Rotation2d(0)),
-            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-            new Pose2d(3, 0, new Rotation2d(0)),
-            this.trajectoryConfig
-        );
-
         this.pidController = new PIDController(
             DrivetrainConstants.kPDriveVelocity, 
             DrivetrainConstants.kIDriveVelocity, 
             DrivetrainConstants.kDDriveVelocity
         );
-
         this.ramseteController = new RamseteController(
             AutoConstants.kRamseteB, 
             AutoConstants.kRamseteZeta
@@ -81,9 +50,14 @@ public class TrajectoryBuilder {
     }
 
     //autonomous commands
+
+    /*
+     * This method was not updated. For the next commits,
+     * we need to handle this.
+     */
     public Command getAutonomousCommand() {
-        if (this.ramseteCommand == null) {
-            this.setDefaultRamseteCommand();
+        if (isNull(this.ramseteCommand)) {
+            this.setRamseteCommand(this.trajectory);
         }
         
         this.drivetrain.resetOdometry(this.trajectory.getInitialPose());
@@ -101,41 +75,25 @@ public class TrajectoryBuilder {
     }
 
     //setters
-    public void setTrajectory(
-        Pose2d initialPosition, 
-        List<Translation2d> listOfCommands, 
-        Pose2d finalPosition 
-    )
-    {
-        this.trajectory = TrajectoryGenerator.generateTrajectory(
-            initialPosition,
-            listOfCommands,
-            finalPosition,
-            this.trajectoryConfig
-        );
+    public void setTrajectory(String localPath) {
+        String trajectoryJSON = localPath;
+        try {
+            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+            this.trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+        } catch (IOException ex) {
+            DriverStation.reportError(
+                "Unable to open trajectory: " + trajectoryJSON, 
+                ex.getStackTrace()
+            );
+        }
     }
 
-    public void setTrajectoryWithCustomConfig(
-        Pose2d initialPosition, 
-        List<Translation2d> listOfCommands, 
-        Pose2d finalPosition, 
-        TrajectoryConfig trajectoryConfig
-    ) 
-    {
-        this.trajectory = TrajectoryGenerator.generateTrajectory(
-            initialPosition,
-            listOfCommands,
-            finalPosition,
-            trajectoryConfig
-        );
-    }
-
-    public void setDefaultRamseteCommand(){
-        if (this.trajectory == null) {
-            System.err.println("TRAJECTORY IS NULL, YOU MUST SET A TRAJECTORY IN CONSTRUCTOR");
+    public void setRamseteCommand(Trajectory trajectory){
+        if (isNull(this.trajectory)) {
+            System.err.println("trajectory is null, it must be a not null value");
         } else {
             this.ramseteCommand = new RamseteCommand(
-                this.trajectory,
+                trajectory,
                 this.drivetrain::getPose,
                 this.ramseteController,
                 this.simpleMotorFeedforward,
