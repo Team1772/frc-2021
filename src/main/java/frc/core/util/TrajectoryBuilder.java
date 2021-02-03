@@ -20,7 +20,7 @@ import frc.robot.subsystems.Drivetrain;
 
 public class TrajectoryBuilder {
     //subsystems
-    private final Drivetrain drivetrain;
+    private Drivetrain drivetrain;
 
     //attributes
     private final SimpleMotorFeedforward simpleMotorFeedforward;
@@ -31,7 +31,8 @@ public class TrajectoryBuilder {
     private RamseteCommand ramseteCommand;
 
     //constructor
-    public TrajectoryBuilder(Drivetrain drivetrain) {
+    public TrajectoryBuilder(Trajectory trajectory, Drivetrain drivetrain) {
+        this.trajectory = trajectory;
         this.drivetrain = drivetrain;
         this.simpleMotorFeedforward = new SimpleMotorFeedforward(
             DrivetrainConstants.ksVolts,
@@ -47,53 +48,20 @@ public class TrajectoryBuilder {
             AutoConstants.kRamseteB, 
             AutoConstants.kRamseteZeta
         );
+
+        this.createRamsete();
     }
 
-    //autonomous commands
-
-    /*
-     * This method was not updated. For the next commits,
-     * we need to handle this.
-     */
-    public Command getAutonomousCommand() {
-        if (isNull(this.ramseteCommand)) {
-            this.setRamseteCommand(this.trajectory);
-        }
-        
-        this.drivetrain.resetOdometry(this.trajectory.getInitialPose());
-    
-        return this.ramseteCommand.andThen(() -> this.drivetrain.tankDriveVolts(0, 0));
-    }
-
-    //getters
-    public Trajectory getTrajectory(){
-        return this.trajectory;
-    }
-
-    public RamseteCommand getRamseteCommand() {
-        return this.ramseteCommand;
-    }
-
-    //setters
-    public void setTrajectory(String localPath) {
-        String trajectoryJSON = localPath;
-        try {
-            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-            this.trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-        } catch (IOException ex) {
-            DriverStation.reportError(
-                "Unable to open trajectory: " + trajectoryJSON, 
-                ex.getStackTrace()
-            );
-        }
-    }
-
-    public void setRamseteCommand(Trajectory trajectory){
+    //helpers
+    public void createRamsete(){
         if (isNull(this.trajectory)) {
-            System.err.println("trajectory is null, it must be a not null value");
+            DriverStation.reportError(
+                "trajectory is null", 
+                new Exception().getStackTrace()
+            );
         } else {
             this.ramseteCommand = new RamseteCommand(
-                trajectory,
+                this.trajectory,
                 this.drivetrain::getPose,
                 this.ramseteController,
                 this.simpleMotorFeedforward,
@@ -103,6 +71,37 @@ public class TrajectoryBuilder {
                 this.pidController, 
                 this.drivetrain::tankDriveVolts, 
                 this.drivetrain
+            );
+
+            this.drivetrain.resetOdometry(this.trajectory.getInitialPose());
+        }
+    }
+
+    public Command resetTankDriveVolts() {
+        return this.ramseteCommand.andThen(
+            () -> this.drivetrain.tankDriveVolts(0, 0)
+        );
+    }
+
+    //getters
+    public Trajectory getTrajectory(){
+        return this.trajectory;
+    }
+
+    public RamseteCommand getRamsete() {
+        return this.ramseteCommand;
+    }
+
+    //setters
+    public void setTrajectory(String fileName) {
+        String path = String.format("paths\\%s.wpilib.json", fileName);
+        try {
+            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path);
+            this.trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+        } catch (IOException ex) {
+            DriverStation.reportError(
+                String.format("Unable to open trajectory: %s", path), 
+                ex.getStackTrace()
             );
         }
     }
