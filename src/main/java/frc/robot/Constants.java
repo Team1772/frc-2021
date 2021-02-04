@@ -35,12 +35,14 @@ public final class Constants {
 
         public static final DifferentialDriveKinematics
         kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
-
+        
         //PID
-        public static final double 
-        kPDriveVelocity = 0,
-        kIDriveVelocity = 0,
-        kDDriveVelocity = 0;   
+        public static final class PIDConstants {
+            public static final double 
+            kPDriveVelocity = 0,
+            kIDriveVelocity = 0,
+            kDDriveVelocity = 0;  
+        }
     }
 
     public static final class OIConstants {

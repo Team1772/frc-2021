@@ -40,9 +40,9 @@ public class TrajectoryBuilder {
             DrivetrainConstants.kaVoltSecondsSquaredPerMeter
         );
         this.pidController = new PIDController(
-            DrivetrainConstants.kPDriveVelocity, 
-            DrivetrainConstants.kIDriveVelocity, 
-            DrivetrainConstants.kDDriveVelocity
+            DrivetrainConstants.PIDConstants.kPDriveVelocity,
+            DrivetrainConstants.PIDConstants.kIDriveVelocity,
+            DrivetrainConstants.PIDConstants.kDDriveVelocity
         );
         this.ramseteController = new RamseteController(
             AutoConstants.kRamseteB, 

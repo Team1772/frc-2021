@@ -83,9 +83,9 @@ public class RobotContainer {
     );
 
     var pidController = new PIDController(
-      DrivetrainConstants.kPDriveVelocity, 
-      DrivetrainConstants.kIDriveVelocity, 
-      DrivetrainConstants.kDDriveVelocity
+      DrivetrainConstants.PIDConstants.kPDriveVelocity,
+      DrivetrainConstants.PIDConstants.kIDriveVelocity,
+      DrivetrainConstants.PIDConstants.kDDriveVelocity
     );
 
     var ramseteCommand = new RamseteCommand(
