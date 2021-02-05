@@ -8,12 +8,13 @@ public class Gains {
 	public final int kIzone;
 	public final double kPeakOutput;
 	
-	public Gains(double _kP, double _kI, double _kD, double _kF, int _kIzone, double _kPeakOutput){
-		kP = _kP;
-		kI = _kI;
-		kD = _kD;
-		kF = _kF;
-		kIzone = _kIzone;
-		kPeakOutput = _kPeakOutput;
+	//constructor
+	public Gains(double kP, double kI, double kD, double kF, int kIzone, double kPeakOutput){
+		this.kP = kP;
+		this.kI = kI;
+		this.kD = kD;
+		this.kF = kF;
+		this.kIzone = kIzone;
+		this.kPeakOutput = kPeakOutput;
 	}
 }
