@@ -5,10 +5,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.core.components.SmartSolenoid;
 import frc.robot.Constants.IntakeConstants;
 
-
 public class Intake extends SubsystemBase {
-  private  VictorSP motor;
-  private  SmartSolenoid intakeActivator;
+  private VictorSP motor;
+  private SmartSolenoid intakeActivator;
   
   public Intake() {
     this.motor = new VictorSP(IntakeConstants.motorPort);
@@ -21,13 +20,13 @@ public class Intake extends SubsystemBase {
 
   public void enableIntake(){
     this.intakeActivator.enable();
-
   }
 
   public void disableIntake(){
     this.intakeActivator.disable();
   }
+
+  public void toggleIntake(){
+    this.intakeActivator.toggle();
+  }
 }
-
-
-

@@ -18,6 +18,6 @@ public class SmartSolenoid {
     }
     
     public void toggle() {
-        this.solenoid.toggle();   
-    }
+        this.solenoid.toggle();      
+    }   
 }
