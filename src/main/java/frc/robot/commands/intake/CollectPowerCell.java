@@ -14,7 +14,7 @@ public class CollectPowerCell extends CommandBase {
     
     @Override
     public void execute() {
-        this.intake.enableIntake();
+        this.intake.enable();
         this.intake.setSpeed(1);
     }
 }

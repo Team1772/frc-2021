@@ -43,6 +43,7 @@ public class RobotContainer {
 
     this.driver = new XboxController(OIConstants.driverControllerPort);
     this.operator = new XboxController(OIConstants.operatorControllerPort);
+    
     this.configureButtonBindings();
     this.configureDefaultCommand();
   }

@@ -14,7 +14,6 @@ public class Actuator extends CommandBase {
     
     @Override
     public void execute(){
-        this.intake.setSpeed(0);
-        this.intake.toggleIntake();
+        this.intake.toggle();
     }
 }

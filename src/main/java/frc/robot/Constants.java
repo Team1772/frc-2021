@@ -46,8 +46,8 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final int
         motorPort = 4,
-        intakeActivatorOne = 0,   
-        intakeActivatorTwo = 1;
+        activatorOne = 0,   
+        activatorTwo = 1;
     }
 
     public static final class OIConstants {

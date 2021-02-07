@@ -7,26 +7,26 @@ import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
   private VictorSP motor;
-  private SmartSolenoid intakeActivator;
+  private SmartSolenoid activator;
   
   public Intake() {
     this.motor = new VictorSP(IntakeConstants.motorPort);
-    this.intakeActivator = new SmartSolenoid(IntakeConstants.intakeActivatorOne, IntakeConstants.intakeActivatorTwo);
+    this.activator = new SmartSolenoid(IntakeConstants.activatorOne, IntakeConstants.activatorTwo);
   }
 
   public void setSpeed(double speed) {
     this.motor.set(speed);
   }
 
-  public void enableIntake(){
-    this.intakeActivator.enable();
+  public void enable(){
+    this.activator.enable();
   }
 
-  public void disableIntake(){
-    this.intakeActivator.disable();
+  public void disable(){
+    this.activator.disable();
   }
 
-  public void toggleIntake(){
-    this.intakeActivator.toggle();
+  public void toggle(){
+    this.activator.toggle();
   }
 }
