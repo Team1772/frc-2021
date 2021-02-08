@@ -10,7 +10,7 @@ public class Limelight {
         TX("tx"),
         TY("ty"),
         TA("ta"),
-        TV("tv")
+        TV("tv"),
         PIPELINE("pipeline"),
         LED_MODE("ledMode"),
         CAM_MODE("camMode");
