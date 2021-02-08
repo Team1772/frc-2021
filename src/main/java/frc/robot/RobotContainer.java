@@ -17,11 +17,19 @@ import java.util.List;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.BufferConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.intake.Actuator;
+import frc.robot.commands.intake.CollectPowerCell;
+import frc.robot.commands.intake.ReleasePowerCell;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
+import frc.robot.commands.buffer.Feed;
+import frc.robot.commands.buffer.RollBack;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Buffer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -31,6 +39,7 @@ public class RobotContainer {
   //subsystems
   private final Drivetrain drivetrain;
   private final Intake intake;
+  private final Buffer buffer;
 
   //controller
   private final XboxController driver;
@@ -40,6 +49,7 @@ public class RobotContainer {
   public RobotContainer() {
     this.drivetrain = new Drivetrain();
     this.intake = new Intake();
+    this.buffer = new Buffer();
 
     this.driver = new XboxController(OIConstants.driverControllerPort);
     this.operator = new XboxController(OIConstants.operatorControllerPort);

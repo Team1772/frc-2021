@@ -50,6 +50,11 @@ public final class Constants {
         activatorTwo = 1;
     }
 
+    public static final class BufferConstants {
+        public static final int
+        motorPort = 0;
+    }
+
     public static final class OIConstants {
         public static final int
         driverControllerPort = 0,
