@@ -41,8 +41,19 @@ public final class Constants {
             public static final double 
             kPDriveVelocity = 0,
             kIDriveVelocity = 0,
-            kDDriveVelocity = 0;  
+            kDDriveVelocity = 0;
+
+            public static final int
+            kPIDLoopIdx = 0,
+            kTimeoutMs = 30; 
         }
+    }
+    
+    public static final class IntakeConstants {
+        public static final int
+        motorPort = 4,
+        activatorOne = 0,   
+        activatorTwo = 1;
     }
 
     public static final class OIConstants {

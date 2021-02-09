@@ -7,36 +7,35 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TalonVelocity extends PIDTalon {
 
-    //constructor
     public TalonVelocity(
         TalonSRX motor, 
         TalonSRX follower, 
-        int kPIDLoopIdx, 
-        int kTimeoutMs, 
         boolean kSensorPhase,
+        boolean kFollowerInverted,
         double nominalOutputForwardValue, 
         double nominalOutputReverseValue, 
         double peakOutputForwardValue,
         double peakOutputReverseValue, 
-        boolean kMotorInvert
+        boolean kMotorInvert,
+        Gains gains,
+        TalonSRX... followers
     )
     {
         super(
             motor, 
             follower, 
-            kPIDLoopIdx, 
-            kTimeoutMs, 
             kSensorPhase,
+            kFollowerInverted,
             nominalOutputForwardValue,
             nominalOutputReverseValue, 
             peakOutputForwardValue, 
             peakOutputReverseValue, 
             kMotorInvert, 
-            null
+            gains,
+            followers
         );
     }
     
-    //getters
     public double getSensorVelocity(){
         SmartDashboard.putNumber(
             "Motor velocity", 
@@ -46,8 +45,11 @@ public class TalonVelocity extends PIDTalon {
         return super.motor.getSelectedSensorVelocity();
     }
 
-    //setters
-    public void setPower(double power) {
-        super.motor.set(ControlMode.Velocity, power);
+    public void setVelocity(double velocity) {
+        super.motor.set(ControlMode.Velocity, velocity);
+    }
+
+    public void stop(){
+        super.motor.set(ControlMode.PercentOutput, 0);
     }
 }
