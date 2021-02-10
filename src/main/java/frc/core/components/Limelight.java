@@ -1,91 +1,109 @@
 package frc.core.components;
 
+import static java.util.Objects.isNull;
+
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
+import frc.robot.Constants.LimelightConstants;
+
 public class Limelight {
-    private static final String TABLE_NAME = "limelight";
+	private final NetworkTable table;
+	private static Limelight limelight;
 
-    public enum Entry {
-        TX("tx"),
-        TY("ty"),
-        TA("ta"),
-        TV("tv"),
-        PIPELINE("pipeline"),
-        LED_MODE("ledMode"),
-        CAM_MODE("camMode");
+  private Limelight() {
+		this.table = NetworkTableInstance
+									.getDefault()
+									.getTable(
+										LimelightConstants.tableName
+									);
+  }
 
-        public final String key;
-        private Entry(String key) {
-            this.key = key;
-        }
-    }
+  public enum Entry {
+    TX("tx"),
+		TY("ty"),
+		TA("ta"),
+		TV("tv"),
+		PIPELINE("pipeline"),
+		LED_MODE("ledMode"),
+		CAM_MODE("camMode");
 
-    public enum LedMode {
-        CURRENT(0),
-        OFF(1),
-        BLINK(2),
-        ON(3);
+		public final String key;
+		private Entry(String key) {
+			this.key = key;
+		}
+	}
 
-        public final int value;
-        private LedMode(int value) {
-            this.value = value;
-        }
-    }
+	public enum LedMode {
+		CURRENT(0),
+		OFF(1),
+		BLINK(2),
+		ON(3);
 
-    public enum CamMode {
-        VISION_PROCESSOR(0),
-        DRIVER_CAMERA(1);
+		public final int value;
+		private LedMode(int value) {
+			this.value = value;
+		}
+	}
 
-        public final int value;
-        private CamMode(int value) {
-            this.value = value;
-        }
-    }
+	public enum CamMode {
+		VISION_PROCESSOR(0),
+		DRIVER_CAMERA(1);
 
-    private static NetworkTableEntry getEntry(Entry entry) {
-        var table = NetworkTableInstance.getDefault().getTable(TABLE_NAME);
+		public final int value;
+		private CamMode(int value) {
+			this.value = value;
+		}
+	}
 
-        return table.getEntry(entry.key);
-    }
+	public static Limelight getInstance() {
+		if (isNull(limelight)) return new Limelight();
 
-    private static double getValue(Entry entry) {
-        return getEntry(entry).getDouble(0.0);
-    }
+		return limelight;	
+	}
 
-    public static double getX() {
-        return getValue(Entry.TX);
-    }
+	private NetworkTableEntry getEntry(Entry entry) {
+		return this.table.getEntry(entry.key);
+	}
 
-    public static double getY() {
-        return getValue(Entry.TY);
-    }
+	private double getValue(Entry entry) {
+		return this.getEntry(entry).getDouble(0.0);
+	}
 
-    public static double getA() {
-        return getValue(Entry.TA);
-    }
+	public double getX() {
+		return this.getValue(Entry.TX);
+	}
 
-    public static double getV() {
-        return getValue(Entry.TV);
-    }
+	public double getY() {
+		return this.getValue(Entry.TY);
+	}
 
-    public static boolean isTarget() {
-        return getV() == 1;
-    }
+	public double getA() {
+		return this.getValue(Entry.TA);
+	}
 
-    private static void setEntry(Entry entry, int value) {
-        getEntry(entry).setNumber(value);
-    }
+	public double getV() {
+		return this.getValue(Entry.TV);
+	}
 
-    public static void setPipeline(int value) {
-        setEntry(Entry.PIPELINE, value);
-    }
+	public boolean isTarget() {
+		return this.getV() == 1;
+	}
 
-    public static void setLed(LedMode ledMode) {
-        setEntry(Entry.LED_MODE, ledMode.value);
-    }
+	private void setEntry(Entry entry, int value) {
+		this.getEntry(entry).setNumber(value);
+	}
 
-    public static void setCam(CamMode camMode) {
-        setEntry(Entry.CAM_MODE, camMode.value);
-    }
+	public void setPipeline(int value) {
+		this.setEntry(Entry.PIPELINE, value);
+	}
+
+	public void setLed(LedMode ledMode) {
+		this.setEntry(Entry.LED_MODE, ledMode.value);
+	}
+
+	public void setCam(CamMode camMode) {
+		this.setEntry(Entry.CAM_MODE, camMode.value);
+	}
 }

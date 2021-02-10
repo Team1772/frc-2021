@@ -63,4 +63,8 @@ public final class Constants {
 		kRamseteB = 2,
 		kRamseteZeta = 0.7;
 	}
+
+	public static final class LimelightConstants {
+		public static final String tableName = "limelight";
+	}
 }
