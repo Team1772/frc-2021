@@ -62,6 +62,10 @@ public class Drivetrain extends SubsystemBase {
     this.drive.curvatureDrive(forward, -(rotation), isQuickTurn);
   }
 
+  public void tankDrive(double leftSpeed, double rightSpeed) {
+    this.drive.tankDrive(leftSpeed, rightSpeed);
+  }
+
   public void resetEncoders() {
     this.encoderLeft.reset();
     this.encoderRight.reset();
