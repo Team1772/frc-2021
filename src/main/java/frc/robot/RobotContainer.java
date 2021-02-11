@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
@@ -18,6 +19,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.intake.Actuator;
+import frc.robot.commands.intake.CollectPowerCell;
+import frc.robot.commands.intake.ReleasePowerCell;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
 import frc.robot.subsystems.Drivetrain;
@@ -70,8 +74,20 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+    this.configureButtonBindingsIntake();
 
   }
+
+   private void configureButtonBindingsIntake(){
+     var buttonBumperLeft = new JoystickButton(this.operator, Button.kBumperLeft.value);
+     var axisTriggerLeft = new JoystickButton(this.operator, Axis.kLeftTrigger.value);
+ 
+     buttonBumperLeft
+     .whileHeld(new CollectPowerCell(this.intake));
+     
+     axisTriggerLeft
+     .whileHeld(new ReleasePowerCell(this.intake));
+    }
 
   public Command getAutonomousCommand() {
     var simpleMotorFeedforward = new SimpleMotorFeedforward(
