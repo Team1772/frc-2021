@@ -13,7 +13,6 @@ public class AimTarget extends CommandBase {
   public AimTarget(Drivetrain drivetrain, Limelight limelight) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
-    this.limelight.setPipeline(LimelightConstants.pipeline);
 
     addRequirements(this.drivetrain);
   }
@@ -21,15 +20,14 @@ public class AimTarget extends CommandBase {
   @Override
   public void initialize() {
     this.limelight.setLed(LedMode.ON);
+    this.limelight.setPipeline(LimelightConstants.pipeline);
   }
 
   @Override
   public void execute() {
     double x = limelight.getX(),
      headingError = -(x),
-     adjust = 0,
-     rightSpeed = 0,
-     leftSpeed = 0;
+     adjust = 0;
 
     if (x > 1) {
       adjust = LimelightConstants.kP * 
@@ -40,6 +38,9 @@ public class AimTarget extends CommandBase {
                 headingError + 
                 LimelightConstants.minCommand;
     }
+
+    double rightSpeed = 0,
+     leftSpeed = 0;
 
     rightSpeed -= adjust;
     leftSpeed += adjust;

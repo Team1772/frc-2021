@@ -13,7 +13,6 @@ public class AimAndRangeTarget extends CommandBase {
   public AimAndRangeTarget(Drivetrain drivetrain, Limelight limelight) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
-    this.limelight.setPipeline(LimelightConstants.pipeline);
 
     addRequirements(this.drivetrain);
   }
@@ -21,6 +20,7 @@ public class AimAndRangeTarget extends CommandBase {
   @Override
   public void initialize() {
     this.limelight.setLed(LedMode.ON);
+    this.limelight.setPipeline(LimelightConstants.pipeline);
   }
 
   @Override
@@ -29,9 +29,7 @@ public class AimAndRangeTarget extends CommandBase {
       y = limelight.getY(),
       headingError = -(x),
       distanceError = -(y),
-      steeringAdjust = 0,
-      leftSpeed = 0,
-      rightSpeed = 0;
+      steeringAdjust = 0;
 
     if (x > 1) {
       steeringAdjust = LimelightConstants.kpAim *
@@ -44,7 +42,10 @@ public class AimAndRangeTarget extends CommandBase {
     }
 
     var distanceAdjust = LimelightConstants.kpDistance * distanceError;
-    
+
+    double leftSpeed = 0,
+      rightSpeed = 0;
+      
     leftSpeed += steeringAdjust + distanceAdjust;
     rightSpeed -= steeringAdjust + distanceAdjust;
 
