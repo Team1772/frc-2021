@@ -4,17 +4,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
 public class ReleasePowerCell extends CommandBase {
-    private final Intake intake;
+	private final Intake intake;
 
-    public ReleasePowerCell(Intake intake){
-        this.intake = intake;
+	public ReleasePowerCell(Intake intake){
+		this.intake = intake;
 
-        addRequirements(this.intake);
-    }
-   
-    @Override
-    public void execute() {
-        this.intake.enable();
-        this.intake.setSpeed(-1);
-     }
+		addRequirements(this.intake);
+	}
+
+	@Override
+	public void execute() {
+		this.intake.enable();
+		this.intake.setSpeed(-1);
+	}
 }

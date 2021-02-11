@@ -19,90 +19,90 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.Drivetrain;
 
 public class TrajectoryBuilder {
-    //subsystems
-    private Drivetrain drivetrain;
+	//subsystems
+	private Drivetrain drivetrain;
 
-    //attributes
-    private final SimpleMotorFeedforward simpleMotorFeedforward;
-    private final PIDController pidController;
-    private final RamseteController ramseteController;
+	//attributes
+	private final SimpleMotorFeedforward simpleMotorFeedforward;
+	private final PIDController pidController;
+	private final RamseteController ramseteController;
 
-    private Trajectory trajectory;
-    private RamseteCommand ramseteCommand;
+	private Trajectory trajectory;
+	private RamseteCommand ramseteCommand;
 
-    //constructor
-    public TrajectoryBuilder(Trajectory trajectory, Drivetrain drivetrain) {
-        this.trajectory = trajectory;
-        this.drivetrain = drivetrain;
-        this.simpleMotorFeedforward = new SimpleMotorFeedforward(
-            DrivetrainConstants.ksVolts,
-            DrivetrainConstants.kvVoltSecondsPerMeter,
-            DrivetrainConstants.kaVoltSecondsSquaredPerMeter
-        );
-        this.pidController = new PIDController(
-            DrivetrainConstants.kPDriveVelocity, 
-            DrivetrainConstants.kIDriveVelocity, 
-            DrivetrainConstants.kDDriveVelocity
-        );
-        this.ramseteController = new RamseteController(
-            AutoConstants.kRamseteB, 
-            AutoConstants.kRamseteZeta
-        );
+	//constructor
+	public TrajectoryBuilder(Trajectory trajectory, Drivetrain drivetrain) {
+		this.trajectory = trajectory;
+		this.drivetrain = drivetrain;
+		this.simpleMotorFeedforward = new SimpleMotorFeedforward(
+			DrivetrainConstants.ksVolts,
+			DrivetrainConstants.kvVoltSecondsPerMeter,
+			DrivetrainConstants.kaVoltSecondsSquaredPerMeter
+		);
+		this.pidController = new PIDController(
+			DrivetrainConstants.kPDriveVelocity, 
+			DrivetrainConstants.kIDriveVelocity, 
+			DrivetrainConstants.kDDriveVelocity
+		);
+		this.ramseteController = new RamseteController(
+			AutoConstants.kRamseteB, 
+			AutoConstants.kRamseteZeta
+		);
 
-        this.createRamsete();
-    }
+		this.createRamsete();
+	}
 
-    //helpers
-    public void createRamsete(){
-        if (isNull(this.trajectory)) {
-            DriverStation.reportError(
-                "trajectory is null", 
-                new Exception().getStackTrace()
-            );
-        } else {
-            this.ramseteCommand = new RamseteCommand(
-                this.trajectory,
-                this.drivetrain::getPose,
-                this.ramseteController,
-                this.simpleMotorFeedforward,
-                DrivetrainConstants.kDriveKinematics, 
-                this.drivetrain::getWheelSpeeds, 
-                this.pidController, 
-                this.pidController, 
-                this.drivetrain::tankDriveVolts, 
-                this.drivetrain
-            );
+	//helpers
+	public void createRamsete(){
+		if (isNull(this.trajectory)) {
+			DriverStation.reportError(
+				"trajectory is null", 
+				new Exception().getStackTrace()
+			);
+		} else {
+			this.ramseteCommand = new RamseteCommand(
+				this.trajectory,
+				this.drivetrain::getPose,
+				this.ramseteController,
+				this.simpleMotorFeedforward,
+				DrivetrainConstants.kDriveKinematics, 
+				this.drivetrain::getWheelSpeeds, 
+				this.pidController, 
+				this.pidController, 
+				this.drivetrain::tankDriveVolts, 
+				this.drivetrain
+			);
 
-            this.drivetrain.resetOdometry(this.trajectory.getInitialPose());
-        }
-    }
+			this.drivetrain.resetOdometry(this.trajectory.getInitialPose());
+		}
+	}
 
-    public Command resetTankDriveVolts() {
-        return this.ramseteCommand.andThen(
-            () -> this.drivetrain.tankDriveVolts(0, 0)
-        );
-    }
+	public Command resetTankDriveVolts() {
+		return this.ramseteCommand.andThen(
+			() -> this.drivetrain.tankDriveVolts(0, 0)
+		);
+	}
 
-    //getters
-    public Trajectory getTrajectory(){
-        return this.trajectory;
-    }
+	//getters
+	public Trajectory getTrajectory(){
+		return this.trajectory;
+	}
 
-    public RamseteCommand getRamsete() {
-        return this.ramseteCommand;
-    }
+	public RamseteCommand getRamsete() {
+		return this.ramseteCommand;
+	}
 
-    //setters
-    public void setTrajectory(String fileName) {
-        String path = String.format("paths\\%s.wpilib.json", fileName);
-        try {
-            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path);
-            this.trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-        } catch (IOException ex) {
-            DriverStation.reportError(
-                String.format("Unable to open trajectory: %s", path), 
-                ex.getStackTrace()
-            );
-        }
-    }
+	//setters
+	public void setTrajectory(String fileName) {
+		String path = String.format("paths\\%s.wpilib.json", fileName);
+		try {
+			Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path);
+			this.trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+		} catch (IOException ex) {
+			DriverStation.reportError(
+					String.format("Unable to open trajectory: %s", path), 
+					ex.getStackTrace()
+			);
+		}
+	}
 }
