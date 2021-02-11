@@ -8,38 +8,85 @@ import frc.robot.Constants.DrivetrainConstants.PIDConstants;
 public class TalonPosition extends PIDTalon {
 
     public TalonPosition(
-        TalonSRX motor, 
-        TalonSRX follower, 
+        TalonSRX master, 
         boolean kSensorPhase,
         boolean kFollowerInverted,
         double nominalOutputForwardValue, 
         double nominalOutputReverseValue, 
         double peakOutputForwardValue,
         double peakOutputReverseValue, 
-        boolean kMotorInvert,
+        boolean kMasterInverted,
         Gains gains,
         TalonSRX... followers
     )
     {
         super(
-            motor, 
-            follower,  
+            master, 
             kSensorPhase,
             kFollowerInverted,
             nominalOutputForwardValue,
             nominalOutputReverseValue, 
             peakOutputForwardValue, 
             peakOutputReverseValue, 
-            kMotorInvert, 
+            kMasterInverted, 
             gains,
             followers
         );
 
-        this.setAbsolutePosition(kMotorInvert, kSensorPhase);
+        this.setAbsolutePosition(kMasterInverted, kSensorPhase);
+    }
+
+    /*
+     * @param kFollowerInverted - if true ? estará desinvertido : estará invertido
+     * @param kMasterInverted - if true ? estará desinvertido : estará invertido
+     */
+    public TalonPosition(
+        TalonSRX master,
+        boolean kFollowerInverted,
+        boolean kMasterInverted,
+        Gains gains,
+        TalonSRX... followers
+    )
+    {
+        this(
+            master,
+            true,
+            kFollowerInverted,
+            0,
+            0,
+            0,
+            0,
+            kMasterInverted,
+            gains,
+            followers
+        );
+    }
+
+    /*
+     * kMasterInverted e kFollowerInverted estão como default desinvertidos
+     */
+    public TalonPosition(
+        TalonSRX master,
+        Gains gains,
+        TalonSRX... followers
+    )
+    {
+        this(
+            master,
+            true,
+            true,
+            0,
+            0,
+            0,
+            0,
+            true,
+            gains,
+            followers
+        );
     }
 
     private int getAbsolutePosition() {
-        return super.motor.getSensorCollection().getPulseWidthPosition();
+        return super.master.getSensorCollection().getPulseWidthPosition();
     }
 
     public boolean isMaxPosition(double value) {
@@ -47,19 +94,19 @@ public class TalonPosition extends PIDTalon {
     }
 
     public double getSelectedSensorPosition() {
-        return super.motor.getSelectedSensorPosition(0);
+        return super.master.getSelectedSensorPosition(0);
     }
 
-    public double getMotorOutput() {
-        return super.motor.getMotorOutputPercent();
+    public double getMasterOutput() {
+        return super.master.getMotorOutputPercent();
     } 
 
     public void setPostion(int position) {
-        super.motor.set(ControlMode.Position, this.getSelectedSensorPosition() - position);
+        super.master.set(ControlMode.Position, this.getSelectedSensorPosition() - position);
     }
 
     private void setAbsolutePosition(
-        boolean kMotorInvert, 
+        boolean kMasterInverted, 
         boolean kSensorPhase
     )
     {
@@ -68,8 +115,8 @@ public class TalonPosition extends PIDTalon {
         absolutePosition &= 0xFFF;
 
         if (kSensorPhase) { absolutePosition *= -1; }
-        if (kMotorInvert) { absolutePosition *= -1; }
+        if (kMasterInverted) { absolutePosition *= -1; }
         
-        super.motor.setSelectedSensorPosition(absolutePosition, PIDConstants.kPIDLoopIdx, PIDConstants.kTimeoutMs);
+        super.master.setSelectedSensorPosition(absolutePosition, PIDConstants.kPIDLoopIdx, PIDConstants.kTimeoutMs);
     }
 }

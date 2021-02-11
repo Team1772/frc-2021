@@ -8,48 +8,94 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class TalonVelocity extends PIDTalon {
 
     public TalonVelocity(
-        TalonSRX motor, 
-        TalonSRX follower, 
+        TalonSRX master, 
         boolean kSensorPhase,
         boolean kFollowerInverted,
         double nominalOutputForwardValue, 
         double nominalOutputReverseValue, 
         double peakOutputForwardValue,
         double peakOutputReverseValue, 
-        boolean kMotorInvert,
+        boolean kMasterInverted,
         Gains gains,
         TalonSRX... followers
     )
     {
         super(
-            motor, 
-            follower, 
+            master, 
             kSensorPhase,
             kFollowerInverted,
             nominalOutputForwardValue,
             nominalOutputReverseValue, 
             peakOutputForwardValue, 
             peakOutputReverseValue, 
-            kMotorInvert, 
+            kMasterInverted, 
+            gains,
+            followers
+        );
+    }
+
+    /*
+     * @param kFollowerInverted - if true ? estará desinvertido : estará invertido
+     * @param kMasterInverted - if true ? estará desinvertido : estará invertido
+     */
+    public TalonVelocity(
+        TalonSRX master,
+        boolean kFollowerInverted,
+        boolean kMasterInverted,
+        Gains gains,
+        TalonSRX... followers
+    )
+    {
+        this(
+            master,
+            true,
+            kFollowerInverted,
+            0,
+            0,
+            0,
+            0,
+            kMasterInverted,
+            gains,
+            followers
+        );
+    }
+    /*
+     * kMasterInverted e kFollowerInverted estão como default desinvertidos
+     */
+    public TalonVelocity(
+        TalonSRX master,
+        Gains gains,
+        TalonSRX... followers
+    )
+    {
+        this(
+            master,
+            true,
+            true,
+            0,
+            0,
+            0,
+            0,
+            true,
             gains,
             followers
         );
     }
     
-    public double getSensorVelocity(){
+    public double getSensorVelocity() {
         SmartDashboard.putNumber(
-            "Motor velocity", 
-            super.motor.getSelectedSensorVelocity()
+            "master velocity", 
+            super.master.getSelectedSensorVelocity()
         );
         
-        return super.motor.getSelectedSensorVelocity();
+        return super.master.getSelectedSensorVelocity();
     }
 
     public void setVelocity(double velocity) {
-        super.motor.set(ControlMode.Velocity, velocity);
+        super.master.set(ControlMode.Velocity, velocity);
     }
 
     public void stop(){
-        super.motor.set(ControlMode.PercentOutput, 0);
+        super.master.set(ControlMode.PercentOutput, 0);
     }
 }
