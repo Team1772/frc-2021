@@ -5,11 +5,11 @@ import java.util.List;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants.DrivetrainConstants.PIDConstants;
 
 /*
  * lista de refatoração
- *  - ordenação de contexto nos construtores
  *  - tirar o k das variaveis no folder PID e no Constants
  *  - refatoração de indentação de metodos
  *  - mudar o atributo master para master
@@ -22,11 +22,11 @@ import frc.robot.Constants.DrivetrainConstants.PIDConstants;
   * ------------- ATENÇÃO ---------------
   * Os motores do shooter estão invertidos no robô, então
   *
-  * se kMasterInverted = true, ele estará desinvertido
-  * se kMasterInverted = false, ele estará invertido
+  * se kMasterInverted = true, (1)
+  * se kMasterInverted = false, (-1)
   *
-  * se kFollowerInverd = true, ele estará desinvertido
-  * se kFollowerInverd = false, ele estará invertido
+  * se kFollowerInverd = true, (1)
+  * se kFollowerInverd = false, (-1)
   */
 
 public abstract class PIDTalon {
@@ -34,18 +34,18 @@ public abstract class PIDTalon {
     protected List<TalonSRX> followers;
 
     /*
-     * @param kFollowerInverted - if true ? estará desinvertido : estará invertido
-     * @param kMasterInverted - if true ? estará desinvertido : estará invertido
+     * @param kFollowerInverted - if true ? 1 : -1
+     * @param kMasterInverted - if true ? 1 : -1
      */
     public PIDTalon(
         TalonSRX master,
-        boolean kSensorPhase,
+        boolean kMasterInverted,
         boolean kFollowerInverted,
+        boolean kSensorPhase,
         double nominalOutputForwardValue,
         double nominalOutputReverseValue,
         double peakOutputForwardValue,
         double peakOutputReverseValue, 
-        boolean kMasterInverted,
         Gains gains,
         TalonSRX... followers
     )
@@ -80,7 +80,7 @@ public abstract class PIDTalon {
     }
 
     /*
-     * @param isInverted - if true ? estará desinvertido : estará invertido
+     * @param isInverted - if true ? 1 : -1
      */
     private void setMasterInverted(boolean isInverted) {
         this.master.setInverted(isInverted);
@@ -95,15 +95,20 @@ public abstract class PIDTalon {
     }
 
     /*
-     * @param isInvertedList - if true ? estará desinvertido : estará invertido
+     * @param isInvertedList - if true ? 1 : -1
      */
     public void setFollowersInverted(Boolean... isInvertedList){
         int index = 0;
-        if(isInvertedList.length > 0){
+        if(isInvertedList.length >= this.followers.size()){
             for (TalonSRX follower : followers) {
                 follower.setInverted(isInvertedList[index]);
                 index++;
             }
+        } else {
+            DriverStation.reportError(
+                "the length of varags must be equal or higher than the list of followers", 
+                new Exception().getStackTrace()
+            );
         }
     }
 

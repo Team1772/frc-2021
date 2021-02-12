@@ -45,7 +45,11 @@ public final class Constants {
 
             public static final int
             kPIDLoopIdx = 0,
-            kTimeoutMs = 30; 
+            kTimeoutMs = 30,
+            nominalOutputForwardValue = 0,
+            nominalOutputReverseValue = 0,
+            peakOutputForwardValue = 1,
+            peakOutputReverseValue = -1;
         }
     }
     

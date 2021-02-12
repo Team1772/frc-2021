@@ -4,63 +4,64 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.DrivetrainConstants.PIDConstants;
 
 public class TalonVelocity extends PIDTalon {
 
     public TalonVelocity(
         TalonSRX master, 
-        boolean kSensorPhase,
+        boolean kMasterInverted,
         boolean kFollowerInverted,
+        boolean kSensorPhase,
         double nominalOutputForwardValue, 
         double nominalOutputReverseValue, 
         double peakOutputForwardValue,
         double peakOutputReverseValue, 
-        boolean kMasterInverted,
         Gains gains,
         TalonSRX... followers
     )
     {
         super(
             master, 
-            kSensorPhase,
+            kMasterInverted, 
             kFollowerInverted,
+            kSensorPhase,
             nominalOutputForwardValue,
             nominalOutputReverseValue, 
             peakOutputForwardValue, 
             peakOutputReverseValue, 
-            kMasterInverted, 
             gains,
             followers
         );
     }
 
     /*
-     * @param kFollowerInverted - if true ? estará desinvertido : estará invertido
-     * @param kMasterInverted - if true ? estará desinvertido : estará invertido
+     * @param kFollowerInverted - if true ? 1 : -1
+     * @param kMasterInverted - if true ? 1 : -1
      */
     public TalonVelocity(
         TalonSRX master,
-        boolean kFollowerInverted,
         boolean kMasterInverted,
+        boolean kFollowerInverted,
         Gains gains,
         TalonSRX... followers
     )
     {
         this(
             master,
-            true,
-            kFollowerInverted,
-            0,
-            0,
-            0,
-            0,
             kMasterInverted,
+            kFollowerInverted,
+            true,
+            PIDConstants.nominalOutputForwardValue,
+            PIDConstants.nominalOutputReverseValue,
+            PIDConstants.peakOutputForwardValue,
+            PIDConstants.peakOutputReverseValue,
             gains,
             followers
         );
     }
     /*
-     * kMasterInverted e kFollowerInverted estão como default desinvertidos
+     * kMasterInverted e kFollowerInverted estão como default -1
      */
     public TalonVelocity(
         TalonSRX master,
@@ -70,13 +71,13 @@ public class TalonVelocity extends PIDTalon {
     {
         this(
             master,
+            false,
+            false,
             true,
-            true,
-            0,
-            0,
-            0,
-            0,
-            true,
+            PIDConstants.nominalOutputForwardValue,
+            PIDConstants.nominalOutputReverseValue,
+            PIDConstants.peakOutputForwardValue,
+            PIDConstants.peakOutputReverseValue,
             gains,
             followers
         );
