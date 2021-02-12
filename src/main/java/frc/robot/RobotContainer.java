@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.intake.Actuator;
 import frc.robot.commands.intake.CollectPowerCell;
 import frc.robot.commands.intake.ReleasePowerCell;
 import frc.robot.commands.drivetrain.ArcadeDrive;
