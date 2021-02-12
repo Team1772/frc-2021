@@ -50,6 +50,9 @@ public final class Constants {
             nominalOutputReverseValue = 0,
             peakOutputForwardValue = 1,
             peakOutputReverseValue = -1;
+
+            public static final boolean
+            isSensorPhase = true;
         }
     }
     
