@@ -19,7 +19,7 @@ public class CurvatureDrive extends CommandBase {
     }
 
     @Override
-  public void execute() {
-      this.drivetrain.curvatureDrive(this.forward.getAsDouble(), this.rotation.getAsDouble(), true);
-  }
+    public void execute() {
+        this.drivetrain.curvatureDrive(this.forward.getAsDouble(), this.rotation.getAsDouble(), true);
+    }
 }

@@ -55,4 +55,10 @@ public final class Constants {
         kRamseteB = 2,
         kRamseteZeta = 0.7;
     }
+
+    public static final class ShooterConstants {
+        public static final int
+        motorRightPort = 0,
+        motorLeftPort = 1;
+    }
 }

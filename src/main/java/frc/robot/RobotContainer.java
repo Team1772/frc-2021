@@ -20,7 +20,10 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
+import frc.robot.commands.shooter.PushPowerCell;
+import frc.robot.commands.shooter.Stop;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -29,6 +32,7 @@ public class RobotContainer {
 
   //subsystems
   private final Drivetrain drivetrain;
+  private final Shooter shooter;
 
   //controller
   private final XboxController driver;
@@ -36,6 +40,7 @@ public class RobotContainer {
   //constructor
   public RobotContainer() {
     this.drivetrain = new Drivetrain();
+    this.shooter = new Shooter();
 
     this.driver = new XboxController(OIConstants.driverControllerPort);
 
@@ -65,7 +70,10 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+    var buttonBumperRight = new JoystickButton(this.driver, Button.kBumperRight.value);
 
+    buttonBumperRight.whenHeld(new PushPowerCell(this.shooter))
+      .whenReleased(new Stop(this.shooter));
   }
 
   public Command getAutonomousCommand() {
