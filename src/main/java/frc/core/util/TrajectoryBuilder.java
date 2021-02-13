@@ -31,9 +31,9 @@ public class TrajectoryBuilder {
 	private RamseteCommand ramseteCommand;
 
 	//constructor
-	public TrajectoryBuilder(Trajectory trajectory, Drivetrain drivetrain) {
-		this.trajectory = trajectory;
-		this.drivetrain = drivetrain;
+	public TrajectoryBuilder(Drivetrain drivetrain) {
+    this.drivetrain = drivetrain;
+    
 		this.simpleMotorFeedforward = new SimpleMotorFeedforward(
 			DrivetrainConstants.ksVolts,
 			DrivetrainConstants.kvVoltSecondsPerMeter,
@@ -48,8 +48,6 @@ public class TrajectoryBuilder {
 			AutoConstants.kRamseteB, 
 			AutoConstants.kRamseteZeta
 		);
-
-		this.createRamsete();
 	}
 
 	//helpers
@@ -75,26 +73,23 @@ public class TrajectoryBuilder {
 
 			this.drivetrain.resetOdometry(this.trajectory.getInitialPose());
 		}
-	}
+  }
+  
+  public Command buildTrajectory(String fileName) {
+    this.setTrajectory(fileName);
+    this.createRamsete();
 
-	public Command resetTankDriveVolts() {
-		return this.ramseteCommand.andThen(
-			() -> this.drivetrain.tankDriveVolts(0, 0)
-		);
-	}
-
-	//getters
-	public Trajectory getTrajectory(){
-		return this.trajectory;
-	}
-
-	public RamseteCommand getRamsete() {
+    return this.getRamsete().andThen(
+      () -> this.drivetrain.tankDriveVolts(0, 0)
+    );
+  }
+  
+	private RamseteCommand getRamsete() {
 		return this.ramseteCommand;
 	}
 
-	//setters
-	public void setTrajectory(String fileName) {
-		String path = String.format("paths\\%s.wpilib.json", fileName);
+	private void setTrajectory(String fileName) {
+		String path = String.format("paths/output/%s.wpilib.json", fileName);
 		try {
 			Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path);
 			this.trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);

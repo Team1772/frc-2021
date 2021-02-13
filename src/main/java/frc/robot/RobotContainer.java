@@ -3,31 +3,20 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.RamseteController;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
-
-import java.util.List;
-
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DrivetrainConstants;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import frc.robot.subsystems.Intake;
+import frc.core.util.TrajectoryBuilder;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.intake.CollectPowerCell;
 import frc.robot.commands.intake.ReleasePowerCell;
+import frc.robot.commands.autons.GalacticA;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
 
@@ -36,8 +25,11 @@ public class RobotContainer {
   private final Intake intake;
 
   //controller
+  private TrajectoryBuilder trajectoryBuilder;
   private final XboxController driver;
   private final XboxController operator;
+
+  private Trajectory trajectory;
 
   //constructor
   public RobotContainer() {
@@ -46,7 +38,7 @@ public class RobotContainer {
 
     this.driver = new XboxController(OIConstants.driverControllerPort);
     this.operator = new XboxController(OIConstants.operatorControllerPort);
-    
+
     this.configureButtonBindings();
     this.configureDefaultCommand();
   }
@@ -89,53 +81,8 @@ public class RobotContainer {
     }
 
   public Command getAutonomousCommand() {
-    var simpleMotorFeedforward = new SimpleMotorFeedforward(
-      DrivetrainConstants.ksVolts,
-      DrivetrainConstants.kvVoltSecondsPerMeter,
-      DrivetrainConstants.kaVoltSecondsSquaredPerMeter
-    );
+    this.trajectoryBuilder = new TrajectoryBuilder(this.drivetrain);
 
-    var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
-      simpleMotorFeedforward,
-      DrivetrainConstants.kDriveKinematics,
-      DrivetrainConstants.differentialDriveVoltageConstraintMaxVoltage
-    );
-
-    var trajectoryConfig = new TrajectoryConfig(
-      AutoConstants.kMaxSpeedMetersPerSecond,
-      AutoConstants.kMaxAccelerationMetersPerSecondSquared
-    )
-    .setKinematics(DrivetrainConstants.kDriveKinematics)
-    .addConstraint(autoVoltageConstraint);
-
-    var trajectory = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, new Rotation2d(0)),
-      List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-      new Pose2d(3, 0, new Rotation2d(0)),
-      trajectoryConfig
-    );
-
-    var pidController = new PIDController(
-      DrivetrainConstants.kPDriveVelocity, 
-      DrivetrainConstants.kIDriveVelocity, 
-      DrivetrainConstants.kDDriveVelocity
-    );
-
-    var ramseteCommand = new RamseteCommand(
-      trajectory,
-      this.drivetrain::getPose,
-      new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-      simpleMotorFeedforward,
-      DrivetrainConstants.kDriveKinematics, 
-      this.drivetrain::getWheelSpeeds, 
-      pidController, 
-      pidController, 
-      this.drivetrain::tankDriveVolts, 
-      this.drivetrain
-    );
-
-    this.drivetrain.resetOdometry(trajectory.getInitialPose());
-
-    return ramseteCommand.andThen(() -> this.drivetrain.tankDriveVolts(0, 0));
-  }
+    return new GalacticA(this.trajectoryBuilder);
+	}
 }
