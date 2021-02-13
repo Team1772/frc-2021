@@ -28,26 +28,25 @@ public class TrajectoryBuilder {
   private Trajectory trajectory;
   private RamseteCommand ramseteCommand;
 
-  public TrajectoryBuilder(Trajectory trajectory, Drivetrain drivetrain) {
-    this.trajectory = trajectory;
+	//constructor
+	public TrajectoryBuilder(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
-    this.simpleMotorFeedforward = new SimpleMotorFeedforward(
-      DrivetrainConstants.ksVolts,
-      DrivetrainConstants.kvVoltSecondsPerMeter,
-      DrivetrainConstants.kaVoltSecondsSquaredPerMeter
-    );
-    this.pidController = new PIDController(
-      DrivetrainConstants.PIDConstants.kPDriveVelocity,
-      DrivetrainConstants.PIDConstants.kIDriveVelocity,
-      DrivetrainConstants.PIDConstants.kDDriveVelocity
-    );
-    this.ramseteController = new RamseteController(
-      AutoConstants.kRamseteB, 
-      AutoConstants.kRamseteZeta
-    );
-
-    this.createRamsete();
-  }
+    
+		this.simpleMotorFeedforward = new SimpleMotorFeedforward(
+			DrivetrainConstants.ksVolts,
+			DrivetrainConstants.kvVoltSecondsPerMeter,
+			DrivetrainConstants.kaVoltSecondsSquaredPerMeter
+		);
+		this.pidController = new PIDController(
+			DrivetrainConstants.kPDriveVelocity, 
+			DrivetrainConstants.kIDriveVelocity, 
+			DrivetrainConstants.kDDriveVelocity
+		);
+		this.ramseteController = new RamseteController(
+			AutoConstants.kRamseteB, 
+			AutoConstants.kRamseteZeta
+		);
+	}
 
   public void createRamsete(){
     if (isNull(this.trajectory)) {
@@ -69,34 +68,33 @@ public class TrajectoryBuilder {
         this.drivetrain
       );
 
-      this.drivetrain.resetOdometry(this.trajectory.getInitialPose());
-    }
+			this.drivetrain.resetOdometry(this.trajectory.getInitialPose());
+		}
   }
+  
+  public Command buildTrajectory(String fileName) {
+    this.setTrajectory(fileName);
+    this.createRamsete();
 
-  public Command resetTankDriveVolts() {
-    return this.ramseteCommand.andThen(
+    return this.getRamsete().andThen(
       () -> this.drivetrain.tankDriveVolts(0, 0)
     );
   }
+  
+	private RamseteCommand getRamsete() {
+		return this.ramseteCommand;
+	}
 
-  public Trajectory getTrajectory(){
-    return this.trajectory;
-  }
-
-  public RamseteCommand getRamsete() {
-    return this.ramseteCommand;
-  }
-
-  public void setTrajectory(String fileName) {
-    String path = String.format("paths\\%s.wpilib.json", fileName);
-    try {
-      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path);
-      this.trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-    } catch (IOException ex) {
-      DriverStation.reportError(
-        String.format("Unable to open trajectory: %s", path), 
-        ex.getStackTrace()
-      );
-    }
-  }
+	private void setTrajectory(String fileName) {
+		String path = String.format("paths/output/%s.wpilib.json", fileName);
+		try {
+			Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path);
+			this.trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+		} catch (IOException ex) {
+			DriverStation.reportError(
+					String.format("Unable to open trajectory: %s", path), 
+					ex.getStackTrace()
+			);
+		}
+	}
 }
