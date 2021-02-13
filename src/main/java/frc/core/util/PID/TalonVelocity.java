@@ -4,50 +4,93 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.PIDTalonConstants;
 
 public class TalonVelocity extends PIDTalon {
 
-    //constructor
-    public TalonVelocity(
-        TalonSRX motor, 
-        TalonSRX follower, 
-        int kPIDLoopIdx, 
-        int kTimeoutMs, 
-        boolean kSensorPhase,
-        double nominalOutputForwardValue, 
-        double nominalOutputReverseValue, 
-        double peakOutputForwardValue,
-        double peakOutputReverseValue, 
-        boolean kMotorInvert
-    )
-    {
-        super(
-            motor, 
-            follower, 
-            kPIDLoopIdx, 
-            kTimeoutMs, 
-            kSensorPhase,
-            nominalOutputForwardValue,
-            nominalOutputReverseValue, 
-            peakOutputForwardValue, 
-            peakOutputReverseValue, 
-            kMotorInvert, 
-            null
-        );
-    }
-    
-    //getters
-    public double getSensorVelocity(){
-        SmartDashboard.putNumber(
-            "Motor velocity", 
-            super.motor.getSelectedSensorVelocity()
-        );
-        
-        return super.motor.getSelectedSensorVelocity();
-    }
+  public TalonVelocity(
+    TalonSRX master, 
+    boolean isMasterInverted,
+    boolean isFollowerInverted,
+    boolean isSensorPhase,
+    double nominalOutputForwardValue, 
+    double nominalOutputReverseValue, 
+    double peakOutputForwardValue,
+    double peakOutputReverseValue, 
+    Gains gains,
+    TalonSRX... followers
+  )
+  {
+    super(
+      master, 
+      isMasterInverted, 
+      isFollowerInverted,
+      isSensorPhase,
+      nominalOutputForwardValue,
+      nominalOutputReverseValue, 
+      peakOutputForwardValue, 
+      peakOutputReverseValue, 
+      gains,
+      followers
+    );
+  }
 
-    //setters
-    public void setPower(double power) {
-        super.motor.set(ControlMode.Velocity, power);
-    }
+  public TalonVelocity(
+    TalonSRX master,
+    boolean isMasterInverted,
+    boolean isFollowerInverted,
+    Gains gains,
+    TalonSRX... followers
+  )
+  {
+    this(
+      master,
+      isMasterInverted,
+      isFollowerInverted,
+      PIDTalonConstants.isSensorPhase,
+      PIDTalonConstants.nominalOutputForwardValue,
+      PIDTalonConstants.nominalOutputReverseValue,
+      PIDTalonConstants.peakOutputForwardValue,
+      PIDTalonConstants.peakOutputReverseValue,
+      gains,
+      followers
+    );
+  }
+
+  public TalonVelocity(
+    TalonSRX master,
+    Gains gains,
+    TalonSRX... followers
+  )
+  {
+    this(
+      master,
+      false,
+      false,
+      PIDTalonConstants.isSensorPhase,
+      PIDTalonConstants.nominalOutputForwardValue,
+      PIDTalonConstants.nominalOutputReverseValue,
+      PIDTalonConstants.peakOutputForwardValue,
+      PIDTalonConstants.peakOutputReverseValue,
+      gains,
+      followers
+    );
+  }
+  
+  public double getSensorVelocity() {
+    SmartDashboard.putNumber(
+      "master velocity", 
+      super.master.getSelectedSensorVelocity()
+    );
+    
+    return super.master.getSelectedSensorVelocity();
+  }
+
+  public void setVelocity(double velocity) {
+    super.master.set(ControlMode.Velocity, velocity);
+  }
+
+  public void stop() {
+    super.master.set(ControlMode.PercentOutput, 0);
+  }
 }

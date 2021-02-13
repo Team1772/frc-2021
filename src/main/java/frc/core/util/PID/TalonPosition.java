@@ -3,75 +3,118 @@ package frc.core.util.PID;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import frc.robot.Constants.PIDTalonConstants;
+
 public class TalonPosition extends PIDTalon {
 
-    //constructor
-    public TalonPosition(
-        TalonSRX motor, 
-        TalonSRX follower, 
-        int kPIDLoopIdx, 
-        int kTimeoutMs, 
-        boolean kSensorPhase,
-        double nominalOutputForwardValue, 
-        double nominalOutputReverseValue, 
-        double peakOutputForwardValue,
-        double peakOutputReverseValue, 
-        boolean kMotorInvert
-    )
-    {
-        super(
-            motor, 
-            follower, 
-            kPIDLoopIdx, 
-            kTimeoutMs, 
-            kSensorPhase, 
-            nominalOutputForwardValue,
-            nominalOutputReverseValue, 
-            peakOutputForwardValue, 
-            peakOutputReverseValue, 
-            kMotorInvert, 
-            null
-        );
+  public TalonPosition(
+    TalonSRX master, 
+    boolean isMasterInverted,
+    boolean isFollowerInverted,
+    boolean isSensorPhase,
+    double nominalOutputForwardValue, 
+    double nominalOutputReverseValue, 
+    double peakOutputForwardValue,
+    double peakOutputReverseValue, 
+    Gains gains,
+    TalonSRX... followers
+  )
+  {
+    super(
+      master, 
+      isMasterInverted, 
+      isFollowerInverted,
+      isSensorPhase,
+      nominalOutputForwardValue,
+      nominalOutputReverseValue, 
+      peakOutputForwardValue, 
+      peakOutputReverseValue, 
+      gains,
+      followers
+    );
 
-        this.setAbsolutePosition(kPIDLoopIdx, kTimeoutMs, kMotorInvert, kSensorPhase);
-    }
+    this.setAbsolutePosition(isMasterInverted, isSensorPhase);
+  }
 
-    //getters
-    private int getAbsolutePosition(){
-        return super.motor.getSensorCollection().getPulseWidthPosition();
-    }
+  public TalonPosition(
+    TalonSRX master,
+    boolean isMasterInverted,
+    boolean isFollowerInverted,
+    boolean isSensorPhase,
+    Gains gains,
+    TalonSRX... followers
+  )
+  {
+    this(
+      master,
+      isMasterInverted,
+      isFollowerInverted,
+      isSensorPhase,
+      PIDTalonConstants.nominalOutputForwardValue,
+      PIDTalonConstants.nominalOutputReverseValue,
+      PIDTalonConstants.peakOutputForwardValue,
+      PIDTalonConstants.peakOutputReverseValue,
+      gains,
+      followers
+    );
+  }
 
-    public boolean isMaxPosition(double value){
-        return (this.getSelectedSensorPosition() - this.getSelectedSensorPosition()) < (-value);
-    }
+  public TalonPosition(
+    TalonSRX master,
+    Gains gains,
+    TalonSRX... followers
+  )
+  {
+    this(
+      master,
+      false,
+      false,
+      PIDTalonConstants.isSensorPhase,
+      PIDTalonConstants.nominalOutputForwardValue,
+      PIDTalonConstants.nominalOutputReverseValue,
+      PIDTalonConstants.peakOutputForwardValue,
+      PIDTalonConstants.peakOutputReverseValue,
+      gains,
+      followers
+    );
+  }
 
-    public double getSelectedSensorPosition(){
-        return super.motor.getSelectedSensorPosition(0);
-    }
+  private int getAbsolutePosition() {
+    return super.master.getSensorCollection().getPulseWidthPosition();
+  }
 
-    public double getMotorOutput(){
-        return super.motor.getMotorOutputPercent();
-    }
+  public boolean isMaxPosition(double value) {
+    return (this.getSelectedSensorPosition() - this.getSelectedSensorPosition()) < (-value);
+  }
 
-    //setters
-    public void setPostion(int position){
-        super.motor.set(ControlMode.Position, this.getSelectedSensorPosition() - position);
-    }
+  public double getSelectedSensorPosition() {
+    return super.master.getSelectedSensorPosition(0);
+  }
 
-    private void setAbsolutePosition(
-        int kPIDLoopIdx, 
-        int kTimeoutMs, 
-        boolean kMotorInvert, 
-        boolean kSensorPhase
-    )
-    {
-        int absolutePosition = this.getAbsolutePosition();
+  public double getMasterOutput() {
+    return super.master.getMotorOutputPercent();
+  } 
 
-        absolutePosition &= 0xFFF;
+  public void setPostion(int position) {
+    super.master.set(ControlMode.Position, this.getSelectedSensorPosition() - position);
+  }
 
-        if (kSensorPhase) { absolutePosition *= -1; }
-        if (kMotorInvert) { absolutePosition *= -1; }
-        
-        super.motor.setSelectedSensorPosition(absolutePosition, kPIDLoopIdx, kTimeoutMs);
-    }
+  private void setAbsolutePosition(
+    boolean isMasterInverted, 
+    boolean isSensorPhase
+  )
+  {
+    int absolutePosition = this.getAbsolutePosition();
+
+    absolutePosition &= 0xFFF;
+
+    if (isSensorPhase) { absolutePosition *= -1; }
+    if (isMasterInverted) { absolutePosition *= -1; }
+    
+    super.master.setSelectedSensorPosition(
+      absolutePosition, 
+      PIDTalonConstants.kPIDLoopIdx, 
+      PIDTalonConstants.kTimeoutMs
+    );
+  }
 }

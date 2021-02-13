@@ -53,10 +53,25 @@ public final class Constants {
 	}
 
 	public static final class ShooterConstants {
-		public static final double 
-			kPVelocity = 0,
-			kIVelocity = 0,
-			kDVelocity = 0;  
+		public static final class PIDConstants {
+			public static final double 
+				kPDriveVelocity = 0,
+				kIDriveVelocity = 0,
+				kDDriveVelocity = 0;
+		}
+	}
+
+	public static final class PIDTalonConstants {
+		public static final int
+			kPIDLoopIdx = 0,
+			kTimeoutMs = 30,
+			nominalOutputForwardValue = 0,
+			nominalOutputReverseValue = 0,
+			peakOutputForwardValue = 1,
+			peakOutputReverseValue = -1;
+
+		public static final boolean
+			isSensorPhase = true;
 	}
 
 	public static final class OIConstants {

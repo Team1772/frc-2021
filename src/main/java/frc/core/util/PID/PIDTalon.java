@@ -1,93 +1,103 @@
 package frc.core.util.PID;
 
+import java.util.List;
+
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-/* Ideia
- * 
- * implementar uma maneira de escalonar os followers;
- * Perguntar para Gabriela sobre como fazer isso.
- */
+import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.Constants.PIDTalonConstants;
 
 public abstract class PIDTalon {
-    //attributes
-    protected TalonSRX motor, follower;
+	protected TalonSRX master;
+	protected List<TalonSRX> followers;
 
-    //constructor
-    public PIDTalon(
-        TalonSRX motor, 
-        TalonSRX follower, 
-        int kPIDLoopIdx, 
-        int kTimeoutMs, 
-        boolean kSensorPhase, 
-        double nominalOutputForwardValue,
-        double nominalOutputReverseValue, 
-        double peakOutputForwardValue, 
-        double peakOutputReverseValue, 
-        boolean kMotorInvert, 
-        Gains gains
-    )
-    {
-        this.motor = motor;
-        this.follower = follower;
+	public PIDTalon(
+		TalonSRX master, 
+		boolean isMasterInverted, 
+		boolean isFollowerInverted, 
+		boolean isSensorPhase,
+		double nominalOutputForwardValue, 
+		double nominalOutputReverseValue, 
+		double peakOutputForwardValue,	
+		double peakOutputReverseValue, 
+		Gains gains, 
+		TalonSRX... followers
+	)
+	{
+		this.master = master;
+		this.setMasterInverted(isMasterInverted);
 
-        this.configSelectedFeedbackSensor(kPIDLoopIdx, kTimeoutMs);
-        this.setSensorPhase(kSensorPhase);
-        this.setInverted(kMotorInvert);
-        this.setFollower();
-        this.setOutputs(
-        nominalOutputForwardValue, 
-        nominalOutputReverseValue, 
-        peakOutputForwardValue, 
-        peakOutputReverseValue, 
-        kTimeoutMs
-        );
-        this.setPIDValues(kPIDLoopIdx, gains, kTimeoutMs);
-    }
+		this.setFollowers(followers);
 
-    private void configSelectedFeedbackSensor(int kPIDLoopIdx, int kTimeoutMs){
-        this.motor.configSelectedFeedbackSensor(
-            FeedbackDevice.CTRE_MagEncoder_Absolute,
-            kPIDLoopIdx,
-            kTimeoutMs
-        );                               
-    }
-    
-    private void setSensorPhase(boolean kSensorPhase){
-        this.motor.setSensorPhase(kSensorPhase);
-    }
-    
-    private void setFollower(){
-        this.follower.configFactoryDefault();
-        this.follower.setInverted(true);
-        this.follower.follow(motor);
-    }
+		this.configSelectedFeedbackSensor();
+		this.setSensorPhase(isSensorPhase);
 
-    private void setInverted(boolean kMotorInvert){
-        this.motor.setInverted(kMotorInvert);
-    }
-    
-    private void setOutputs(
-        double nominalOutputForwardValue, 
-        double nominalOutputReverseValue,
-        double peakOutputForwardValue, 
-        double peakOutputReverseValue, 
-        int kTimeoutMs
-    )
-    {
-        this.motor.configNominalOutputForward(nominalOutputForwardValue, kTimeoutMs);
-        this.motor.configNominalOutputReverse(nominalOutputReverseValue, kTimeoutMs);
-        this.motor.configPeakOutputForward(peakOutputForwardValue, kTimeoutMs);
-        this.motor.configPeakOutputReverse(peakOutputReverseValue, kTimeoutMs);
-    }
-    
-    private void setPIDValues(int kPIDLoopIdx, Gains gains, int kTimeoutMs){
-        motor.config_kF(kPIDLoopIdx, gains.kF, kTimeoutMs);
-        motor.config_kP(kPIDLoopIdx, gains.kP, kTimeoutMs);
-        motor.config_kI(kPIDLoopIdx, gains.kI, kTimeoutMs);
-        motor.config_kD(kPIDLoopIdx, gains.kD, kTimeoutMs);       
-    }
+		this.setOutputs(
+			nominalOutputForwardValue, 
+			nominalOutputReverseValue, 
+			peakOutputForwardValue,
+			peakOutputReverseValue
+		);
+		this.setPIDValues(gains);
+	}
+
+	private void configSelectedFeedbackSensor() {
+		this.master.configSelectedFeedbackSensor(
+			FeedbackDevice.CTRE_MagEncoder_Relative,
+			PIDTalonConstants.kPIDLoopIdx,
+			PIDTalonConstants.kTimeoutMs
+		);
+	}
+
+	private void setSensorPhase(boolean isSensorPhase) {
+		this.master.setSensorPhase(isSensorPhase);
+	}
+
+	private void setMasterInverted(boolean isInverted) {
+		this.master.setInverted(isInverted);
+	}
+
+	public void setFollowers(TalonSRX... followers) {
+		for (TalonSRX follower : followers) {
+			this.followers.add(follower);
+			follower.configFactoryDefault();
+			follower.follow(this.master);
+		}
+	}
+
+	public void setFollowersInverted(Boolean... isInvertedList) {
+		int index = 0;
+		if (isInvertedList.length >= this.followers.size()) {
+			for (TalonSRX follower : followers) {
+				follower.setInverted(isInvertedList[index]);
+				index++;
+			}
+		} else {
+			DriverStation.reportError(
+				"the length of varags must be equal or higher than the list of followers",
+				new Exception().getStackTrace()
+			);
+		}
+	}
+
+	private void setOutputs(
+		double nominalOutputForwardValue, 
+		double nominalOutputReverseValue,
+		double peakOutputForwardValue, 
+		double peakOutputReverseValue
+	)
+	{
+		this.master.configNominalOutputForward(nominalOutputForwardValue, PIDTalonConstants.kTimeoutMs);
+		this.master.configNominalOutputReverse(nominalOutputReverseValue, PIDTalonConstants.kTimeoutMs);
+		this.master.configPeakOutputForward(peakOutputForwardValue, PIDTalonConstants.kTimeoutMs);
+		this.master.configPeakOutputReverse(peakOutputReverseValue, PIDTalonConstants.kTimeoutMs);
+	}
+
+	private void setPIDValues(Gains gains) {
+		this.master.config_kF(PIDTalonConstants.kPIDLoopIdx, gains.kF, PIDTalonConstants.kTimeoutMs);
+		this.master.config_kP(PIDTalonConstants.kPIDLoopIdx, gains.kP, PIDTalonConstants.kTimeoutMs);
+		this.master.config_kI(PIDTalonConstants.kPIDLoopIdx, gains.kI, PIDTalonConstants.kTimeoutMs);
+		this.master.config_kD(PIDTalonConstants.kPIDLoopIdx, gains.kD, PIDTalonConstants.kTimeoutMs);
+	}
 }
-
-
-
