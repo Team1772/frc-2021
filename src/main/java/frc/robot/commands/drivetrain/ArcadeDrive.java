@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.drivetrain;
 
 import frc.robot.subsystems.Drivetrain;
 
@@ -11,11 +11,11 @@ public class ArcadeDrive extends CommandBase {
   private DoubleSupplier forward, rotation;
 
   public ArcadeDrive(Drivetrain drivetrain, DoubleSupplier forward, DoubleSupplier rotation) {
-      this.drivetrain = drivetrain;
-      this.forward = forward;
-      this.rotation = rotation;
+    this.drivetrain = drivetrain;
+    this.forward = forward;
+    this.rotation = rotation;
 
-      addRequirements(this.drivetrain);
+    addRequirements(this.drivetrain);
   }
 
   @Override
