@@ -19,16 +19,14 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.Drivetrain;
 
 public class TrajectoryBuilder {
-	//subsystems
-	private Drivetrain drivetrain;
+  private Drivetrain drivetrain;
 
-	//attributes
-	private final SimpleMotorFeedforward simpleMotorFeedforward;
-	private final PIDController pidController;
-	private final RamseteController ramseteController;
+  private final SimpleMotorFeedforward simpleMotorFeedforward;
+  private final PIDController pidController;
+  private final RamseteController ramseteController;
 
-	private Trajectory trajectory;
-	private RamseteCommand ramseteCommand;
+  private Trajectory trajectory;
+  private RamseteCommand ramseteCommand;
 
 	//constructor
 	public TrajectoryBuilder(Drivetrain drivetrain) {
@@ -40,9 +38,9 @@ public class TrajectoryBuilder {
 			DrivetrainConstants.kaVoltSecondsSquaredPerMeter
 		);
 		this.pidController = new PIDController(
-			DrivetrainConstants.kPDriveVelocity, 
-			DrivetrainConstants.kIDriveVelocity, 
-			DrivetrainConstants.kDDriveVelocity
+			DrivetrainConstants.PIDConstants.kPDriveVelocity,
+			DrivetrainConstants.PIDConstants.kIDriveVelocity, 
+			DrivetrainConstants.PIDConstants.kDDriveVelocity
 		);
 		this.ramseteController = new RamseteController(
 			AutoConstants.kRamseteB, 
@@ -50,26 +48,25 @@ public class TrajectoryBuilder {
 		);
 	}
 
-	//helpers
-	public void createRamsete(){
-		if (isNull(this.trajectory)) {
-			DriverStation.reportError(
-				"trajectory is null", 
-				new Exception().getStackTrace()
-			);
-		} else {
-			this.ramseteCommand = new RamseteCommand(
-				this.trajectory,
-				this.drivetrain::getPose,
-				this.ramseteController,
-				this.simpleMotorFeedforward,
-				DrivetrainConstants.kDriveKinematics, 
-				this.drivetrain::getWheelSpeeds, 
-				this.pidController, 
-				this.pidController, 
-				this.drivetrain::tankDriveVolts, 
-				this.drivetrain
-			);
+  public void createRamsete(){
+    if (isNull(this.trajectory)) {
+      DriverStation.reportError(
+          "trajectory is null", 
+          new Exception().getStackTrace()
+      );
+    } else {
+      this.ramseteCommand = new RamseteCommand(
+        this.trajectory,
+        this.drivetrain::getPose,
+        this.ramseteController,
+        this.simpleMotorFeedforward,
+        DrivetrainConstants.kDriveKinematics, 
+        this.drivetrain::getWheelSpeeds, 
+        this.pidController, 
+        this.pidController, 
+        this.drivetrain::tankDriveVolts, 
+        this.drivetrain
+      );
 
 			this.drivetrain.resetOdometry(this.trajectory.getInitialPose());
 		}
