@@ -15,14 +15,17 @@ import frc.robot.commands.intake.ReleasePowerCell;
 import frc.robot.commands.autons.GalacticA;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
+import frc.robot.commands.buffer.Feed;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Buffer;
 
 public class RobotContainer {
 
   //subsystems
   private final Drivetrain drivetrain;
   private final Intake intake;
-  
+  private final Buffer buffer;
+
   //controller
   private final XboxController driver;
   private final XboxController operator;
@@ -33,6 +36,7 @@ public class RobotContainer {
   public RobotContainer() {
     this.drivetrain = new Drivetrain();
     this.intake = new Intake();
+    this.buffer = new Buffer();
 
     this.driver = new XboxController(OIConstants.driverControllerPort);
     this.operator = new XboxController(OIConstants.operatorControllerPort);
@@ -66,6 +70,7 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     this.configureButtonBindingsIntake();
+    this.configureButtonBindingsBuffer();
 
   }
 
@@ -78,6 +83,15 @@ public class RobotContainer {
      
      axisTriggerLeft
      .whileHeld(new ReleasePowerCell(this.intake));
+    }
+
+    private void configureButtonBindingsBuffer(){
+      this.buffer.setDefaultCommand(
+        new Feed(
+          buffer,
+          () -> this.operator.getY(Hand.kRight)
+        )
+      );
     }
 
   public Command getAutonomousCommand() {
