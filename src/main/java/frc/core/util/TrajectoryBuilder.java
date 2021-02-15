@@ -96,7 +96,7 @@ public class TrajectoryBuilder {
 		return this.ramseteCommand;
 	}
 
-	public Trajectory createTrajectory(String fileName) {
+	private Trajectory createTrajectory(String fileName) {
 		String path = String.format("paths/output/%s.wpilib.json", fileName);
 		try {
 			Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path);
