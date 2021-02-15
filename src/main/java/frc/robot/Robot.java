@@ -20,7 +20,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    this.robotContainer.reset();
+  }
 
   @Override
   public void disabledPeriodic() {}

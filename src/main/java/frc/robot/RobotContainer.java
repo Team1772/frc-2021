@@ -23,14 +23,13 @@ public class RobotContainer {
   //subsystems
   private final Drivetrain drivetrain;
   private final Intake intake;
-
+  
   //controller
-  private TrajectoryBuilder trajectoryBuilder;
   private final XboxController driver;
   private final XboxController operator;
-
-  private Trajectory trajectory;
-
+  
+  private TrajectoryBuilder trajectoryBuilder;
+  
   //constructor
   public RobotContainer() {
     this.drivetrain = new Drivetrain();
@@ -38,6 +37,8 @@ public class RobotContainer {
 
     this.driver = new XboxController(OIConstants.driverControllerPort);
     this.operator = new XboxController(OIConstants.operatorControllerPort);
+
+    this.trajectoryBuilder = new TrajectoryBuilder(this.drivetrain, "galacticA_0");
 
     this.configureButtonBindings();
     this.configureDefaultCommand();
@@ -81,8 +82,10 @@ public class RobotContainer {
     }
 
   public Command getAutonomousCommand() {
-    this.trajectoryBuilder = new TrajectoryBuilder(this.drivetrain);
-
     return new GalacticA(this.trajectoryBuilder);
-	}
+  }
+  
+  public void reset() {
+    this.drivetrain.reset();
+  }
 }

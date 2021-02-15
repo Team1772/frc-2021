@@ -4,6 +4,8 @@ import static java.util.Objects.isNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -27,12 +29,18 @@ public class TrajectoryBuilder {
 	private final PIDController pidController;
 	private final RamseteController ramseteController;
 
-	private Trajectory trajectory;
+	private Map<String, Trajectory> trajectories;
 	private RamseteCommand ramseteCommand;
 
 	//constructor
-	public TrajectoryBuilder(Drivetrain drivetrain) {
-    this.drivetrain = drivetrain;
+	public TrajectoryBuilder(Drivetrain drivetrain, String... filesNames) {
+		this.drivetrain = drivetrain;
+		this.trajectories = new HashMap<>();
+
+		for (String fileName : filesNames) {
+			var trajectory = this.createTrajectory(fileName);
+			this.trajectories.put(fileName, trajectory);
+		}
     
 		this.simpleMotorFeedforward = new SimpleMotorFeedforward(
 			DrivetrainConstants.ksVolts,
@@ -51,15 +59,15 @@ public class TrajectoryBuilder {
 	}
 
 	//helpers
-	public void createRamsete(){
-		if (isNull(this.trajectory)) {
+	public void createRamsete(Trajectory trajectory){
+		if (isNull(trajectory)) {
 			DriverStation.reportError(
 				"trajectory is null", 
 				new Exception().getStackTrace()
 			);
 		} else {
 			this.ramseteCommand = new RamseteCommand(
-				this.trajectory,
+				trajectory,
 				this.drivetrain::getPose,
 				this.ramseteController,
 				this.simpleMotorFeedforward,
@@ -71,13 +79,13 @@ public class TrajectoryBuilder {
 				this.drivetrain
 			);
 
-			this.drivetrain.resetOdometry(this.trajectory.getInitialPose());
+			this.drivetrain.resetOdometry(trajectory.getInitialPose());
 		}
   }
   
   public Command buildTrajectory(String fileName) {
-    this.setTrajectory(fileName);
-    this.createRamsete();
+		var trajectory = this.trajectories.get(fileName);
+    this.createRamsete(trajectory);
 
     return this.getRamsete().andThen(
       () -> this.drivetrain.tankDriveVolts(0, 0)
@@ -88,16 +96,19 @@ public class TrajectoryBuilder {
 		return this.ramseteCommand;
 	}
 
-	private void setTrajectory(String fileName) {
+	public Trajectory createTrajectory(String fileName) {
 		String path = String.format("paths/output/%s.wpilib.json", fileName);
 		try {
 			Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path);
-			this.trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+
+			return TrajectoryUtil.fromPathweaverJson(trajectoryPath);
 		} catch (IOException ex) {
 			DriverStation.reportError(
 					String.format("Unable to open trajectory: %s", path), 
 					ex.getStackTrace()
 			);
+
+			return null;
 		}
 	}
 }

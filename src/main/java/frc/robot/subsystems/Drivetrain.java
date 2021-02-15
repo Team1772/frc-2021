@@ -71,8 +71,13 @@ public class Drivetrain extends SubsystemBase {
     this.encoderRight.reset();
   }
 
-  public void reset() {
+  public void resetNavX() {
     this.navX.reset();
+  }
+
+  public void reset() {
+    this.resetNavX();
+    this.resetEncoders();
   }
 
   public void updateOdometry() {
