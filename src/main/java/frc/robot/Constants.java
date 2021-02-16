@@ -60,7 +60,7 @@ public final class Constants {
 		nominalOutputForwardValue = 0,
 		nominalOutputReverseValue = 0,
 		peakOutputForwardValue = 1,
-		peakOutputReverseValue = -1	;
+		peakOutputReverseValue = -1;
 	}
 
 	public static final class BufferConstants {
