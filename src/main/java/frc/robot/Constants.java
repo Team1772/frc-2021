@@ -50,6 +50,19 @@ public final class Constants {
 			activatorTwo = 1;
 	}
 
+	public static final class PIDTalonConstants{
+		public static final boolean
+		isSensorPhase = true;
+
+		public static final int
+		kPIDLoopIdx = 0,
+		kTimeoutMs = 30,
+		nominalOutputForwardValue = 0,
+		nominalOutputReverseValue = 0,
+		peakOutputForwardValue = 1,
+		peakOutputReverseValue = -1;
+	}
+
 	public static final class BufferConstants {
 		public static final int
 			motorPort = 4;
