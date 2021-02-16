@@ -3,7 +3,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -16,28 +15,33 @@ import frc.robot.commands.intake.ReleasePowerCell;
 import frc.robot.commands.autons.GalacticA;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
+import frc.robot.commands.buffer.Feed;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Buffer;
 
 public class RobotContainer {
 
   //subsystems
   private final Drivetrain drivetrain;
   private final Intake intake;
+  private final Buffer buffer;
 
   //controller
-  private TrajectoryBuilder trajectoryBuilder;
   private final XboxController driver;
   private final XboxController operator;
-
-  private Trajectory trajectory;
-
+  
+  private TrajectoryBuilder trajectoryBuilder;
+  
   //constructor
   public RobotContainer() {
     this.drivetrain = new Drivetrain();
     this.intake = new Intake();
+    this.buffer = new Buffer();
 
     this.driver = new XboxController(OIConstants.driverControllerPort);
     this.operator = new XboxController(OIConstants.operatorControllerPort);
+
+    this.trajectoryBuilder = new TrajectoryBuilder(this.drivetrain, "galacticA_0");
 
     this.configureButtonBindings();
     this.configureDefaultCommand();
@@ -66,6 +70,7 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     this.configureButtonBindingsIntake();
+    this.configureButtonBindingsBuffer();
 
   }
 
@@ -80,9 +85,20 @@ public class RobotContainer {
      .whileHeld(new ReleasePowerCell(this.intake));
     }
 
-  public Command getAutonomousCommand() {
-    this.trajectoryBuilder = new TrajectoryBuilder(this.drivetrain);
+    private void configureButtonBindingsBuffer(){
+      this.buffer.setDefaultCommand(
+        new Feed(
+          buffer,
+          () -> this.operator.getY(Hand.kRight)
+        )
+      );
+    }
 
+  public Command getAutonomousCommand() {
     return new GalacticA(this.trajectoryBuilder);
-	}
+  }
+  
+  public void reset() {
+    this.drivetrain.reset();
+  }
 }

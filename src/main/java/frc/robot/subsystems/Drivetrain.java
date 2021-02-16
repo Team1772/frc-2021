@@ -71,8 +71,13 @@ public class Drivetrain extends SubsystemBase {
     this.encoderRight.reset();
   }
 
-  public void reset() {
+  public void resetNavX() {
     this.navX.reset();
+  }
+
+  public void reset() {
+    this.resetNavX();
+    this.resetEncoders();
   }
 
   public void updateOdometry() {
@@ -88,7 +93,7 @@ public class Drivetrain extends SubsystemBase {
     this.odometry.resetPosition(pose, this.getRotation2d());
   }
 
-  public void tankDriveVolts(double rightVolts, double leftVolts) {
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
     this.motorsLeft.setVoltage(leftVolts);
     this.motorsRight.setVoltage(-(rightVolts));
     this.drive.feed();

@@ -3,7 +3,6 @@ package frc.core.util.PID;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.PIDTalonConstants;
 
 public class TalonVelocity extends PIDTalon {
