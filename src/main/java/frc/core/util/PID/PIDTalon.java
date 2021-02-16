@@ -23,8 +23,7 @@ public abstract class PIDTalon {
 		double peakOutputReverseValue, 
 		Gains gains, 
 		TalonSRX... followers
-	)
-	{
+	) {
 		this.master = master;
 		this.setMasterInverted(isMasterInverted);
 
@@ -86,8 +85,7 @@ public abstract class PIDTalon {
 		double nominalOutputReverseValue,
 		double peakOutputForwardValue, 
 		double peakOutputReverseValue
-	)
-	{
+	) {
 		this.master.configNominalOutputForward(nominalOutputForwardValue, PIDTalonConstants.kTimeoutMs);
 		this.master.configNominalOutputReverse(nominalOutputReverseValue, PIDTalonConstants.kTimeoutMs);
 		this.master.configPeakOutputForward(peakOutputForwardValue, PIDTalonConstants.kTimeoutMs);

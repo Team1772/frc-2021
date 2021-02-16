@@ -18,8 +18,7 @@ public class TalonPosition extends PIDTalon {
     double peakOutputReverseValue, 
     Gains gains,
     TalonSRX... followers
-  )
-  {
+  ) {
     super(
       master, 
       isMasterInverted, 
@@ -43,8 +42,7 @@ public class TalonPosition extends PIDTalon {
     boolean isSensorPhase,
     Gains gains,
     TalonSRX... followers
-  )
-  {
+  ) {
     this(
       master,
       isMasterInverted,
@@ -63,8 +61,7 @@ public class TalonPosition extends PIDTalon {
     TalonSRX master,
     Gains gains,
     TalonSRX... followers
-  )
-  {
+  ) {
     this(
       master,
       false,
@@ -99,11 +96,7 @@ public class TalonPosition extends PIDTalon {
     super.master.set(ControlMode.Position, this.getSelectedSensorPosition() - position);
   }
 
-  private void setAbsolutePosition(
-    boolean isMasterInverted, 
-    boolean isSensorPhase
-  )
-  {
+  private void setAbsolutePosition( boolean isMasterInverted, boolean isSensorPhase) {
     int absolutePosition = this.getAbsolutePosition();
 
     absolutePosition &= 0xFFF;

@@ -4,6 +4,8 @@ import static java.util.Objects.isNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -19,18 +21,26 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.Drivetrain;
 
 public class TrajectoryBuilder {
-  private Drivetrain drivetrain;
+	//subsystems
+	private Drivetrain drivetrain;
 
-  private final SimpleMotorFeedforward simpleMotorFeedforward;
-  private final PIDController pidController;
-  private final RamseteController ramseteController;
+	//attributes
+	private final SimpleMotorFeedforward simpleMotorFeedforward;
+	private final PIDController pidController;
+	private final RamseteController ramseteController;
 
-  private Trajectory trajectory;
-  private RamseteCommand ramseteCommand;
+	private Map<String, Trajectory> trajectories;
+	private RamseteCommand ramseteCommand;
 
 	//constructor
-	public TrajectoryBuilder(Drivetrain drivetrain) {
-    this.drivetrain = drivetrain;
+	public TrajectoryBuilder(Drivetrain drivetrain, String... filesNames) {
+		this.drivetrain = drivetrain;
+		this.trajectories = new HashMap<>();
+
+		for (String fileName : filesNames) {
+			var trajectory = this.createTrajectory(fileName);
+			this.trajectories.put(fileName, trajectory);
+		}
     
 		this.simpleMotorFeedforward = new SimpleMotorFeedforward(
 			DrivetrainConstants.ksVolts,
@@ -38,7 +48,7 @@ public class TrajectoryBuilder {
 			DrivetrainConstants.kaVoltSecondsSquaredPerMeter
 		);
 		this.pidController = new PIDController(
-			DrivetrainConstants.PIDConstants.kPDriveVelocity,
+			DrivetrainConstants.PIDConstants.kPDriveVelocity, 
 			DrivetrainConstants.PIDConstants.kIDriveVelocity, 
 			DrivetrainConstants.PIDConstants.kDDriveVelocity
 		);
@@ -48,33 +58,34 @@ public class TrajectoryBuilder {
 		);
 	}
 
-  public void createRamsete(){
-    if (isNull(this.trajectory)) {
-      DriverStation.reportError(
-          "trajectory is null", 
-          new Exception().getStackTrace()
-      );
-    } else {
-      this.ramseteCommand = new RamseteCommand(
-        this.trajectory,
-        this.drivetrain::getPose,
-        this.ramseteController,
-        this.simpleMotorFeedforward,
-        DrivetrainConstants.kDriveKinematics, 
-        this.drivetrain::getWheelSpeeds, 
-        this.pidController, 
-        this.pidController, 
-        this.drivetrain::tankDriveVolts, 
-        this.drivetrain
-      );
+	//helpers
+	public void createRamsete(Trajectory trajectory){
+		if (isNull(trajectory)) {
+			DriverStation.reportError(
+				"trajectory is null", 
+				new Exception().getStackTrace()
+			);
+		} else {
+			this.ramseteCommand = new RamseteCommand(
+				trajectory,
+				this.drivetrain::getPose,
+				this.ramseteController,
+				this.simpleMotorFeedforward,
+				DrivetrainConstants.kDriveKinematics, 
+				this.drivetrain::getWheelSpeeds, 
+				this.pidController, 
+				this.pidController, 
+				this.drivetrain::tankDriveVolts, 
+				this.drivetrain
+			);
 
-			this.drivetrain.resetOdometry(this.trajectory.getInitialPose());
+			this.drivetrain.resetOdometry(trajectory.getInitialPose());
 		}
   }
   
   public Command buildTrajectory(String fileName) {
-    this.setTrajectory(fileName);
-    this.createRamsete();
+		var trajectory = this.trajectories.get(fileName);
+    this.createRamsete(trajectory);
 
     return this.getRamsete().andThen(
       () -> this.drivetrain.tankDriveVolts(0, 0)
@@ -85,16 +96,19 @@ public class TrajectoryBuilder {
 		return this.ramseteCommand;
 	}
 
-	private void setTrajectory(String fileName) {
+	private Trajectory createTrajectory(String fileName) {
 		String path = String.format("paths/output/%s.wpilib.json", fileName);
 		try {
 			Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path);
-			this.trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+
+			return TrajectoryUtil.fromPathweaverJson(trajectoryPath);
 		} catch (IOException ex) {
 			DriverStation.reportError(
 					String.format("Unable to open trajectory: %s", path), 
 					ex.getStackTrace()
 			);
+
+			return null;
 		}
 	}
 }

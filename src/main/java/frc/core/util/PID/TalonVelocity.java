@@ -19,8 +19,7 @@ public class TalonVelocity extends PIDTalon {
     double peakOutputReverseValue, 
     Gains gains,
     TalonSRX... followers
-  )
-  {
+  ) {
     super(
       master, 
       isMasterInverted, 
@@ -41,8 +40,7 @@ public class TalonVelocity extends PIDTalon {
     boolean isFollowerInverted,
     Gains gains,
     TalonSRX... followers
-  )
-  {
+  ) {
     this(
       master,
       isMasterInverted,
@@ -61,8 +59,7 @@ public class TalonVelocity extends PIDTalon {
     TalonSRX master,
     Gains gains,
     TalonSRX... followers
-  )
-  {
+  ) {
     this(
       master,
       false,
@@ -75,15 +72,6 @@ public class TalonVelocity extends PIDTalon {
       gains,
       followers
     );
-  }
-  
-  public double getSensorVelocity() {
-    SmartDashboard.putNumber(
-      "master velocity", 
-      super.master.getSelectedSensorVelocity()
-    );
-    
-    return super.master.getSelectedSensorVelocity();
   }
 
   public void setVelocity(double velocity) {
