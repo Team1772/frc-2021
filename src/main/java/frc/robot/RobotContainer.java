@@ -21,18 +21,14 @@ import frc.robot.subsystems.Buffer;
 
 public class RobotContainer {
 
-  //subsystems
   private final Drivetrain drivetrain;
   private final Intake intake;
   private final Buffer buffer;
 
-  //controller
-  private final XboxController driver;
-  private final XboxController operator;
+  private final XboxController driver, operator;
   
   private TrajectoryBuilder trajectoryBuilder;
   
-  //constructor
   public RobotContainer() {
     this.drivetrain = new Drivetrain();
     this.intake = new Intake();
@@ -47,7 +43,6 @@ public class RobotContainer {
     this.configureDefaultCommand();
   }
 
-  //configure commands
   private void configureDefaultCommand() {
     var buttonBumperLeft = new JoystickButton(this.driver, Button.kBumperLeft.value);
 
