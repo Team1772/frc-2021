@@ -66,28 +66,27 @@ public class RobotContainer {
   private void configureButtonBindings() {
     this.configureButtonBindingsIntake();
     this.configureButtonBindingsBuffer();
-
   }
 
-   private void configureButtonBindingsIntake(){
-     var buttonBumperLeft = new JoystickButton(this.operator, Button.kBumperLeft.value);
-     var axisTriggerLeft = new JoystickButton(this.operator, Axis.kLeftTrigger.value);
- 
-     buttonBumperLeft
-     .whileHeld(new CollectPowerCell(this.intake));
-     
-     axisTriggerLeft
-     .whileHeld(new ReleasePowerCell(this.intake));
-    }
+  private void configureButtonBindingsIntake(){
+    var buttonBumperLeft = new JoystickButton(this.operator, Button.kBumperLeft.value);
+    var axisTriggerLeft = new JoystickButton(this.operator, Axis.kLeftTrigger.value);
 
-    private void configureButtonBindingsBuffer(){
-      this.buffer.setDefaultCommand(
-        new Feed(
-          buffer,
-          () -> this.operator.getY(Hand.kRight)
-        )
-      );
-    }
+    buttonBumperLeft
+      .whileHeld(new CollectPowerCell(this.intake));
+    
+    axisTriggerLeft
+      .whileHeld(new ReleasePowerCell(this.intake));
+  }
+
+  private void configureButtonBindingsBuffer(){
+    this.buffer.setDefaultCommand(
+      new Feed(
+        buffer,
+        () -> this.operator.getY(Hand.kRight)
+      )
+    );
+  }
 
   public Command getAutonomousCommand() {
     return new GalacticA(this.trajectoryBuilder);
