@@ -12,7 +12,6 @@ import frc.core.util.TrajectoryBuilder;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.intake.CollectPowerCell;
 import frc.robot.commands.intake.ReleasePowerCell;
-import frc.robot.commands.autons.GalacticA;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
 import frc.robot.commands.buffer.Feed;
@@ -90,7 +89,8 @@ public class RobotContainer {
     }
 
   public Command getAutonomousCommand() {
-    return new GalacticA(this.trajectoryBuilder);
+    // return new GalacticA(this.trajectoryBuilder);
+    return null;
   }
   
   public void reset() {
