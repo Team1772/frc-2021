@@ -1,12 +1,13 @@
 package frc.core.util.PID;
 
+import static frc.core.util.function.For.forWithCounter;
+
 import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.core.util.function.For;
 import frc.robot.Constants.PIDTalonConstants;
 
 public abstract class PIDTalon {
@@ -68,9 +69,9 @@ public abstract class PIDTalon {
 
 	public void setFollowersInverted(Boolean... isInvertedList) {
 		if (isInvertedList.length >= this.followers.size()) {
-			followers.forEach(For.withCounter((i, follower) -> {
-				follower.setInverted(isInvertedList[i]);		
-			}));
+			forWithCounter(this.followers, (i, follower) -> {
+ 				follower.setInverted(isInvertedList[i]);		
+			});
 		} else {
 			DriverStation.reportError(
 				"the length of varags must be equal or higher than the list of followers",
