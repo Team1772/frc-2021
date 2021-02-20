@@ -30,4 +30,8 @@ public class Intake extends SubsystemBase {
   public void toggle(){
     this.activator.toggle();
   }
+
+  public void stop() {
+    this.motor.set(VictorSPXControlMode.PercentOutput, 0);
+}
 }
