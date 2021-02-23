@@ -2,8 +2,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.core.util.TrajectoryBuilder;
 import frc.robot.routines.Autonomous;
 import frc.robot.routines.Teleoperated;
+import frc.robot.routines.Autonomous.RobotPath;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 
@@ -11,10 +13,14 @@ public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static Intake intake;
 
+  public static TrajectoryBuilder trajectoryBuilder;
+
   @Override
   public void robotInit() { 
     drivetrain = new Drivetrain();
     intake = new Intake();
+
+    trajectoryBuilder = new TrajectoryBuilder(drivetrain, RobotPath.getPaths());
   }
 
   @Override
