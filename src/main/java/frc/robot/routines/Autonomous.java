@@ -3,8 +3,7 @@ package frc.robot.routines;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,33 +12,28 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.commands.autons.GalacticA;
 
-
-
 public class Autonomous implements IRoutines {
   private static Autonomous autonomous;
 
-  private Command automonousCommand;
-  private SendableChooser<Command> chooser;
+  private Command automonousCommand = this.getAutonomousCommand();
+  private SendableChooser<Command> chooser = new SendableChooser<>();
 
   public enum RobotPath {
     //add all paths here
     GALACTIC_A("galaticA");
   
-    private final String fileName;
+    public final String fileName;
     private RobotPath(String fileName) {
       this.fileName = fileName;
     }
 
-    public static String[] getPaths() {
-      List<String> pathsList = new ArrayList<>(); 
+    public static String[] get() {
+      var robotPathValues = RobotPath.values();
+      var pathsArray = Arrays
+                        .stream(robotPathValues)
+                        .map(p -> p.fileName)
+                        .toArray(String[]::new);
 
-      for(String path : RobotPath.getPaths()) {
-        pathsList.add(path.toString());
-      }
-
-      String[] pathsArray = new String[pathsList.size()];
-      pathsList.toArray(pathsArray);
-      
       return pathsArray;
     }
   }
@@ -47,17 +41,14 @@ public class Autonomous implements IRoutines {
   private Autonomous() { }
 
   public static Autonomous getInstance(){
-    if (isNull(autonomous)) return new Autonomous();
+    if (isNull(autonomous)) autonomous = new Autonomous();
 
     return autonomous;
   }
 
   @Override
   public void init() {
-    this.chooser = new SendableChooser<>();
     this.setAutonomousOptions();
-
-    this.automonousCommand = this.getAutonomousCommand();
 
     if (nonNull(this.automonousCommand)) this.automonousCommand.schedule();
   }

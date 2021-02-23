@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Robot;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.buffer.Feed;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
 import frc.robot.commands.intake.CollectPowerCell;
@@ -17,7 +18,8 @@ import frc.robot.commands.intake.ReleasePowerCell;
 public class Teleoperated implements IRoutines {
   private static Teleoperated teleoperated;
 
-  private XboxController driver, operator;
+  private XboxController driver = new XboxController(OIConstants.driverControllerPort);
+  private XboxController operator = new XboxController(OIConstants.operatorControllerPort);
 
   private Teleoperated() { }
 
@@ -28,10 +30,7 @@ public class Teleoperated implements IRoutines {
   }
 
   @Override
-  public void init() {
-    this.driver = new XboxController(OIConstants.driverControllerPort);
-    this.operator = new XboxController(OIConstants.operatorControllerPort);
-  }
+  public void init() {}
 
   @Override
   public void periodic() {
@@ -42,8 +41,9 @@ public class Teleoperated implements IRoutines {
   public void cancel() { }
 
   private void configureButtonBindings() {
-    this.commandsDrivetrain();
     this.commandsIntake();
+    this.commandsDrivetrain();
+    this.commandsBuffer();
   }
 
   private void commandsIntake() {
@@ -73,6 +73,15 @@ public class Teleoperated implements IRoutines {
         Robot.drivetrain, 
         () -> this.driver.getY(Hand.kLeft), 
         () -> this.driver.getX(Hand.kRight)
+      )
+    );
+  }
+
+  private void commandsBuffer(){
+    Robot.buffer.setDefaultCommand(
+      new Feed(
+        Robot.buffer,
+        () -> this.operator.getY(Hand.kRight)
       )
     );
   }

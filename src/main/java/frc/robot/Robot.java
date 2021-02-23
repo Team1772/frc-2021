@@ -6,12 +6,14 @@ import frc.core.util.TrajectoryBuilder;
 import frc.robot.routines.Autonomous;
 import frc.robot.routines.Teleoperated;
 import frc.robot.routines.Autonomous.RobotPath;
+import frc.robot.subsystems.Buffer;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 
 public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static Intake intake;
+  public static Buffer buffer;
 
   public static TrajectoryBuilder trajectoryBuilder;
 
@@ -19,8 +21,9 @@ public class Robot extends TimedRobot {
   public void robotInit() { 
     drivetrain = new Drivetrain();
     intake = new Intake();
+    buffer = new Buffer();
 
-    trajectoryBuilder = new TrajectoryBuilder(drivetrain, RobotPath.getPaths());
+    trajectoryBuilder = new TrajectoryBuilder(drivetrain, RobotPath.get());
   }
 
   @Override
@@ -29,7 +32,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    drivetrain.reset();
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -52,6 +57,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    //its may causing bugs 
     Teleoperated.getInstance().periodic();
 
   }

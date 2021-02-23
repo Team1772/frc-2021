@@ -58,7 +58,7 @@ public class Limelight {
 	}
 
 	public static Limelight getInstance() {
-		if (isNull(limelight)) return new Limelight();
+		if (isNull(limelight)) limelight = new Limelight();
 
 		return limelight;	
 	}
