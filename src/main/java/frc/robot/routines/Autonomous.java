@@ -15,8 +15,8 @@ import frc.robot.commands.autons.GalacticA;
 public class Autonomous implements IRoutines {
   private static Autonomous autonomous;
 
-  private Command automonousCommand = this.getAutonomousCommand();
   private SendableChooser<Command> chooser = new SendableChooser<>();
+  private Command automonousCommand = this.getAutonomousCommand();
 
   public enum RobotPath {
     //add all paths here
