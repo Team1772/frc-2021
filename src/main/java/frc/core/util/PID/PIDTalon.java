@@ -1,5 +1,7 @@
 package frc.core.util.PID;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -58,13 +60,16 @@ public abstract class PIDTalon {
 	}
 
 	public void setFollowers(TalonSRX... followers) {
-		for (TalonSRX follower : followers) {
+		this.followers = new ArrayList<>();
+		
+		Arrays.stream(followers).forEach(follower -> {
+		  follower.configFactoryDefault();
 			this.followers.add(follower);
-			follower.configFactoryDefault();
-			follower.follow(this.master);
-		}
+		  follower.follow(this.master);
+		});
 	}
 
+	//this method has functional programming at branch "bruno's paths"
 	public void setFollowersInverted(Boolean... isInvertedList) {
 		int index = 0;
 		if (isInvertedList.length >= this.followers.size()) {

@@ -4,6 +4,7 @@ import static java.util.Objects.isNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.Drivetrain;
@@ -33,14 +35,10 @@ public class TrajectoryBuilder {
 	private RamseteCommand ramseteCommand;
 
 	//constructor
-	public TrajectoryBuilder(Drivetrain drivetrain, String... filesNames) {
+	public TrajectoryBuilder(Drivetrain drivetrain, String... filesName) {
 		this.drivetrain = drivetrain;
-		this.trajectories = new HashMap<>();
 
-		for (String fileName : filesNames) {
-			var trajectory = this.createTrajectory(fileName);
-			this.trajectories.put(fileName, trajectory);
-		}
+		this.configTrajectories(filesName);
     
 		this.simpleMotorFeedforward = new SimpleMotorFeedforward(
 			DrivetrainConstants.ksVolts,
@@ -59,6 +57,16 @@ public class TrajectoryBuilder {
 	}
 
 	//helpers
+	public void configTrajectories(String... filesName){
+		this.trajectories = new HashMap<>();
+
+		Arrays.stream(filesName)
+					.forEach(name -> {
+						var trajectory = this.createTrajectory(name);
+						this.trajectories.put(name, trajectory);
+					});
+	}
+
 	public void createRamsete(Trajectory trajectory){
 		if (isNull(trajectory)) {
 			DriverStation.reportError(
