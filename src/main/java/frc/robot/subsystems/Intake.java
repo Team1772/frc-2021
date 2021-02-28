@@ -33,4 +33,9 @@ public class Intake extends SubsystemBase {
   public void toggle(){
     this.activator.toggle();
   }
+
+  public void stop() {
+    this.motorLeft.set(ControlMode.PercentOutput, 0);
+    this.motorRight.set(ControlMode.PercentOutput, 0);
+  }
 }

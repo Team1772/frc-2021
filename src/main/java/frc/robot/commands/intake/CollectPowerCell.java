@@ -17,4 +17,9 @@ public class CollectPowerCell extends CommandBase {
 		this.intake.enable();
 		this.intake.setSpeed(0.5);
 	}
+	
+	public void end(boolean interrupted) {
+		this.intake.stop();
+		this.intake.disable();
+  }
 }
