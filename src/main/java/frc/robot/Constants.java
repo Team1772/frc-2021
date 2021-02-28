@@ -30,10 +30,10 @@ public final class Constants {
 
 		//voltageConstraint
 		public static final double 
-			ksVolts = 0.934, //kS
-			kvVoltSecondsPerMeter = 2.16, //kV
-			kaVoltSecondsSquaredPerMeter = 0.408, //kA
-			kTrackwidthMeters = 2.78,
+			ksVolts = 0.976, //kS
+			kvVoltSecondsPerMeter = 2.21, //kV
+			kaVoltSecondsSquaredPerMeter = 0.726, //kA
+			kTrackwidthMeters = 2.81,
 			differentialDriveVoltageConstraintMaxVoltage = 10;
 
 		public static final DifferentialDriveKinematics

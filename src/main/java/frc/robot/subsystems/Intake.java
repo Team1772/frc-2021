@@ -20,6 +20,8 @@ public class Intake extends SubsystemBase {
   public void setSpeed(double speed) {
     this.motorLeft.set(ControlMode.PercentOutput, speed);
     this.motorRight.set(ControlMode.PercentOutput, speed);
+
+    System.out.println(speed);
   }
 
   public void enable(){

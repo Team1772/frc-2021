@@ -18,7 +18,8 @@ public class CollectPowerCell extends CommandBase {
 		this.intake.setSpeed(0.5);
 	}
 	
-	public void end(boolean interrupted) {
+	@Override
+	public void end(boolean isInterrupted) {
 		this.intake.stop();
 		this.intake.disable();
   }
