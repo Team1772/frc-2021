@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -34,10 +35,10 @@ public class TrajectoryBuilder {
 	private RamseteCommand ramseteCommand;
 
 	//constructor
-	public TrajectoryBuilder(Drivetrain drivetrain, String... filesName) {
+	public TrajectoryBuilder(Drivetrain drivetrain, String... filesNames) {
 		this.drivetrain = drivetrain;
 
-		this.configTrajectories(filesName);
+		this.configTrajectories(filesNames);
     
 		this.simpleMotorFeedforward = new SimpleMotorFeedforward(
 			DrivetrainConstants.ksVolts,
@@ -56,14 +57,14 @@ public class TrajectoryBuilder {
 	}
 
 	//helpers
-	public void configTrajectories(String... filesName){
+	public void configTrajectories(String... filesNames){
 		this.trajectories = new HashMap<>();
 
-		Arrays.stream(filesName)
-					.forEach(name -> {
-						var trajectory = this.createTrajectory(name);
-						this.trajectories.put(name, trajectory);
-					});
+		Arrays.stream(filesNames)
+					.collect(Collectors.toMap(
+						fileName -> filesNames, 
+						fileName -> this.createTrajectory(fileName)
+					));
 	}
 	
 	public void createRamsete(Trajectory trajectory){
