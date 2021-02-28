@@ -35,6 +35,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void stop() {
-    this.motor.set(VictorSPXControlMode.PercentOutput, 0);
+    this.motorLeft.set(ControlMode.PercentOutput, 0);
+    this.motorRight.set(ControlMode.PercentOutput, 0);
   }
 }
