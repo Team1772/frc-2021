@@ -68,7 +68,7 @@ public class RobotContainer {
     this.configureButtonBindingsBuffer();
   }
 
-  private void configureButtonBindingsIntake(){
+  private void configureButtonBindingsIntake() {
     var buttonBumperLeft = new JoystickButton(this.operator, Button.kBumperLeft.value);
     var axisTriggerLeft = new JoystickButton(this.operator, Axis.kLeftTrigger.value);
 
@@ -79,7 +79,7 @@ public class RobotContainer {
       .whileHeld(new ReleasePowerCell(this.intake));
   }
 
-  private void configureButtonBindingsBuffer(){
+  private void configureButtonBindingsBuffer() {
     this.buffer.setDefaultCommand(
       new Feed(
         buffer,
