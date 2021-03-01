@@ -23,10 +23,8 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.Drivetrain;
 
 public class TrajectoryBuilder {
-	//subsystems
 	private Drivetrain drivetrain;
 
-	//attributes
 	private final SimpleMotorFeedforward simpleMotorFeedforward;
 	private final PIDController pidController;
 	private final RamseteController ramseteController;
@@ -34,7 +32,6 @@ public class TrajectoryBuilder {
 	private Map<String, Trajectory> trajectories;
 	private RamseteCommand ramseteCommand;
 
-	//constructor
 	public TrajectoryBuilder(Drivetrain drivetrain, String... filesNames) {
 		this.drivetrain = drivetrain;
 
@@ -56,15 +53,14 @@ public class TrajectoryBuilder {
 		);
 	}
 
-	//helpers
 	public void configTrajectories(String... filesNames){
 		this.trajectories = new HashMap<>();
 
-		Arrays.stream(filesNames)
-					.collect(Collectors.toMap(
-						fileName -> filesNames, 
-						fileName -> this.createTrajectory(fileName)
-					));
+		this.trajectories = Arrays.stream(filesNames)
+			    .collect(Collectors.toMap(
+				    fileName -> fileName,
+				    fileName -> this.createTrajectory(fileName)
+			    ));
 	}
 	
 	public void createRamsete(Trajectory trajectory){
