@@ -53,7 +53,7 @@ public class TrajectoryBuilder {
 		);
 	}
 
-	public void configTrajectories(String... filesNames){
+	public void configTrajectories(String... filesNames) {
 		this.trajectories = new HashMap<>();
 
 		this.trajectories = Arrays.stream(filesNames)

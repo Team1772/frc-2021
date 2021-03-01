@@ -75,8 +75,6 @@ public abstract class PIDTalon {
 		return configuredFollowers;
 	}
 
-
-
 	//this method has functional programming at branch "bruno's paths"
 	public void setFollowersInverted(Boolean... isInvertedList) {
 		int index = 0;
