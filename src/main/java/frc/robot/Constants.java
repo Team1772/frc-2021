@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
-import frc.core.util.PID.Gains;
 
 public final class Constants {
 	public static final class DrivetrainConstants {
@@ -78,17 +77,17 @@ public final class Constants {
 		activatorOne = 0,   
 		activatorTwo = 1;
 
-		//PID
-		public static final double 
-			kPVelocity = 0,
-			kIVelocity = 0,
-			kDVelocity = 0, 
-			kFVelocity = 0, 
-			kPeakOutputVelocity = 0;
-
-		public static final int
-			kIZoneVelocity = 0;
-		
+		public static final class PIDConstants {
+			public static final double 
+				kPVelocity = 0,
+				kIVelocity = 0,
+				kDVelocity = 0, 
+				kFVelocity = 0, 
+				kPeakOutputVelocity = 0;
+	
+			public static final int
+				kIZoneVelocity = 0;
+		}
 	}
 
 	public static final class OIConstants {

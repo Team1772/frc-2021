@@ -3,10 +3,10 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class ShootPowerCell extends CommandBase {
+public class ShootPowerCellDefault extends CommandBase {
 	private final Shooter shooter;
 	
-	public ShootPowerCell(Shooter shooter){
+	public ShootPowerCellDefault(Shooter shooter){
 		this.shooter = shooter;
 		
 		addRequirements(this.shooter);
@@ -14,7 +14,11 @@ public class ShootPowerCell extends CommandBase {
 	
 	@Override
 	public void execute() {
-		this.shooter.enable();
-		this.shooter.setSpeed(1);
+		this.shooter.setVelocity(1);
 	}
+
+	@Override
+	public void end(boolean isInterrupted) {
+		this.shooter.stop();
+  	}
 }

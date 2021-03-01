@@ -3,10 +3,10 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class PullPowerCell extends CommandBase {
+public class ShootPowerCellAngle extends CommandBase {
 	private final Shooter shooter;
 	
-	public PullPowerCell(Shooter shooter){
+	public ShootPowerCellAngle(Shooter shooter){
 		this.shooter = shooter;
 		
 		addRequirements(this.shooter);
@@ -14,11 +14,13 @@ public class PullPowerCell extends CommandBase {
 	
 	@Override
 	public void execute() {
-		this.shooter.setSpeed(-1);
+		this.shooter.enableAngle();
+		this.shooter.setVelocity(0.5);
 	}
-		
+	
 	@Override
 	public void end(boolean isInterrupted) {
 		this.shooter.stop();
+		this.shooter.disableAngle();
   	}
 }
