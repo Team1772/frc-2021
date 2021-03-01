@@ -16,4 +16,9 @@ public class Actuator extends CommandBase {
 	public void execute(){
 		this.intake.toggle();
 	}
+	
+	@Override
+	public void end(boolean isInterrupted) {
+		this.intake.disable();
+  }
 }

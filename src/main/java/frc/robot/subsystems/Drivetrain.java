@@ -32,17 +32,20 @@ public class Drivetrain extends SubsystemBase {
       new VictorSP(DrivetrainConstants.motorLeftPort[1])
     );
 
+    this.setMotorsInverted();
+
     this.drive = new DifferentialDrive(this.motorsRight, this.motorsLeft);
 
     this.encoderLeft = new Encoder(
       DrivetrainConstants.encoderLeftPort[0],
-      DrivetrainConstants.encoderLeftPort[1]
+      DrivetrainConstants.encoderLeftPort[1],
+      DrivetrainConstants.isEcondersInverted[0]
     );
  
     this.encoderRight = new Encoder(
       DrivetrainConstants.encoderRightPort[0],
       DrivetrainConstants.encoderRightPort[1],
-      DrivetrainConstants.isEncoderRightInverted
+      DrivetrainConstants.isEcondersInverted[1]
     );
 
     this.navX = new SmartNavX(); 
@@ -146,6 +149,11 @@ public class Drivetrain extends SubsystemBase {
   //setters
   public void setMaxOutput(double maxOutput) {
     this.drive.setMaxOutput(maxOutput);
+  }
+
+  public void setMotorsInverted() {
+    this.motorsLeft.setInverted(DrivetrainConstants.isMotorsInverted[0]);
+    this.motorsRight.setInverted(DrivetrainConstants.isMotorsInverted[1]);
   }
 
   public void setEncodersDistancePerPulse() {

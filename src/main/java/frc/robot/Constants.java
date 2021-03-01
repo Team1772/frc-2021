@@ -10,13 +10,16 @@ public final class Constants {
 			motorRightPort = new int[] { 0, 1 },
 			motorLeftPort = new int[] { 2, 3 };
 
+		public static final boolean[]
+			isMotorsInverted = new boolean[] { true, true };
+
 		//encoders
 		public static final int[]
 			encoderRightPort = new int[] { 6, 7 },
 			encoderLeftPort = new int[] { 8, 9 };
 
-		public static final boolean
-			isEncoderRightInverted = true;
+		public static final boolean[]
+			isEcondersInverted = new boolean[] { true, true };
 
 		public static final int 
 			pulsesRight = 498,
@@ -28,10 +31,10 @@ public final class Constants {
 
 		//voltageConstraint
 		public static final double 
-			ksVolts = 0.934, //kS
-			kvVoltSecondsPerMeter = 2.16, //kV
-			kaVoltSecondsSquaredPerMeter = 0.408, //kA
-			kTrackwidthMeters = 2.78,
+			ksVolts = 0.976, //kS
+			kvVoltSecondsPerMeter = 2.21, //kV
+			kaVoltSecondsSquaredPerMeter = 0.726, //kA
+			kTrackwidthMeters = 2.81,
 			differentialDriveVoltageConstraintMaxVoltage = 10;
 
 		public static final DifferentialDriveKinematics
@@ -45,10 +48,9 @@ public final class Constants {
 	}
 	
 	public static final class IntakeConstants {
-		public static final int
-			motorPort = 3,
-			activatorOne = 0,   
-			activatorTwo = 1;
+		public static final int[]
+			motorsPorts = new int[] { 2, 3 },
+			activatorsPorts = new int[] { 0, 1 };
 	}
 
 	public static final class PIDTalonConstants{

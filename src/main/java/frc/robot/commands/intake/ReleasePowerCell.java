@@ -17,4 +17,10 @@ public class ReleasePowerCell extends CommandBase {
 		this.intake.enable();
 		this.intake.setSpeed(-1);
 	}
+
+	@Override
+	public void end(boolean isInterrupted) {
+		this.intake.stop();
+		this.intake.disable();
+  }
 }
