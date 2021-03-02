@@ -33,7 +33,6 @@ public class RobotContainer {
   private final XboxController driver, operator;
   
   private TrajectoryBuilder trajectoryBuilder;
-  private DoubleButton doubleButton;
   
   public RobotContainer() {
     this.drivetrain = new Drivetrain();
@@ -103,9 +102,9 @@ public class RobotContainer {
     buttonBumperRight
     .whileHeld(new ShootPowerCellDefault(shooter));
     
-    this.doubleButton = new DoubleButton(buttonBumperRight, buttonA);
+    var doubleButton = new DoubleButton(buttonBumperRight, buttonA);
 
-    this.doubleButton.whileHeld(new ShootPowerCellAngle(shooter));
+    doubleButton.whenActive(new ShootPowerCellAngle(shooter));
   }
 
   public Command getAutonomousCommand() {
