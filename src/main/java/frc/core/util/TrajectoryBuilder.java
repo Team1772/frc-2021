@@ -5,7 +5,6 @@ import static java.util.Objects.isNull;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -36,7 +35,7 @@ public class TrajectoryBuilder {
 		this.drivetrain = drivetrain;
 
 		this.configTrajectories(filesNames);
-    
+
 		this.simpleMotorFeedforward = new SimpleMotorFeedforward(
 			DrivetrainConstants.ksVolts,
 			DrivetrainConstants.kvVoltSecondsPerMeter,
@@ -54,8 +53,6 @@ public class TrajectoryBuilder {
 	}
 
 	public void configTrajectories(String... filesNames) {
-		this.trajectories = new HashMap<>();
-
 		this.trajectories = Arrays.stream(filesNames)
 			    .collect(Collectors.toMap(
 				    fileName -> fileName,
@@ -86,7 +83,7 @@ public class TrajectoryBuilder {
 			this.drivetrain.resetOdometry(trajectory.getInitialPose());
 		}
   }
-  
+
   public Command buildTrajectory(String fileName) {
 		var trajectory = this.trajectories.get(fileName);
     this.createRamsete(trajectory);
@@ -95,7 +92,7 @@ public class TrajectoryBuilder {
       () -> this.drivetrain.tankDriveVolts(0, 0)
     );
   }
-  
+
 	private RamseteCommand getRamsete() {
 		return this.ramseteCommand;
 	}

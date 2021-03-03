@@ -1,5 +1,7 @@
 package frc.core.util.PID;
 
+import static frc.core.util.function.For.forWithCounter;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,29 +62,25 @@ public abstract class PIDTalon {
 	}
 
 	public void setFollowers(TalonSRX... followers) {
-		this.followers = this.configFollowers(followers)
-												 .stream()
-												 .collect(Collectors.toList());
+		this.followers = this.createFollowers(followers);
 	}
 
-	public List<TalonSRX> configFollowers(TalonSRX... followers) {
-		var configuredFollowers = Arrays.stream(followers)
-																		.map(follower -> {
-																			follower.configFactoryDefault();
-																			return follower;
-																		}).collect(Collectors.toList());
+	public List<TalonSRX> createFollowers(TalonSRX... followers) {
+		var followersList = Arrays.stream(followers)
+															.map(follower -> {
+																follower.configFactoryDefault();
+																follower.follow(this.master);
+																return follower;
+															}).collect(Collectors.toList());
 
-		return configuredFollowers;
+		return followersList;
 	}
 
-	//this method has functional programming at branch "bruno's paths"
-	public void setFollowersInverted(Boolean... isInvertedList) {
-		int index = 0;
-		if (isInvertedList.length >= this.followers.size()) {
-			for (TalonSRX follower : followers) {
-				follower.setInverted(isInvertedList[index]);
-				index++;
-			}
+	public void setFollowersInverted(Boolean... isInverted) {
+		if (isInverted.length >= this.followers.size()) {
+			forWithCounter(this.followers, (i, follower) -> {
+				follower.setInverted(isInverted[i]);		
+		 	});
 		} else {
 			DriverStation.reportError(
 				"the length of varags must be equal or higher than the list of followers",
