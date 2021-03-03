@@ -70,6 +70,26 @@ public final class Constants {
 			motorPort = 4;
 	}
 
+	public static final class ShooterConstants {
+		public static final int
+		motorRightPort = 0,
+		motorLeftPort = 1,
+		activatorOne = 0,   
+		activatorTwo = 1;
+
+		public static final class PIDConstants {
+			public static final double 
+				kPVelocity = 0,
+				kIVelocity = 0,
+				kDVelocity = 0, 
+				kFVelocity = 0, 
+				kPeakOutputVelocity = 0;
+	
+			public static final int
+				kIZoneVelocity = 0;
+		}
+	}
+
 	public static final class OIConstants {
 		public static final int
 			driverControllerPort = 0,
