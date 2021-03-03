@@ -31,7 +31,8 @@ public abstract class PIDTalon {
 		this.master = master;
 		this.setMasterInverted(isMasterInverted);
 
-		this.setFollowers(followers);
+		this.followers = Arrays.stream(followers).collect(Collectors.toList());
+		this.createFollowers();
 
 		this.configSelectedFeedbackSensor();
 		this.setSensorPhase(isSensorPhase);
@@ -61,19 +62,12 @@ public abstract class PIDTalon {
 		this.master.setInverted(isInverted);
 	}
 
-	public void setFollowers(TalonSRX... followers) {
-		this.followers = this.createFollowers(followers);
-	}
-
-	public List<TalonSRX> createFollowers(TalonSRX... followers) {
-		var followersList = Arrays.stream(followers)
-															.map(follower -> {
-																follower.configFactoryDefault();
-																follower.follow(this.master);
-																return follower;
-															}).collect(Collectors.toList());
-
-		return followersList;
+	public void createFollowers() {
+	this.followers.stream()
+								.forEach(follower -> {
+									follower.configFactoryDefault();
+									follower.follow(this.master);
+								});
 	}
 
 	public void setFollowersInverted(Boolean... isInverted) {
