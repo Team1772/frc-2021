@@ -97,12 +97,15 @@ public class RobotContainer {
 
   private void configureButtonBindingsShooter() {
     var buttonBumperRight = new JoystickButton(this.operator, Button.kBumperRight.value);
-    var buttonA = new JoystickButton(this.operator, Button.kA.value);
     
     buttonBumperRight
     .whileHeld(new ShootPowerCellDefault(shooter));
     
-    var doubleButton = new DoubleButton(buttonBumperRight, buttonA);
+    var doubleButton = new DoubleButton(
+      this.operator,
+      Button.kBumperRight.value,
+      Button.kA.value
+    );
 
     doubleButton.whenActive(new ShootPowerCellAngle(shooter));
   }
