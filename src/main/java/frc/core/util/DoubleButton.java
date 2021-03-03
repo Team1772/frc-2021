@@ -5,17 +5,17 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class DoubleButton extends Trigger {
 
-    private final GenericHID joystick;
-    private final int buttonOne, buttonTwo;
+  private final GenericHID joystick;
+  private final int buttonNumberOne, buttonNumberTwo;
 
-    public DoubleButton(GenericHID joystick, int buttonOne, int buttonTwo) {
-        this.joystick = joystick;
-        this.buttonOne = buttonOne;
-        this.buttonTwo = buttonTwo;
-    }
-    
-    @Override
-    public boolean get() {
-        return joystick.getRawButton(buttonOne) && joystick.getRawButton(buttonTwo);
-    }
+  public DoubleButton(GenericHID joystick, int buttonNumberOne, int buttonNumberTwo) {
+    this.joystick = joystick;
+    this.buttonNumberOne = buttonNumberOne;
+    this.buttonNumberTwo = buttonNumberTwo;
+  }
+  
+  @Override
+  public boolean get() {
+    return joystick.getRawButton(buttonNumberOne) && joystick.getRawButton(buttonNumberTwo);
+  }
 }
