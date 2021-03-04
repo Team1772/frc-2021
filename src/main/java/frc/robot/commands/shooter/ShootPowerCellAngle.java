@@ -15,12 +15,12 @@ public class ShootPowerCellAngle extends CommandBase {
 	@Override
 	public void execute() {
 		this.shooter.enableAngle();
-		this.shooter.setVelocity(0.5);
+		this.shooter.setVelocityMetersPerSecond(10);
 	}
 	
 	@Override
 	public void end(boolean isInterrupted) {
 		this.shooter.stop();
 		this.shooter.disableAngle();
-  	}
+  }
 }

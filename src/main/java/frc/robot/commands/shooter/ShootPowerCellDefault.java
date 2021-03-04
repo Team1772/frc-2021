@@ -14,11 +14,11 @@ public class ShootPowerCellDefault extends CommandBase {
 	
 	@Override
 	public void execute() {
-		this.shooter.setVelocity(1);
+		this.shooter.setVelocityMetersPerSecond(20);
 	}
 
 	@Override
 	public void end(boolean isInterrupted) {
 		this.shooter.stop();
-  	}
+  }
 }
