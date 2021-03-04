@@ -32,7 +32,7 @@ public abstract class PIDTalon {
 		this.setMasterInverted(isMasterInverted);
 
 		this.followers = Arrays.stream(followers).collect(Collectors.toList());
-		this.createFollowers();
+		this.configFollowers();
 
 		this.configSelectedFeedbackSensor();
 		this.setSensorPhase(isSensorPhase);
@@ -62,7 +62,7 @@ public abstract class PIDTalon {
 		this.master.setInverted(isInverted);
 	}
 
-	public void createFollowers() {
+	public void configFollowers() {
 	this.followers.stream()
 								.forEach(follower -> {
 									follower.configFactoryDefault();
