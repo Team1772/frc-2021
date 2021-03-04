@@ -68,6 +68,9 @@ public final class Constants {
 	public static final class BufferConstants {
 		public static final int
 			motorPort = 4;
+
+			public static final int[]
+			bufferSensors = new int[] {0, 1, 2};
 	}
 
 	public static final class ShooterConstants {
