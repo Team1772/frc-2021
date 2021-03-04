@@ -39,11 +39,12 @@ public final class Constants {
 		public static final DifferentialDriveKinematics
 			kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
 
-		//PID
-		public static final double 
-			kPDriveVelocity = 2.62,
-			kIDriveVelocity = 0,
-			kDDriveVelocity = 0;   
+		public static final class PID {
+			public static final double 
+				kPDriveVelocity = 2.62,
+				kIDriveVelocity = 0,
+				kDDriveVelocity = 0;   
+		}
 	}
 	
 	public static final class IntakeConstants {

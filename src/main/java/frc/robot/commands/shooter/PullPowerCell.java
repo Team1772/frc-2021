@@ -20,5 +20,5 @@ public class PullPowerCell extends CommandBase {
 	@Override
 	public void end(boolean isInterrupted) {
 		this.shooter.stop();
-  	}
+	}
 }

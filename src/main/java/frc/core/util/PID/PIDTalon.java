@@ -63,7 +63,7 @@ public abstract class PIDTalon {
 	}
 
 	public void configFollowers() {
-	this.followers.stream()
+		this.followers.stream()
 								.forEach(follower -> {
 									follower.configFactoryDefault();
 									follower.follow(this.master);

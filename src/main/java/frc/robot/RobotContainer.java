@@ -113,8 +113,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return new GalacticA(this.trajectoryBuilder);
   }
-
-  
   
   public void reset() {
     this.drivetrain.reset();
