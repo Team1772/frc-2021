@@ -1,7 +1,5 @@
 package frc.core.components;
 
-import static java.util.Objects.isNull;
-
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -9,16 +7,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants.LimelightConstants;
 
 public class Limelight {
-	private final NetworkTable table;
-	private static Limelight limelight;
-
-  private Limelight() {
-		this.table = NetworkTableInstance
-									.getDefault()
-									.getTable(
-										LimelightConstants.tableName
-									);
-  }
+	private static final NetworkTable table =
+		NetworkTableInstance.getDefault().getTable(LimelightConstants.tableName);
 
   public enum Entry {
     TX("tx"),
@@ -57,53 +47,47 @@ public class Limelight {
 		}
 	}
 
-	public static Limelight getInstance() {
-		if (isNull(limelight)) return new Limelight();
-
-		return limelight;	
+	private static NetworkTableEntry getEntry(Entry entry) {
+		return table.getEntry(entry.key);
 	}
 
-	private NetworkTableEntry getEntry(Entry entry) {
-		return this.table.getEntry(entry.key);
+	private static double getValue(Entry entry) {
+		return getEntry(entry).getDouble(0.0);
 	}
 
-	private double getValue(Entry entry) {
-		return this.getEntry(entry).getDouble(0.0);
+	public static double getX() {
+		return getValue(Entry.TX);
 	}
 
-	public double getX() {
-		return this.getValue(Entry.TX);
+	public static double getY() {
+		return getValue(Entry.TY);
 	}
 
-	public double getY() {
-		return this.getValue(Entry.TY);
+	public static double getA() {
+		return getValue(Entry.TA);
 	}
 
-	public double getA() {
-		return this.getValue(Entry.TA);
+	public static double getV() {
+		return getValue(Entry.TV);
 	}
 
-	public double getV() {
-		return this.getValue(Entry.TV);
+	public static boolean isTarget() {
+		return getV() == 1;
 	}
 
-	public boolean isTarget() {
-		return this.getV() == 1;
+	private static void setEntry(Entry entry, int value) {
+		getEntry(entry).setNumber(value);
 	}
 
-	private void setEntry(Entry entry, int value) {
-		this.getEntry(entry).setNumber(value);
+	public static void setPipeline(int value) {
+		setEntry(Entry.PIPELINE, value);
 	}
 
-	public void setPipeline(int value) {
-		this.setEntry(Entry.PIPELINE, value);
+	public static void setLed(LedMode ledMode) {
+		setEntry(Entry.LED_MODE, ledMode.value);
 	}
 
-	public void setLed(LedMode ledMode) {
-		this.setEntry(Entry.LED_MODE, ledMode.value);
-	}
-
-	public void setCam(CamMode camMode) {
-		this.setEntry(Entry.CAM_MODE, camMode.value);
+	public static void setCam(CamMode camMode) {
+		setEntry(Entry.CAM_MODE, camMode.value);
 	}
 }
