@@ -8,24 +8,22 @@ import frc.robot.subsystems.Drivetrain;
 
 public class AimTarget extends CommandBase {
   private Drivetrain drivetrain;
-  private Limelight limelight;
 
-  public AimTarget(Drivetrain drivetrain, Limelight limelight) {
+  public AimTarget(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
-    this.limelight = limelight;
 
     addRequirements(this.drivetrain);
   }
 
   @Override
   public void initialize() {
-    this.limelight.setLed(LedMode.ON);
-    this.limelight.setPipeline(LimelightConstants.pipeline);
+    Limelight.setLed(LedMode.ON);
+    Limelight.setPipeline(LimelightConstants.pipeline);
   }
 
   @Override
   public void execute() {
-    double x = limelight.getX(),
+    double x = Limelight.getX(),
      headingError = -(x),
      adjust = 0;
 
@@ -50,6 +48,6 @@ public class AimTarget extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    this.limelight.setLed(LedMode.OFF);
+    Limelight.setLed(LedMode.OFF);
   }
 }
