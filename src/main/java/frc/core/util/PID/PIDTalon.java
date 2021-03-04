@@ -1,6 +1,10 @@
 package frc.core.util.PID;
 
+import static frc.core.util.function.For.forWithCounter;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -27,7 +31,8 @@ public abstract class PIDTalon {
 		this.master = master;
 		this.setMasterInverted(isMasterInverted);
 
-		this.setFollowers(followers);
+		this.followers = Arrays.stream(followers).collect(Collectors.toList());
+		this.configFollowers();
 
 		this.configSelectedFeedbackSensor();
 		this.setSensorPhase(isSensorPhase);
@@ -57,21 +62,19 @@ public abstract class PIDTalon {
 		this.master.setInverted(isInverted);
 	}
 
-	public void setFollowers(TalonSRX... followers) {
-		for (TalonSRX follower : followers) {
-			this.followers.add(follower);
-			follower.configFactoryDefault();
-			follower.follow(this.master);
-		}
+	public void configFollowers() {
+	this.followers.stream()
+								.forEach(follower -> {
+									follower.configFactoryDefault();
+									follower.follow(this.master);
+								});
 	}
 
-	public void setFollowersInverted(Boolean... isInvertedList) {
-		int index = 0;
-		if (isInvertedList.length >= this.followers.size()) {
-			for (TalonSRX follower : followers) {
-				follower.setInverted(isInvertedList[index]);
-				index++;
-			}
+	public void setFollowersInverted(Boolean... isInverted) {
+		if (isInverted.length >= this.followers.size()) {
+			forWithCounter(this.followers, (i, follower) -> {
+				follower.setInverted(isInverted[i]);		
+		 	});
 		} else {
 			DriverStation.reportError(
 				"the length of varags must be equal or higher than the list of followers",
