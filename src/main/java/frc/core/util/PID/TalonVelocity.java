@@ -72,9 +72,21 @@ public class TalonVelocity extends PIDTalon {
       followers
     );
   }
+  
+  private void setVelocity(double velocity, double dutyCycle) {
+    var velocityUnitsPer100ms = dutyCycle * velocity * 4096 / 600;
 
-  public void setVelocity(double velocity) {
-    super.master.set(ControlMode.Velocity, velocity);
+    super.master.set(ControlMode.Velocity, velocityUnitsPer100ms);
+  }
+
+  public void setVelocityRPM(double velocityRPM, double dutyCycle) {
+    this.setVelocity(velocityRPM, dutyCycle);
+  } 
+
+  public void setVelocityMetersPerSecond(double velocityMetersPerSecond, double dutyCycle, double wheelRadius) {
+    var velocityRPM = (velocityMetersPerSecond * 60) / (2 * Math.PI * wheelRadius);
+
+    this.setVelocity(velocityRPM, dutyCycle);
   }
 
   public void stop() {
