@@ -12,42 +12,44 @@ import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
 	private final TalonSRX motorLeft, motorRight;
-	private final TalonVelocity shooterPID;
+	// private final TalonVelocity shooterPID;
 	private final SmartSolenoid activator;
 
 	public Shooter() {
 		this.motorLeft = new TalonSRX(ShooterConstants.motorsPorts[0]);
 		this.motorRight = new TalonSRX(ShooterConstants.motorsPorts[1]);
-		this.shooterPID = new TalonVelocity(
-			this.motorLeft, 
-			new Gains(
-				ShooterConstants.PID.kPVelocity,
-				ShooterConstants.PID.kIVelocity,
-				ShooterConstants.PID.kDVelocity,
-				ShooterConstants.PID.kFVelocity,
-				ShooterConstants.PID.kIZoneVelocity,
-				ShooterConstants.PID.kPeakOutputVelocity
-			),
-			this.motorRight
-		);
+
+		this.motorLeft.setInverted(true);
+		// this.shooterPID = new TalonVelocity(
+		// 	this.motorLeft, 
+		// 	new Gains(
+		// 		ShooterConstants.PID.kPVelocity,
+		// 		ShooterConstants.PID.kIVelocity,
+		// 		ShooterConstants.PID.kDVelocity,
+		// 		ShooterConstants.PID.kFVelocity,
+		// 		ShooterConstants.PID.kIZoneVelocity,
+		// 		ShooterConstants.PID.kPeakOutputVelocity
+		// 	),
+		// 	this.motorRight
+		// );
 
 		this.activator = new SmartSolenoid(ShooterConstants.activatorPorts[0], ShooterConstants.activatorPorts[1]);
 	}
 
-	public void setVelocityMetersPerSecond(double velocityMetersPerSecond) {
-		this.shooterPID.setVelocityMetersPerSecond(
-			velocityMetersPerSecond, 
-			ShooterConstants.PID.dutyCycle, 
-			ShooterConstants.wheelRadius
-		);
-	}
+	// public void setVelocityMetersPerSecond(double velocityMetersPerSecond) {
+	// 	this.shooterPID.setVelocityMetersPerSecond(
+	// 		velocityMetersPerSecond, 
+	// 		ShooterConstants.PID.dutyCycle, 
+	// 		ShooterConstants.wheelRadius
+	// 	);
+	// }
 
-	public void setVelocityRPM(double velocityRPM) {
-		this.shooterPID.setVelocityRPM(
-			velocityRPM, 
-			ShooterConstants.PID.dutyCycle
-		);
-	}
+	// public void setVelocityRPM(double velocityRPM) {
+	// 	this.shooterPID.setVelocityRPM(
+	// 		velocityRPM, 
+	// 		ShooterConstants.PID.dutyCycle
+	// 	);
+	// }
 
 	public void setSpeed(double speed) {
 		this.motorLeft.set(ControlMode.PercentOutput, speed);
@@ -63,12 +65,12 @@ public class Shooter extends SubsystemBase {
 	}
 
 	public void stop() {
-		this.shooterPID.stop();
+		// this.shooterPID.stop();
 	}
 
 	@Override
   public void periodic() {
-    SmartDashboard.putNumber("[SHOOTER] Selected Sensor Velocity", this.shooterPID.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("[SHOOTER] Closed Loop Error", this.shooterPID.getClosedLoopError());
+    // SmartDashboard.putNumber("[SHOOTER] Selected Sensor Velocity", this.shooterPID.getSelectedSensorVelocity());
+    // SmartDashboard.putNumber("[SHOOTER] Closed Loop Error", this.shooterPID.getClosedLoopError());
   }
 }
