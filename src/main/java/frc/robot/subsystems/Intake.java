@@ -17,6 +17,7 @@ public class Intake extends SubsystemBase {
     this.activator = new SmartSolenoid(IntakeConstants.activatorsPorts[0], IntakeConstants.activatorsPorts[1]);
   }
 
+  //os motores tem que ter velocidades diferentes
   public void setSpeed(double speed) {
     this.motorLeft.set(ControlMode.PercentOutput, speed);
     this.motorRight.set(ControlMode.PercentOutput, speed);
