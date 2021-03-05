@@ -11,9 +11,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
-	private TalonSRX motorLeft, motorRight;
-	private TalonVelocity shooterPID;
-	private SmartSolenoid activator;
+	private final TalonSRX motorLeft, motorRight;
+	private final TalonVelocity shooterPID;
+	private final SmartSolenoid activator;
 
 	public Shooter() {
 		this.motorLeft = new TalonSRX(ShooterConstants.motorsPorts[0]);
@@ -56,7 +56,7 @@ public class Shooter extends SubsystemBase {
 
 	public void enableAngle(){
 		this.activator.enable();
-}
+	}
 
 	public void disableAngle(){
 		this.activator.disable();
