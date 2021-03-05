@@ -99,7 +99,7 @@ public class RobotContainer {
     var buttonBumperRight = new JoystickButton(this.operator, Button.kBumperRight.value);
     
     buttonBumperRight
-    .whileHeld(new ShootPowerCellDefault(shooter));
+      .whileHeld(new ShootPowerCellDefault(this.shooter));
     
     var doubleButton = new DoubleButton(
       this.operator,
@@ -107,7 +107,7 @@ public class RobotContainer {
       Button.kA.value
     );
 
-    doubleButton.whenActive(new ShootPowerCellAngle(shooter));
+    doubleButton.whenActive(new ShootPowerCellAngle(this.shooter));
   }
 
   public Command getAutonomousCommand() {

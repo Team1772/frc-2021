@@ -171,9 +171,9 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Encoder left", encoderLeft.get());
-    SmartDashboard.putNumber("Encoder right", encoderRight.get());
-    SmartDashboard.putNumber("Average distance", this.getAverageDistance());
+    SmartDashboard.putNumber("[DRIVETRAIN] Encoder Left", this.encoderLeft.get());
+    SmartDashboard.putNumber("[DRIVETRAIN] Encoder Right", this.encoderRight.get());
+    SmartDashboard.putNumber("[DRIVETRAIN] Average Distance", this.getAverageDistance());
     
     this.updateOdometry();
   }

@@ -10,7 +10,7 @@ public class TalonVelocity extends PIDTalon {
   public TalonVelocity(
     TalonSRX master, 
     boolean isMasterInverted,
-    boolean isFollowerInverted,
+    boolean isFollowersInverted,
     boolean isSensorPhase,
     double nominalOutputForwardValue, 
     double nominalOutputReverseValue, 
@@ -22,7 +22,7 @@ public class TalonVelocity extends PIDTalon {
     super(
       master, 
       isMasterInverted, 
-      isFollowerInverted,
+      isFollowersInverted,
       isSensorPhase,
       nominalOutputForwardValue,
       nominalOutputReverseValue, 
@@ -36,15 +36,16 @@ public class TalonVelocity extends PIDTalon {
   public TalonVelocity(
     TalonSRX master,
     boolean isMasterInverted,
-    boolean isFollowerInverted,
+    boolean isFollowersInverted,
+    boolean isSensorPhase,
     Gains gains,
     TalonSRX... followers
   ) {
     this(
       master,
       isMasterInverted,
-      isFollowerInverted,
-      PIDTalonConstants.isSensorPhase,
+      isFollowersInverted,
+      isSensorPhase,
       PIDTalonConstants.nominalOutputForwardValue,
       PIDTalonConstants.nominalOutputReverseValue,
       PIDTalonConstants.peakOutputForwardValue,

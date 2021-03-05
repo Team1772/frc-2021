@@ -49,8 +49,7 @@ public final class Constants {
 	
 	public static final class IntakeConstants {
 		public static final int[]
-			motorsPorts = new int[] { 2, 3 },
-			activatorsPorts = new int[] { 0, 1 };
+			motorsPorts = new int[] { 2, 3 };
 	}
 
 	public static final class PIDTalonConstants{
@@ -72,11 +71,9 @@ public final class Constants {
 	}
 
 	public static final class ShooterConstants {
-		public static final int
-			motorRightPort = 0,
-			motorLeftPort = 1,
-			activatorOne = 0,   
-			activatorTwo = 1;
+		public static final int[]
+			motorsPorts = new int[] { 0, 1 },
+			activatorPorts = new int[] { 0, 1 };
 
 		public static final double wheelRadius = 0.0762;
 
