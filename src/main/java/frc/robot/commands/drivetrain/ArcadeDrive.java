@@ -20,6 +20,6 @@ public class ArcadeDrive extends CommandBase {
 
   @Override
   public void execute() {
-      this.drivetrain.arcadeDrive(this.forward.getAsDouble(), this.rotation.getAsDouble());
+    this.drivetrain.arcadeDrive(this.forward.getAsDouble(), this.rotation.getAsDouble());
   }
 }

@@ -6,7 +6,7 @@ import frc.robot.subsystems.Intake;
 public class CollectPowerCell extends CommandBase {
 	private final Intake intake;
 	
-	public CollectPowerCell(Intake intake){
+	public CollectPowerCell(Intake intake) {
 		this.intake = intake;
 		
 		addRequirements(this.intake);
@@ -14,13 +14,11 @@ public class CollectPowerCell extends CommandBase {
 	
 	@Override
 	public void execute() {
-		this.intake.enable();
-		this.intake.setSpeed(0.40);
+		this.intake.setSpeed(0.5, 0.7);
 	}
 	
 	@Override
 	public void end(boolean isInterrupted) {
 		this.intake.stop();
-		this.intake.disable();
   }
 }

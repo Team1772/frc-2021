@@ -34,7 +34,7 @@ public class TrajectoryBuilder {
 	public TrajectoryBuilder(Drivetrain drivetrain, String... filesNames) {
 		this.drivetrain = drivetrain;
 
-		this.configTrajectories(filesNames);
+		this.trajectories = this.mapTrajectories(filesNames);
 
 		this.simpleMotorFeedforward = new SimpleMotorFeedforward(
 			DrivetrainConstants.ksVolts,
@@ -42,9 +42,9 @@ public class TrajectoryBuilder {
 			DrivetrainConstants.kaVoltSecondsSquaredPerMeter
 		);
 		this.pidController = new PIDController(
-			DrivetrainConstants.kPDriveVelocity, 
-			DrivetrainConstants.kIDriveVelocity, 
-			DrivetrainConstants.kDDriveVelocity
+			DrivetrainConstants.PID.kPDriveVelocity, 
+			DrivetrainConstants.PID.kIDriveVelocity, 
+			DrivetrainConstants.PID.kDDriveVelocity
 		);
 		this.ramseteController = new RamseteController(
 			AutoConstants.kRamseteB, 
@@ -52,8 +52,8 @@ public class TrajectoryBuilder {
 		);
 	}
 
-	public void configTrajectories(String... filesNames) {
-		this.trajectories = Arrays.stream(filesNames)
+	public Map<String, Trajectory> mapTrajectories(String... filesNames) {
+		return Arrays.stream(filesNames)
 			    .collect(Collectors.toMap(
 				    fileName -> fileName,
 				    fileName -> this.createTrajectory(fileName)

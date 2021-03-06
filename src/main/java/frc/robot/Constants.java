@@ -39,17 +39,17 @@ public final class Constants {
 		public static final DifferentialDriveKinematics
 			kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
 
-		//PID
-		public static final double 
-			kPDriveVelocity = 2.62,
-			kIDriveVelocity = 0,
-			kDDriveVelocity = 0;   
+		public static final class PID {
+			public static final double 
+				kPDriveVelocity = 2.62,
+				kIDriveVelocity = 0,
+				kDDriveVelocity = 0;   
+		}
 	}
 	
 	public static final class IntakeConstants {
 		public static final int[]
-			motorsPorts = new int[] { 2, 3 },
-			activatorsPorts = new int[] { 0, 1 };
+			motorsPorts = new int[] { 2, 3 };
 	}
 
 	public static final class PIDTalonConstants{
@@ -67,32 +67,42 @@ public final class Constants {
 
 	public static final class BufferConstants {
 		public static final int
-			motorPort = 4;
+		motorPort = 4;
 
-			public static final int[]
-			bufferSensors = new int[] {0, 1, 2};
+		public static final int[]
+		sensorsPorts = new int[] { 0, 1, 2 };
+
+		public static final boolean
+		motorInverted = true;
+
+		
+
+
 	}
 
 	public static final class ShooterConstants {
-		public static final int
-			motorRightPort = 0,
-			motorLeftPort = 1,
-			activatorOne = 0,   
-			activatorTwo = 1;
+		public static final int[]
+			motorsPorts = new int[] { 0, 1 },
+			activatorPorts = new int[] { 0, 1 };
 
 		public static final double wheelRadius = 0.0762;
 
+		public static final boolean
+			isMotorsInverted = true,
+			isFollowerInverted = false,
+			isSensorPhase = false;
+
 		public static final class PID {
 			public static final double 
-				kPVelocity = 0,
-				kIVelocity = 0,
-				kDVelocity = 0, 
-				kFVelocity = 0, 
-				kPeakOutputVelocity = 0,
+				kPVelocity = 0.33,
+				kIVelocity = 0.0009,
+				kDVelocity = 13.3, 
+				kFVelocity = 0.034, 
+				kPeakOutputVelocity = 1,
 				dutyCycle = 0.8;
 	
 			public static final int
-				kIZoneVelocity = 0;
+				kIZoneVelocity = 210;
 		}
 	}
 

@@ -14,7 +14,7 @@ public class ShootPowerCellDefault extends CommandBase {
 	
 	@Override
 	public void execute() {
-		this.shooter.setVelocityMetersPerSecond(20);
+		this.shooter.setVelocityMetersPerSecond(30);
 	}
 
 	@Override

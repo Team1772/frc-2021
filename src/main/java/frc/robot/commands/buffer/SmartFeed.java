@@ -16,20 +16,17 @@ public class SmartFeed extends CommandBase{
   public void execute() {
     this.smartFeed();
   }
-  
-  //else if precisa refatorar
+
   public void smartFeed() {
-    var isSensorBottom = buffer.isSensorBottom();
-    var isSensorQueue = buffer.isSensorQueue();
-    var isSensorTop = buffer.isSensorTop();
+    var isSensorBottom = this.buffer.isSensorBottom();
+    var isSensorQueue = this.buffer.isSensorQueue();
+    var isSensorTop = this.buffer.isSensorTop();
     
-    if (isSensorTop) buffer.stop();
-    else if (isSensorBottom && !isSensorQueue) {
-      buffer.pull();
-    } else if (isSensorBottom && isSensorQueue) {
-      buffer.pull();
+    if (isSensorTop) this.buffer.setSpeed(0);
+    else if ((isSensorBottom && !isSensorQueue) || (isSensorBottom && isSensorQueue)) {
+      this.buffer.setSpeed(1);
     } else if (isSensorQueue && !isSensorBottom) {
-      buffer.stop();
+      this.buffer.setSpeed(0);
     }
   }
 }

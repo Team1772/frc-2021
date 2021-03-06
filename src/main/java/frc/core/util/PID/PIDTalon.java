@@ -19,7 +19,7 @@ public abstract class PIDTalon {
 	public PIDTalon(
 		TalonSRX master, 
 		boolean isMasterInverted, 
-		boolean isFollowerInverted, 
+		boolean isFollowersInverted, 
 		boolean isSensorPhase,
 		double nominalOutputForwardValue, 
 		double nominalOutputReverseValue, 
@@ -29,13 +29,15 @@ public abstract class PIDTalon {
 		TalonSRX... followers
 	) {
 		this.master = master;
-		this.setMasterInverted(isMasterInverted);
-
 		this.followers = Arrays.stream(followers).collect(Collectors.toList());
-		this.configFollowers();
-
+		
+		this.configFactoryDefault();
 		this.configSelectedFeedbackSensor();
 		this.setSensorPhase(isSensorPhase);
+		this.configMasterToFollowers();
+		
+		this.setMasterInverted(isMasterInverted);
+		this.setFollowersInverted(isFollowersInverted);
 
 		this.setOutputs(
 			nominalOutputForwardValue, 
@@ -54,20 +56,8 @@ public abstract class PIDTalon {
 		);
 	}
 
-	private void setSensorPhase(boolean isSensorPhase) {
-		this.master.setSensorPhase(isSensorPhase);
-	}
-
-	private void setMasterInverted(boolean isInverted) {
+	public void setMasterInverted(boolean isInverted) {
 		this.master.setInverted(isInverted);
-	}
-
-	public void configFollowers() {
-	this.followers.stream()
-								.forEach(follower -> {
-									follower.configFactoryDefault();
-									follower.follow(this.master);
-								});
 	}
 
 	public void setFollowersInverted(Boolean... isInverted) {
@@ -81,6 +71,34 @@ public abstract class PIDTalon {
 				new Exception().getStackTrace()
 			);
 		}
+	}
+
+	public void setFollowersInverted(Boolean isInverted) {
+		this.followers.stream().forEach(follower -> follower.setInverted(isInverted));
+	}
+
+	public double getSelectedSensorVelocity() {
+    return this.master.getSelectedSensorVelocity();
+  }
+
+  public double getClosedLoopError() {
+    return this.master.getClosedLoopError();
+  }
+
+	private void configMasterToFollowers() {
+		this.followers.stream()
+								.forEach(follower -> follower.follow(this.master));
+	}
+
+	private void configFactoryDefault() {
+		this.master.configFactoryDefault();
+
+		this.followers.stream()
+								.forEach(follower -> follower.configFactoryDefault());
+	}
+
+	private void setSensorPhase(boolean isSensorPhase) {
+		this.master.setSensorPhase(isSensorPhase);
 	}
 
 	private void setOutputs(

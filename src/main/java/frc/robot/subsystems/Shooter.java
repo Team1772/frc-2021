@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.core.components.SmartSolenoid;
 import frc.core.util.PID.Gains;
@@ -10,15 +11,19 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
-	private TalonSRX motorLeft, motorRight;
-	private TalonVelocity shooterPID;
-	private SmartSolenoid activator;
-
+	private final TalonSRX motorLeft, motorRight;
+	private final TalonVelocity shooterPID;
+	private final SmartSolenoid activator;
+	
 	public Shooter() {
-		this.motorLeft = new TalonSRX(ShooterConstants.motorLeftPort);
-		this.motorRight = new TalonSRX(ShooterConstants.motorRightPort);
+		this.motorLeft = new TalonSRX(ShooterConstants.motorsPorts[0]);
+		this.motorRight = new TalonSRX(ShooterConstants.motorsPorts[1]);
+
 		this.shooterPID = new TalonVelocity(
 			this.motorLeft, 
+			ShooterConstants.isMotorsInverted,
+			ShooterConstants.isFollowerInverted,
+			ShooterConstants.isSensorPhase,
 			new Gains(
 				ShooterConstants.PID.kPVelocity,
 				ShooterConstants.PID.kIVelocity,
@@ -30,7 +35,7 @@ public class Shooter extends SubsystemBase {
 			this.motorRight
 		);
 
-		this.activator = new SmartSolenoid(ShooterConstants.activatorOne, ShooterConstants.activatorTwo);
+		this.activator = new SmartSolenoid(ShooterConstants.activatorPorts[0], ShooterConstants.activatorPorts[1]);
 	}
 
 	public void setVelocityMetersPerSecond(double velocityMetersPerSecond) {
@@ -55,7 +60,7 @@ public class Shooter extends SubsystemBase {
 
 	public void enableAngle(){
 		this.activator.enable();
-}
+	}
 
 	public void disableAngle(){
 		this.activator.disable();
@@ -64,4 +69,10 @@ public class Shooter extends SubsystemBase {
 	public void stop() {
 		this.shooterPID.stop();
 	}
+
+	@Override
+  public void periodic() {
+    SmartDashboard.putNumber("[SHOOTER] Selected Sensor Velocity", this.shooterPID.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("[SHOOTER] Closed Loop Error", this.shooterPID.getClosedLoopError());
+  }
 }

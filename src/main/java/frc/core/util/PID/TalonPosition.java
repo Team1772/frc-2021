@@ -10,7 +10,7 @@ public class TalonPosition extends PIDTalon {
   public TalonPosition(
     TalonSRX master, 
     boolean isMasterInverted,
-    boolean isFollowerInverted,
+    boolean isFollowersInverted,
     boolean isSensorPhase,
     double nominalOutputForwardValue, 
     double nominalOutputReverseValue, 
@@ -22,7 +22,7 @@ public class TalonPosition extends PIDTalon {
     super(
       master, 
       isMasterInverted, 
-      isFollowerInverted,
+      isFollowersInverted,
       isSensorPhase,
       nominalOutputForwardValue,
       nominalOutputReverseValue, 
@@ -38,7 +38,7 @@ public class TalonPosition extends PIDTalon {
   public TalonPosition(
     TalonSRX master,
     boolean isMasterInverted,
-    boolean isFollowerInverted,
+    boolean isFollowersInverted,
     boolean isSensorPhase,
     Gains gains,
     TalonSRX... followers
@@ -46,7 +46,7 @@ public class TalonPosition extends PIDTalon {
     this(
       master,
       isMasterInverted,
-      isFollowerInverted,
+      isFollowersInverted,
       isSensorPhase,
       PIDTalonConstants.nominalOutputForwardValue,
       PIDTalonConstants.nominalOutputReverseValue,
@@ -92,7 +92,7 @@ public class TalonPosition extends PIDTalon {
     return super.master.getMotorOutputPercent();
   } 
 
-  public void setPostion(int position) {
+  public void setPostion(double position) {
     super.master.set(ControlMode.Position, this.getSelectedSensorPosition() - position);
   }
 

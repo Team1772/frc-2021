@@ -3,8 +3,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -13,7 +11,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.core.util.TrajectoryBuilder;
 import frc.core.util.DoubleButton;
-import frc.robot.Constants.BufferConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.intake.CollectPowerCell;
 import frc.robot.commands.intake.ReleasePowerCell;
@@ -22,7 +19,6 @@ import frc.robot.commands.shooter.ShootPowerCellDefault;
 import frc.robot.commands.autons.GalacticA;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
-import frc.robot.commands.buffer.Feed;
 import frc.robot.commands.buffer.SmartFeed;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Buffer;
@@ -32,7 +28,7 @@ public class RobotContainer {
   private final Drivetrain drivetrain;
   private final Intake intake;
   private final Buffer buffer;
-  // private final Shooter shooter;
+  private final Shooter shooter;
 
   private final XboxController driver, operator;
   
@@ -42,7 +38,7 @@ public class RobotContainer {
     this.drivetrain = new Drivetrain();
     this.intake = new Intake();
     this.buffer = new Buffer();
-    // this.shooter = new Shooter();
+    this.shooter = new Shooter();
 
     this.driver = new XboxController(OIConstants.driverControllerPort);
     this.operator = new XboxController(OIConstants.operatorControllerPort);
@@ -76,7 +72,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     this.configureButtonBindingsIntake();
     this.configureButtonBindingsBuffer();
-    // this.configureButtonBindingsShooter();
+    this.configureButtonBindingsShooter();
   }
 
   private void configureButtonBindingsIntake() {
@@ -96,26 +92,24 @@ public class RobotContainer {
     );
   }
 
-  // private void configureButtonBindingsShooter() {
-  //   var buttonBumperRight = new JoystickButton(this.operator, Button.kBumperRight.value);
+   private void configureButtonBindingsShooter() {
+     var buttonBumperRight = new JoystickButton(this.operator, Button.kBumperRight.value);
     
-  //   buttonBumperRight
-  //   .whileHeld(new ShootPowerCellDefault(shooter));
+    buttonBumperRight
+      .whileHeld(new ShootPowerCellDefault(this.shooter));
     
-  //   var doubleButton = new DoubleButton(
-  //     this.operator,
-  //     Button.kBumperRight.value,
-  //     Button.kA.value
-  //   );
+    var doubleButton = new DoubleButton(
+      this.operator,
+      Button.kBumperRight.value,
+      Button.kA.value
+    );
 
-  //   doubleButton.whenActive(new ShootPowerCellAngle(shooter));
-  // }
+    doubleButton.whenActive(new ShootPowerCellAngle(this.shooter));
+  }
 
   public Command getAutonomousCommand() {
     return new GalacticA(this.trajectoryBuilder);
   }
-
-  
   
   public void reset() {
     this.drivetrain.reset();
