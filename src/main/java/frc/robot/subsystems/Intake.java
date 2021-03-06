@@ -13,9 +13,9 @@ public class Intake extends SubsystemBase {
     this.motorRight = new VictorSPX(IntakeConstants.motorsPorts[1]);
   }
 
-  public void setSpeed(double speed) {
-    this.motorLeft.set(ControlMode.PercentOutput, speed);
-    this.motorRight.set(ControlMode.PercentOutput, speed);
+  public void setSpeed(double speedY, double speedX) {
+    this.motorLeft.set(ControlMode.PercentOutput, speedY);
+    this.motorRight.set(ControlMode.PercentOutput, speedX);
   }
 
   public void stop() {
