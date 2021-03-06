@@ -7,6 +7,8 @@ import frc.robot.Constants.PIDTalonConstants;
 
 public class TalonVelocity extends PIDTalon {
 
+  private double velocityUnitsPer100ms;
+
   public TalonVelocity(
     TalonSRX master, 
     boolean isMasterInverted,
@@ -75,9 +77,9 @@ public class TalonVelocity extends PIDTalon {
   }
   
   private void setVelocity(double velocity, double dutyCycle) {
-    var velocityUnitsPer100ms = dutyCycle * velocity * 4096 / 600;
+    this.velocityUnitsPer100ms = dutyCycle * velocity * 4096 / 600;
 
-    super.master.set(ControlMode.Velocity, velocityUnitsPer100ms);
+    super.master.set(ControlMode.Velocity, this.velocityUnitsPer100ms);
   }
 
   public void setVelocityRPM(double velocityRPM, double dutyCycle) {
@@ -92,5 +94,9 @@ public class TalonVelocity extends PIDTalon {
 
   public void stop() {
     super.master.set(ControlMode.PercentOutput, 0);
+  }
+
+  public boolean atSettedVelocity() {
+    return super.master.getSelectedSensorVelocity() >= this.velocityUnitsPer100ms;
   }
 }

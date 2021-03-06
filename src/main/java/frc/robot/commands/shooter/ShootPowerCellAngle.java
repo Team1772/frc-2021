@@ -22,5 +22,5 @@ public class ShootPowerCellAngle extends CommandBase {
 	public void end(boolean isInterrupted) {
 		this.shooter.stop();
 		this.shooter.disableAngle();
-  }
+	}
 }

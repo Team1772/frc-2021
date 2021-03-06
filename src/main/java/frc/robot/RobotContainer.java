@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.core.util.TrajectoryBuilder;
@@ -20,6 +20,7 @@ import frc.robot.commands.autons.GalacticA;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
 import frc.robot.commands.buffer.SmartFeed;
+import frc.robot.commands.buffer.Feed;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Buffer;
 
@@ -87,6 +88,9 @@ public class RobotContainer {
   }
 
   private void configureButtonBindingsBuffer() {
+    var isAtSettedVelocity = new Trigger(() -> this.shooter.atSettedVelocity());
+    isAtSettedVelocity.whenActive(new Feed(this.buffer));
+
     this.buffer.setDefaultCommand(
       new SmartFeed(this.buffer)
     );
