@@ -21,9 +21,9 @@ public class Shooter extends SubsystemBase {
 
 		this.shooterPID = new TalonVelocity(
 			this.motorLeft, 
-			true,
-			false,
-			false,
+			ShooterConstants.isMotorsInverted,
+			ShooterConstants.isFollowerInverted,
+			ShooterConstants.isSensorPhase,
 			new Gains(
 				ShooterConstants.PID.kPVelocity,
 				ShooterConstants.PID.kIVelocity,

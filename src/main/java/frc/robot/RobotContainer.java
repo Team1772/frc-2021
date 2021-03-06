@@ -19,7 +19,7 @@ import frc.robot.commands.shooter.ShootPowerCellDefault;
 import frc.robot.commands.autons.GalacticA;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
-import frc.robot.commands.buffer.Feed;
+import frc.robot.commands.buffer.SmartFeed;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Buffer;
 
@@ -88,15 +88,12 @@ public class RobotContainer {
 
   private void configureButtonBindingsBuffer() {
     this.buffer.setDefaultCommand(
-      new Feed(
-        buffer,
-        () -> this.operator.getY(Hand.kRight)
-      )
+      new SmartFeed(this.buffer)
     );
   }
 
-  private void configureButtonBindingsShooter() {
-    var buttonBumperRight = new JoystickButton(this.operator, Button.kBumperRight.value);
+   private void configureButtonBindingsShooter() {
+     var buttonBumperRight = new JoystickButton(this.operator, Button.kBumperRight.value);
     
     buttonBumperRight
       .whileHeld(new ShootPowerCellDefault(this.shooter));
