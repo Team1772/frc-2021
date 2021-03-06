@@ -14,12 +14,16 @@ public class Shooter extends SubsystemBase {
 	private final TalonSRX motorLeft, motorRight;
 	private final TalonVelocity shooterPID;
 	private final SmartSolenoid activator;
-
+	
 	public Shooter() {
 		this.motorLeft = new TalonSRX(ShooterConstants.motorsPorts[0]);
 		this.motorRight = new TalonSRX(ShooterConstants.motorsPorts[1]);
+
 		this.shooterPID = new TalonVelocity(
 			this.motorLeft, 
+			true,
+			false,
+			false,
 			new Gains(
 				ShooterConstants.PID.kPVelocity,
 				ShooterConstants.PID.kIVelocity,

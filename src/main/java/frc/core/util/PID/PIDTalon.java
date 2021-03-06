@@ -31,13 +31,13 @@ public abstract class PIDTalon {
 		this.master = master;
 		this.followers = Arrays.stream(followers).collect(Collectors.toList());
 		
-		this.configFacotryDefault();
+		this.configFactoryDefault();
 		this.configSelectedFeedbackSensor();
+		this.setSensorPhase(isSensorPhase);
 		this.configMasterToFollowers();
 		
 		this.setMasterInverted(isMasterInverted);
 		this.setFollowersInverted(isFollowersInverted);
-		this.setSensorPhase(isSensorPhase);
 
 		this.setOutputs(
 			nominalOutputForwardValue, 
@@ -90,7 +90,7 @@ public abstract class PIDTalon {
 								.forEach(follower -> follower.follow(this.master));
 	}
 
-	private void configFacotryDefault() {
+	private void configFactoryDefault() {
 		this.master.configFactoryDefault();
 
 		this.followers.stream()
