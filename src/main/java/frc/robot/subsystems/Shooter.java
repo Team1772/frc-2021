@@ -58,12 +58,14 @@ public class Shooter extends SubsystemBase {
 		this.motorRight.set(ControlMode.PercentOutput, speed);
 	}
 
-	public void enableAngle(){
+	public void enableAngle() {
 		this.activator.enable();
+		System.out.println("entrou enable angle");
 	}
 
-	public void disableAngle(){
+	public void disableAngle() {
 		this.activator.disable();
+		System.out.println("entrou disable angle");
 	}
 
 	public void stop() {
@@ -78,5 +80,6 @@ public class Shooter extends SubsystemBase {
 	public void periodic() {
 		SmartDashboard.putNumber("[SHOOTER] Selected Sensor Velocity", this.shooterPID.getSelectedSensorVelocity());
 		SmartDashboard.putNumber("[SHOOTER] Closed Loop Error", this.shooterPID.getClosedLoopError());
+		SmartDashboard.putString("[SHOOTER] Activator", this.activator.getValue().toString());
 	}
 }

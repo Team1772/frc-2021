@@ -108,7 +108,7 @@ public class RobotContainer {
       Button.kA.value
     );
 
-    doubleButton.whenActive(new ShootPowerCellAngle(this.shooter));
+    doubleButton.whileActiveContinuous(new ShootPowerCellAngle(this.shooter));
   }
 
   public Command getAutonomousCommand() {
