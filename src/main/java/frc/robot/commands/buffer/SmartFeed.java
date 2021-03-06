@@ -14,10 +14,6 @@ public class SmartFeed extends CommandBase{
 
   @Override
   public void execute() {
-    this.smartFeed();
-  }
-
-  public void smartFeed() {
     var isSensorBottom = this.buffer.isSensorBottom();
     var isSensorQueue = this.buffer.isSensorQueue();
     var isSensorTop = this.buffer.isSensorTop();

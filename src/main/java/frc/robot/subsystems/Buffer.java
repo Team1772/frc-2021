@@ -16,7 +16,7 @@ public class Buffer extends SubsystemBase {
     this.sensorQueue = new DigitalInput(BufferConstants.sensorsPorts[1]);
     this.sensorTop = new DigitalInput(BufferConstants.sensorsPorts[2]);
 
-    this.setMotorInverted(BufferConstants.motorInverted);
+    this.motor.setInverted(true);
   }
 
   @Override
@@ -40,9 +40,5 @@ public class Buffer extends SubsystemBase {
 
   public boolean isSensorBottom() {
     return !this.sensorBottom.get();
-  }
-
-  public void setMotorInverted(boolean isInverted){
-    this.motor.setInverted(isInverted);
   }
 }
