@@ -79,15 +79,15 @@ public final class Constants {
 
 		public static final class PID {
 			public static final double 
-				kPVelocity = 0,
-				kIVelocity = 0,
-				kDVelocity = 0, 
-				kFVelocity = 0, 
-				kPeakOutputVelocity = 0,
+				kPVelocity = 0.33,
+				kIVelocity = 0.0009,
+				kDVelocity = 13.3, 
+				kFVelocity = 0.034, 
+				kPeakOutputVelocity = 1,
 				dutyCycle = 0.8;
 	
 			public static final int
-				kIZoneVelocity = 0;
+				kIZoneVelocity = 210;
 		}
 	}
 

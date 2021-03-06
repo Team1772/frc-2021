@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.PIDTalonConstants;
 
 public abstract class PIDTalon {
@@ -31,13 +32,13 @@ public abstract class PIDTalon {
 		this.master = master;
 		this.followers = Arrays.stream(followers).collect(Collectors.toList());
 		
-		this.configFacotryDefault();
+		this.configFactoryDefault();
 		this.configSelectedFeedbackSensor();
+		this.setSensorPhase(isSensorPhase);
 		this.configMasterToFollowers();
 		
 		this.setMasterInverted(isMasterInverted);
 		this.setFollowersInverted(isFollowersInverted);
-		this.setSensorPhase(isSensorPhase);
 
 		this.setOutputs(
 			nominalOutputForwardValue, 
@@ -90,7 +91,7 @@ public abstract class PIDTalon {
 								.forEach(follower -> follower.follow(this.master));
 	}
 
-	private void configFacotryDefault() {
+	private void configFactoryDefault() {
 		this.master.configFactoryDefault();
 
 		this.followers.stream()
