@@ -88,19 +88,19 @@ public class RobotContainer {
   }
 
   private void configureButtonBindingsBuffer() {
-    var isAtSettedVelocity = new Trigger(() -> this.shooter.atSettedVelocity());
-    isAtSettedVelocity.whenActive(new Feed(this.buffer));
-
     this.buffer.setDefaultCommand(
       new SmartFeed(this.buffer)
     );
   }
 
    private void configureButtonBindingsShooter() {
-     var buttonBumperRight = new JoystickButton(this.operator, Button.kBumperRight.value);
+    var buttonBumperRight = new JoystickButton(this.operator, Button.kBumperRight.value);
     
+    Trigger isAtSettedVelocity = new Trigger(() -> this.shooter.atSettedVelocity());
+
     buttonBumperRight
-      .whileHeld(new ShootPowerCellDefault(this.shooter));
+      .whileHeld(new ShootPowerCellDefault(this.shooter))
+      .and(isAtSettedVelocity).whileActiveContinuous(new Feed(this.buffer));
     
     var doubleButton = new DoubleButton(
       this.operator,
