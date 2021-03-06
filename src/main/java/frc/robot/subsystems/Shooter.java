@@ -70,9 +70,13 @@ public class Shooter extends SubsystemBase {
 		this.shooterPID.stop();
 	}
 
+	public boolean atSettedVelocity() {
+		return this.shooterPID.atSettedVelocity();
+	}
+
 	@Override
-  public void periodic() {
-    SmartDashboard.putNumber("[SHOOTER] Selected Sensor Velocity", this.shooterPID.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("[SHOOTER] Closed Loop Error", this.shooterPID.getClosedLoopError());
-  }
+	public void periodic() {
+		SmartDashboard.putNumber("[SHOOTER] Selected Sensor Velocity", this.shooterPID.getSelectedSensorVelocity());
+		SmartDashboard.putNumber("[SHOOTER] Closed Loop Error", this.shooterPID.getClosedLoopError());
+	}
 }

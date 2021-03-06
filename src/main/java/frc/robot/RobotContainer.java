@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.core.util.TrajectoryBuilder;
@@ -87,12 +87,8 @@ public class RobotContainer {
   }
 
   private void configureButtonBindingsBuffer() {
-    this.buffer.setDefaultCommand(
-      new Feed(
-        buffer,
-        () -> this.operator.getY(Hand.kRight)
-      )
-    );
+    var isAtSettedVelocity = new Trigger(() -> this.shooter.atSettedVelocity());
+    isAtSettedVelocity.whenActive(() -> new Feed(this.buffer));
   }
 
   private void configureButtonBindingsShooter() {
