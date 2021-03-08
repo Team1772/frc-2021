@@ -1,4 +1,4 @@
-package frc.core.util.PID;
+package frc.core.util.pid;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;

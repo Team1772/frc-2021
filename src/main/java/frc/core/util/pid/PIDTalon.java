@@ -1,4 +1,4 @@
-package frc.core.util.PID;
+package frc.core.util.pid;
 
 import static frc.core.util.function.For.forWithCounter;
 
