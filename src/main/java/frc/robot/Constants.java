@@ -123,8 +123,8 @@ public final class Constants {
 	public static final class LimelightConstants {
 		public static final String tableName = "limelight";
 		public static final int pipeline = 0;
-		public static final double kP = 0,
-			minCommand = 0,
+		public static final double kP = - 0.1,
+			minCommand = 0.095,
 			kpAim = 0,
 			kpDistance = 0,
 			minAimCommand = 0;

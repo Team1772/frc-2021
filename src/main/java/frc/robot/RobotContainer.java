@@ -17,6 +17,7 @@ import frc.robot.commands.intake.ReleasePowerCell;
 import frc.robot.commands.shooter.ShootPowerCellAngle;
 import frc.robot.commands.shooter.ShootPowerCellDefault;
 import frc.robot.commands.autons.GalacticA;
+import frc.robot.commands.drivetrain.AimTarget;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
 import frc.robot.commands.buffer.SmartFeed;
@@ -74,6 +75,7 @@ public class RobotContainer {
     this.configureButtonBindingsIntake();
     this.configureButtonBindingsBuffer();
     this.configureButtonBindingsShooter();
+    this.configureButtonBindingsDrivetrain();
   }
 
   private void configureButtonBindingsIntake() {
@@ -109,6 +111,12 @@ public class RobotContainer {
     );
 
     doubleButton.whileActiveContinuous(new ShootPowerCellAngle(this.shooter));
+  }
+
+  public void configureButtonBindingsDrivetrain() {
+    var buttonBumperRight = new JoystickButton(this.driver, Button.kBumperRight.value);
+    buttonBumperRight
+      .whileHeld(new AimTarget(this.drivetrain));
   }
 
   public Command getAutonomousCommand() {
