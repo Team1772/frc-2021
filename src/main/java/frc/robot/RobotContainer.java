@@ -115,6 +115,7 @@ public class RobotContainer {
 
   public void configureButtonBindingsDrivetrain() {
     var buttonBumperRight = new JoystickButton(this.driver, Button.kBumperRight.value);
+    
     buttonBumperRight
       .whileHeld(new AimTarget(this.drivetrain));
   }

@@ -4,9 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.core.components.Limelight;
 import frc.core.components.Limelight.LedMode;
 import frc.robot.Constants.LimelightConstants;
-import frc.robot.subsystems.Drivetrain;
-
-//refatorar classes 
+import frc.robot.subsystems.Drivetrain; 
 
 public class AimTarget extends CommandBase {
   private Drivetrain drivetrain;
@@ -25,35 +23,27 @@ public class AimTarget extends CommandBase {
 
   @Override
   public void execute() {
-    double x = Limelight.getX();
-    System.out.println(x);
-    var headingError = -(x);
-    double adjust = 0;
+    double x = Limelight.getX(),
+      headingError = -(x),
+      adjust = 0;
 
     if (x > 1) {
       adjust = LimelightConstants.kP * 
                 headingError - 
                 LimelightConstants.minCommand;
-      
-      System.out.println("entrou x>1");
     } else if (x < 1) { 
       adjust = LimelightConstants.kP * 
                 headingError + 
                 LimelightConstants.minCommand;
-
-      System.out.println("entrou x<1");
     }
 
     double rightSpeed = 0,
-     leftSpeed = 0;
+      leftSpeed = 0;
 
     rightSpeed -= adjust;
     leftSpeed += adjust;
 
     this.drivetrain.tankDrive(leftSpeed, rightSpeed);
-
-    System.out.println(leftSpeed);
-    System.out.println(rightSpeed);
   }
 
   @Override
