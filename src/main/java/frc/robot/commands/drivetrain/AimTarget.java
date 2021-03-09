@@ -1,12 +1,12 @@
 package frc.robot.commands.drivetrain;
 
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.core.components.Limelight;
 import frc.core.components.Limelight.LedMode;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.subsystems.Drivetrain;
+
+//refatorar classes 
 
 public class AimTarget extends CommandBase {
   private Drivetrain drivetrain;
@@ -20,12 +20,12 @@ public class AimTarget extends CommandBase {
   @Override
   public void initialize() {
     Limelight.setLed(LedMode.ON);
-    // Limelight.setPipeline(LimelightConstants.pipeline);
+    Limelight.setPipeline(LimelightConstants.pipeline);
   }
 
   @Override
   public void execute() {
-    double x = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0.0);
+    double x = Limelight.getX();
     System.out.println(x);
     var headingError = -(x);
     double adjust = 0;
