@@ -74,10 +74,6 @@ public final class Constants {
 
 		public static final boolean
 		motorInverted = true;
-
-		
-
-
 	}
 
 	public static final class ShooterConstants {
@@ -86,6 +82,8 @@ public final class Constants {
 			activatorPorts = new int[] { 0, 1 };
 
 		public static final double wheelRadius = 0.0762;
+
+		public static final int maxRPM = 6232;
 
 		public static final boolean
 			isMotorsInverted = true,
