@@ -4,6 +4,7 @@ import static java.util.Objects.isNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -84,9 +85,16 @@ public class TrajectoryBuilder {
 		}
   }
 
-  public Command buildTrajectory(String fileName) {
-		var trajectory = this.trajectories.get(fileName);
-    this.createRamsete(trajectory);
+  public Command buildTrajectory(String... filesName) {
+		var trajectories = new ArrayList<Trajectory>();
+		Trajectory trajectory;
+		for (String fileName : filesName) trajectories.add(this.trajectories.get(fileName));
+
+		if (trajectories.size() > 1) trajectory = this.concatenate(trajectories.toArray(Trajectory[]::new));
+		else trajectory = trajectories.get(0);
+
+		this.createRamsete(trajectory);
+
 
     return this.getRamsete().andThen(
       () -> this.drivetrain.tankDriveVolts(0, 0)
@@ -111,5 +119,40 @@ public class TrajectoryBuilder {
 
 			return null;
 		}
+	}
+
+	private Trajectory concatenate(Trajectory... trajectories) {
+		var trajectoriesList = Arrays.stream(trajectories).collect(Collectors.toList());
+		var finalTrajectory = trajectoriesList.get(0);
+
+		for (var otherTrajectory : trajectoriesList.subList(1, trajectoriesList.size())) {
+				var states =
+					finalTrajectory.getStates().stream()
+						.map(
+							state ->
+								new Trajectory.State(
+									state.timeSeconds,
+									state.velocityMetersPerSecond,
+									state.accelerationMetersPerSecondSq,
+									state.poseMeters,
+									state.curvatureRadPerMeter))
+						.collect(Collectors.toList());
+
+			for (var state : otherTrajectory.getStates()) {
+				states.add(
+					new Trajectory.State(
+						state.timeSeconds + finalTrajectory.getTotalTimeSeconds(),
+						state.velocityMetersPerSecond,
+						state.accelerationMetersPerSecondSq,
+						state.poseMeters,
+						state.curvatureRadPerMeter
+					)
+				);
+			}
+			
+			finalTrajectory = new Trajectory(states);
+		}	
+
+		return finalTrajectory;
 	}
 }
