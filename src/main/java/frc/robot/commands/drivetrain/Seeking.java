@@ -27,20 +27,20 @@ public class Seeking extends CommandBase {
       steeringAdjust = 0;
 
     if (!Limelight.isTarget()) {
-      steeringAdjust = 0;
+      steeringAdjust = 0.3;
     } else {
       double headingError = x;
 
       steeringAdjust = LimelightConstants.Seeking.kP * headingError;
-}
+    }
 
-  double leftSpeed = 0,
+    double leftSpeed = 0,
     rightSpeed = 0;
 
-  leftSpeed += steeringAdjust;
-  rightSpeed -= steeringAdjust;
+    leftSpeed += steeringAdjust;
+    rightSpeed -= steeringAdjust;
 
-  this.drivetrain.tankDrive(leftSpeed, rightSpeed);
+    this.drivetrain.tankDrive(leftSpeed, rightSpeed);
   }
 
   @Override

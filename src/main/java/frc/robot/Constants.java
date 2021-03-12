@@ -131,8 +131,8 @@ public final class Constants {
 		
 		public static final class AimAndRangeTarget {
 			public static final double kP = 0,
-			kPDistance = 0,
-			minCommand = 0;
+				kPDistance = 0,
+				minCommand = 0;
 		}
 
 		public static final class Seeking {
