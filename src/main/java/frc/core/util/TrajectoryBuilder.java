@@ -4,9 +4,10 @@ import static java.util.Objects.isNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -86,12 +88,15 @@ public class TrajectoryBuilder {
   }
 
   public Command buildTrajectory(String... filesName) {
-		var trajectories = new ArrayList<Trajectory>();
-		Trajectory trajectory;
-		for (String fileName : filesName) trajectories.add(this.trajectories.get(fileName));
+		var trajectories = this.trajectories
+			.entrySet().stream()
+			.filter(trajectory -> Set.of(filesName).contains(trajectory.getKey()))
+			.map(trajectory -> trajectory.getValue())
+			.collect(Collectors.toList());
 
-		if (trajectories.size() > 1) trajectory = this.concatenate(trajectories.toArray(Trajectory[]::new));
-		else trajectory = trajectories.get(0);
+		var trajectory = trajectories.size() > 1 ? 
+			this.concatenate(trajectories)
+			: trajectories.get(0);
 
 		this.createRamsete(trajectory);
 
@@ -121,38 +126,35 @@ public class TrajectoryBuilder {
 		}
 	}
 
-	private Trajectory concatenate(Trajectory... trajectories) {
-		var trajectoriesList = Arrays.stream(trajectories).collect(Collectors.toList());
-		var finalTrajectory = trajectoriesList.get(0);
+	private Trajectory concatenate(List<Trajectory> trajectories) {
+		var trajectory = trajectories.get(0);
 
-		for (var otherTrajectory : trajectoriesList.subList(1, trajectoriesList.size())) {
-				var states =
-					finalTrajectory.getStates().stream()
-						.map(
-							state ->
-								new Trajectory.State(
-									state.timeSeconds,
-									state.velocityMetersPerSecond,
-									state.accelerationMetersPerSecondSq,
-									state.poseMeters,
-									state.curvatureRadPerMeter))
-						.collect(Collectors.toList());
+		for (var otherTrajectory : trajectories.subList(1, trajectories.size())) {
+				var states = trajectory.getStates().stream()
+					.map(
+						state ->
+							new State(
+								state.timeSeconds,
+								state.velocityMetersPerSecond,
+								state.accelerationMetersPerSecondSq,
+								state.poseMeters,
+								state.curvatureRadPerMeter))
+					.collect(Collectors.toList());
 
 			for (var state : otherTrajectory.getStates()) {
-				states.add(
-					new Trajectory.State(
-						state.timeSeconds + finalTrajectory.getTotalTimeSeconds(),
-						state.velocityMetersPerSecond,
-						state.accelerationMetersPerSecondSq,
-						state.poseMeters,
-						state.curvatureRadPerMeter
+				states.add(new State(
+					state.timeSeconds + trajectory.getTotalTimeSeconds(),
+					state.velocityMetersPerSecond,
+					state.accelerationMetersPerSecondSq,
+					state.poseMeters,
+					state.curvatureRadPerMeter
 					)
 				);
 			}
-			
-			finalTrajectory = new Trajectory(states);
+
+			trajectory = new Trajectory(states);
 		}	
 
-		return finalTrajectory;
+		return trajectory;
 	}
 }
