@@ -1,4 +1,4 @@
-package frc.core.util.PID;
+package frc.core.util.pid;
 
 public class Gains {
   public final double kP, kI, kD, kF, kPeakOutput;

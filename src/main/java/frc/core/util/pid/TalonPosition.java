@@ -1,16 +1,13 @@
-package frc.core.util.PID;
+package frc.core.util.pid;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import frc.robot.Constants.PIDTalonConstants;
-import frc.robot.Constants.ShooterConstants;
 
-public class TalonVelocity extends PIDTalon {
+public class TalonPosition extends PIDTalon {
 
-  private double velocityUnitsPer100ms;
-
-  public TalonVelocity(
+  public TalonPosition(
     TalonSRX master, 
     boolean isMasterInverted,
     boolean isFollowersInverted,
@@ -34,9 +31,11 @@ public class TalonVelocity extends PIDTalon {
       gains,
       followers
     );
+
+    this.setAbsolutePosition(isMasterInverted, isSensorPhase);
   }
 
-  public TalonVelocity(
+  public TalonPosition(
     TalonSRX master,
     boolean isMasterInverted,
     boolean isFollowersInverted,
@@ -58,7 +57,7 @@ public class TalonVelocity extends PIDTalon {
     );
   }
 
-  public TalonVelocity(
+  public TalonPosition(
     TalonSRX master,
     Gains gains,
     TalonSRX... followers
@@ -77,32 +76,38 @@ public class TalonVelocity extends PIDTalon {
     );
   }
 
-  private void setVelocity(double rpm, double dutyCycle) {
-    dutyCycle = rpm > (ShooterConstants.maxRPM * dutyCycle) ? dutyCycle : 1;
-    this.velocityUnitsPer100ms = dutyCycle * rpm * 4096 / 600;
-
-    super.master.set(ControlMode.Velocity, this.velocityUnitsPer100ms);
+  private int getAbsolutePosition() {
+    return super.master.getSensorCollection().getPulseWidthPosition();
   }
 
-  public void setRPM(double rpm, double dutyCycle) {
-    this.setVelocity(rpm, dutyCycle);
+  public boolean isMaxPosition(double value) {
+    return (this.getSelectedSensorPosition() - this.getSelectedSensorPosition()) < (-value);
+  }
+
+  public double getSelectedSensorPosition() {
+    return super.master.getSelectedSensorPosition(0);
+  }
+
+  public double getMasterOutput() {
+    return super.master.getMotorOutputPercent();
   } 
 
-  /*
-   * ------------(2021 Robot)-------------
-   * @param velocityMetersPerSecond = 40 is the most efficient m/s shoot velocity
-   */
-  public void setVelocityMetersPerSecond(double velocityMetersPerSecond, double dutyCycle, double wheelRadius) {
-    var rpm = (velocityMetersPerSecond * 60) / (2 * Math.PI * wheelRadius);
-
-    this.setVelocity(rpm, dutyCycle);
+  public void setPostion(double position) {
+    super.master.set(ControlMode.Position, this.getSelectedSensorPosition() - position);
   }
 
-  public void stop() {
-    super.master.set(ControlMode.PercentOutput, 0);
-  }
+  private void setAbsolutePosition( boolean isMasterInverted, boolean isSensorPhase) {
+    int absolutePosition = this.getAbsolutePosition();
 
-  public boolean atSettedVelocity() {
-    return super.master.getSelectedSensorVelocity() >= this.velocityUnitsPer100ms;
+    absolutePosition &= 0xFFF;
+
+    if (isSensorPhase) { absolutePosition *= -1; }
+    if (isMasterInverted) { absolutePosition *= -1; }
+    
+    super.master.setSelectedSensorPosition(
+      absolutePosition, 
+      PIDTalonConstants.kPIDLoopIdx, 
+      PIDTalonConstants.kTimeoutMs
+    );
   }
 }
