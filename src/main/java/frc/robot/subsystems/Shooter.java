@@ -3,8 +3,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.core.components.SmartSolenoid;
-import frc.core.util.PID.Gains;
-import frc.core.util.PID.TalonVelocity;
+import frc.core.util.pid.Gains;
+import frc.core.util.pid.TalonVelocity;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;

@@ -30,17 +30,18 @@ public class AimAndRangeTarget extends CommandBase {
       steeringAdjust = 0;
 
     if (x > 1) {
-      steeringAdjust = LimelightConstants.kpAim *
+      steeringAdjust = LimelightConstants.AimAndRangeTarget.kP *
                         headingError -
-                        LimelightConstants.minAimCommand;
-    } else if (x < 1){
-      steeringAdjust = LimelightConstants.kpAim *
+                        LimelightConstants.AimAndRangeTarget.minCommand;
+    } else if (x < 1) {
+      steeringAdjust = LimelightConstants.AimAndRangeTarget.kP *
                         headingError +
-                        LimelightConstants.minAimCommand;
+                        LimelightConstants.AimAndRangeTarget.minCommand;
     }
 
-    double distanceAdjust = LimelightConstants.kpDistance * distanceError,
-      leftSpeed = 0,
+    var distanceAdjust = LimelightConstants.AimAndRangeTarget.kPDistance * distanceError;
+
+    double leftSpeed = 0,
       rightSpeed = 0;
       
     leftSpeed += steeringAdjust + distanceAdjust;
