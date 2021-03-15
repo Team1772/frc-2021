@@ -46,9 +46,9 @@ public class Shooter extends SubsystemBase {
 		);
 	}
 
-	public void setVelocityRPM(double velocityRPM) {
-		this.shooterPID.setVelocityRPM(
-			velocityRPM, 
+	public void setRPM(double rpm) {
+		this.shooterPID.setRPM(
+			rpm, 
 			ShooterConstants.PID.dutyCycle
 		);
 	}

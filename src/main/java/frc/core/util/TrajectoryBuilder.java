@@ -63,7 +63,7 @@ public class TrajectoryBuilder {
 			    ));
 	}
 	
-	public void createRamsete(Trajectory trajectory){
+	public void createRamsete(Trajectory trajectory) {
 		if (isNull(trajectory)) {
 			DriverStation.reportError(
 				"trajectory is null", 

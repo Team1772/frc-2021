@@ -6,7 +6,7 @@ import frc.robot.subsystems.Shooter;
 public class ShootPowerCellAngle extends CommandBase {
 	private final Shooter shooter;
 	
-	public ShootPowerCellAngle(Shooter shooter){
+	public ShootPowerCellAngle(Shooter shooter) {
 		this.shooter = shooter;
 		
 		addRequirements(this.shooter);

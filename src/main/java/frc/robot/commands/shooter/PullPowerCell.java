@@ -6,7 +6,7 @@ import frc.robot.subsystems.Shooter;
 public class PullPowerCell extends CommandBase {
 	private final Shooter shooter;
 	
-	public PullPowerCell(Shooter shooter){
+	public PullPowerCell(Shooter shooter) {
 		this.shooter = shooter;
 		
 		addRequirements(this.shooter);

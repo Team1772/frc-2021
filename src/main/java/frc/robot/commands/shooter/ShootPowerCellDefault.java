@@ -6,7 +6,7 @@ import frc.robot.subsystems.Shooter;
 public class ShootPowerCellDefault extends CommandBase {
 	private final Shooter shooter;
 	
-	public ShootPowerCellDefault(Shooter shooter){
+	public ShootPowerCellDefault(Shooter shooter) {
 		this.shooter = shooter;
 		
 		addRequirements(this.shooter);

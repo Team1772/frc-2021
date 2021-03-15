@@ -15,7 +15,7 @@ public class SmartNavX {
 		return this.ahrs.getAngle();
 	}
 
-	public void reset(){
+	public void reset() {
 		this.ahrs.reset();
 	}
 
