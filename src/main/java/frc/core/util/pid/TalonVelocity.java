@@ -78,7 +78,7 @@ public class TalonVelocity extends PIDTalon {
   }
 
   private void setVelocity(double rpm, double dutyCycle) {
-    dutyCycle = rpm > (ShooterConstants.maxRPM * dutyCycle) ? dutyCycle : 1;
+    dutyCycle = rpm > (ShooterConstants.maxRPM) ? dutyCycle : 1;
     this.velocityUnitsPer100ms = dutyCycle * rpm * 4096 / 600;
 
     super.master.set(ControlMode.Velocity, this.velocityUnitsPer100ms);
