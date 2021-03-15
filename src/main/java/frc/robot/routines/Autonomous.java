@@ -20,11 +20,11 @@ public class Autonomous implements IRoutines {
 
   public enum RobotPath {
     //add all paths here
-    GALACTIC_A("galacticA"),
-    GALACTIC_B("galacticB"),
-    SLALOM("slalom"),
-    BOUNCE("bounce"),
-    BARREL("barrel");
+    GALACTIC_A("galacticA");
+    // GALACTIC_B("galacticB"),
+    // SLALOM("slalom"),
+    // BOUNCE("bounce"),
+    // BARREL("barrel");
   
     public final String fileName;
     private RobotPath(String fileName) {

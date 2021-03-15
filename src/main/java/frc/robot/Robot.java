@@ -27,9 +27,10 @@ public class Robot extends TimedRobot {
     buffer = new Buffer();
     shooter = new Shooter();
 
-    autonomous.configOptions();
-
+    
     trajectoryBuilder = new TrajectoryBuilder(drivetrain, RobotPath.get());
+    
+    Autonomous.getInstance().configOptions();
   }
 
   @Override
