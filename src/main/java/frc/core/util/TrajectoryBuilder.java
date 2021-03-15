@@ -87,7 +87,7 @@ public class TrajectoryBuilder {
 		}
   }
 
-  public Command buildTrajectory(String... filesNames) {
+  public Command build(String... filesNames) {
 		var trajectories = this.trajectories
 			.entrySet().stream()
 			.filter(trajectory -> Set.of(filesNames).contains(trajectory.getKey()))
