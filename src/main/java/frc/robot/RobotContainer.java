@@ -45,30 +45,17 @@ public class RobotContainer {
     this.driver = new XboxController(OIConstants.driverControllerPort);
     this.operator = new XboxController(OIConstants.operatorControllerPort);
 
-    this.trajectoryBuilder = new TrajectoryBuilder(this.drivetrain, "autoAwards_0","autoAwards_1", "autoAwards");
+    this.trajectoryBuilder = new TrajectoryBuilder(
+      this.drivetrain, 
+      "autoAwards"
+      // "barrel",
+      // "slalom", 
+      // "galacticA",
+      // "galacticB",
+      // "bounce"
+    );
 
     this.configureButtonBindings();
-    this.configureDefaultCommand();
-  }
-
-  private void configureDefaultCommand() {
-    var buttonBumperLeft = new JoystickButton(this.driver, Button.kBumperLeft.value);
-
-    buttonBumperLeft.whenHeld(
-      new CurvatureDrive(
-        this.drivetrain,
-        () -> this.driver.getY(Hand.kLeft),
-        () -> this.driver.getX(Hand.kRight)
-      )
-    );
-
-    this.drivetrain.setDefaultCommand(
-      new ArcadeDrive(
-        drivetrain, 
-        () -> this.driver.getY(Hand.kLeft), 
-        () -> this.driver.getX(Hand.kRight)
-      )
-    );
   }
 
   private void configureButtonBindings() {
@@ -114,6 +101,24 @@ public class RobotContainer {
   }
 
   public void configureButtonBindingsDrivetrain() {
+    var buttonBumperLeft = new JoystickButton(this.driver, Button.kBumperLeft.value);
+
+    buttonBumperLeft.whenHeld(
+      new CurvatureDrive(
+        this.drivetrain,
+        () -> this.driver.getY(Hand.kLeft),
+        () -> this.driver.getX(Hand.kRight)
+      )
+    );
+
+    this.drivetrain.setDefaultCommand(
+      new ArcadeDrive(
+        drivetrain, 
+        () -> this.driver.getY(Hand.kLeft), 
+        () -> this.driver.getX(Hand.kRight)
+      )
+    );
+
     var buttonBumperRight = new JoystickButton(this.driver, Button.kBumperRight.value);
     
     buttonBumperRight
