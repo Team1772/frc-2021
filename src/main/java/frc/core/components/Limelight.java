@@ -47,19 +47,8 @@ public class Limelight {
 		}
 	}
 
-<<<<<<< HEAD
-	public static Limelight getInstance() {
-		if (isNull(limelight)) limelight = new Limelight();
-
-		return limelight;	
-	}
-
-	private NetworkTableEntry getEntry(Entry entry) {
-		return this.table.getEntry(entry.key);
-=======
 	private static NetworkTableEntry getEntry(Entry entry) {
 		return table.getEntry(entry.key);
->>>>>>> c8a50e53344d5d2a1271aadc5f64e1400699348f
 	}
 
 	private static double getValue(Entry entry) {
