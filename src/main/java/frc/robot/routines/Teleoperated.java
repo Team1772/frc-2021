@@ -13,6 +13,7 @@ import frc.robot.Robot;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.buffer.Feed;
 import frc.robot.commands.buffer.SmartFeed;
+import frc.robot.commands.drivetrain.AimTarget;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
 import frc.robot.commands.intake.CollectPowerCell;
@@ -99,6 +100,11 @@ public class Teleoperated implements IRoutines {
         () -> this.driver.getX(Hand.kRight)
       )
     );
+
+    var buttonBumperRight = new JoystickButton(this.driver, Button.kBumperRight.value);
+    
+    buttonBumperRight
+      .whileHeld(new AimTarget(Robot.drivetrain));
   }
 
   private void commandsBuffer(){
