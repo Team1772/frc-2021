@@ -8,40 +8,38 @@ import frc.robot.subsystems.Drivetrain;
 
 public class AimAndRangeTarget extends CommandBase {
   private Drivetrain drivetrain;
-  private Limelight limelight;
 
-  public AimAndRangeTarget(Drivetrain drivetrain, Limelight limelight) {
+  public AimAndRangeTarget(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
-    this.limelight = limelight;
-
+    
     addRequirements(this.drivetrain);
   }
 
   @Override
   public void initialize() {
-    this.limelight.setLed(LedMode.ON);
-    this.limelight.setPipeline(LimelightConstants.pipeline);
+    Limelight.setLed(LedMode.ON);
+    Limelight.setPipeline(LimelightConstants.pipeline);
   }
 
   @Override
   public void execute() {
-    double x = limelight.getX(),
-      y = limelight.getY(),
+    double x = Limelight.getX(),
+      y = Limelight.getY(),
       headingError = -(x),
       distanceError = -(y),
       steeringAdjust = 0;
 
     if (x > 1) {
-      steeringAdjust = LimelightConstants.kpAim *
+      steeringAdjust = LimelightConstants.AimAndRangeTarget.kP *
                         headingError -
-                        LimelightConstants.minAimCommand;
+                        LimelightConstants.AimAndRangeTarget.minCommand;
     } else if (x < 1) {
-      steeringAdjust = LimelightConstants.kpAim *
+      steeringAdjust = LimelightConstants.AimAndRangeTarget.kP *
                         headingError +
-                        LimelightConstants.minAimCommand;
+                        LimelightConstants.AimAndRangeTarget.minCommand;
     }
 
-    var distanceAdjust = LimelightConstants.kpDistance * distanceError;
+    var distanceAdjust = LimelightConstants.AimAndRangeTarget.kPDistance * distanceError;
 
     double leftSpeed = 0,
       rightSpeed = 0;
@@ -54,6 +52,6 @@ public class AimAndRangeTarget extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    this.limelight.setLed(LedMode.OFF);
+    Limelight.setLed(LedMode.OFF);
   }
 }

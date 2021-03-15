@@ -32,17 +32,23 @@ public class Drivetrain extends SubsystemBase {
       new VictorSP(DrivetrainConstants.motorLeftPort[1])
     );
 
+    this.setMotorsInverted(
+      DrivetrainConstants.isMotorsInverted[0], 
+      DrivetrainConstants.isMotorsInverted[1]
+    );
+
     this.drive = new DifferentialDrive(this.motorsRight, this.motorsLeft);
 
     this.encoderLeft = new Encoder(
       DrivetrainConstants.encoderLeftPort[0],
-      DrivetrainConstants.encoderLeftPort[1]
+      DrivetrainConstants.encoderLeftPort[1],
+      DrivetrainConstants.isEcondersInverted[0]
     );
  
     this.encoderRight = new Encoder(
       DrivetrainConstants.encoderRightPort[0],
       DrivetrainConstants.encoderRightPort[1],
-      DrivetrainConstants.isEncoderRightInverted
+      DrivetrainConstants.isEcondersInverted[1]
     );
 
     this.navX = new SmartNavX(); 
@@ -148,6 +154,11 @@ public class Drivetrain extends SubsystemBase {
     this.drive.setMaxOutput(maxOutput);
   }
 
+  public void setMotorsInverted(boolean isMotorsLeftInverted, boolean isMotorsRightInverted) {
+    this.motorsLeft.setInverted(isMotorsLeftInverted);
+    this.motorsRight.setInverted(isMotorsRightInverted);
+  }
+
   public void setEncodersDistancePerPulse() {
     var wheelCircumferenceMeters = Units.inchesToMeters(DrivetrainConstants.wheelRadius) * 2 * Math.PI;
 
@@ -160,9 +171,9 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Encoder left", encoderLeft.get());
-    SmartDashboard.putNumber("Encoder right", encoderRight.get());
-    SmartDashboard.putNumber("Average distance", this.getAverageDistance());
+    SmartDashboard.putNumber("[DRIVETRAIN] Encoder Left", this.encoderLeft.get());
+    SmartDashboard.putNumber("[DRIVETRAIN] Encoder Right", this.encoderRight.get());
+    SmartDashboard.putNumber("[DRIVETRAIN] Average Distance", this.getAverageDistance());
     
     this.updateOdometry();
   }

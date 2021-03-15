@@ -1,7 +1,5 @@
 package frc.core.components;
 
-import static java.util.Objects.isNull;
-
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -9,16 +7,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants.LimelightConstants;
 
 public class Limelight {
-	private final NetworkTable table;
-	private static Limelight limelight;
-
-  private Limelight() {
-		this.table = NetworkTableInstance
-									.getDefault()
-									.getTable(
-										LimelightConstants.tableName
-									);
-  }
+	private static final NetworkTable table =
+		NetworkTableInstance.getDefault().getTable(LimelightConstants.tableName);
 
   public enum Entry {
     TX("tx"),
@@ -57,6 +47,7 @@ public class Limelight {
 		}
 	}
 
+<<<<<<< HEAD
 	public static Limelight getInstance() {
 		if (isNull(limelight)) limelight = new Limelight();
 
@@ -65,45 +56,49 @@ public class Limelight {
 
 	private NetworkTableEntry getEntry(Entry entry) {
 		return this.table.getEntry(entry.key);
+=======
+	private static NetworkTableEntry getEntry(Entry entry) {
+		return table.getEntry(entry.key);
+>>>>>>> c8a50e53344d5d2a1271aadc5f64e1400699348f
 	}
 
-	private double getValue(Entry entry) {
-		return this.getEntry(entry).getDouble(0.0);
+	private static double getValue(Entry entry) {
+		return getEntry(entry).getDouble(0.0);
 	}
 
-	public double getX() {
-		return this.getValue(Entry.TX);
+	public static double getX() {
+		return getValue(Entry.TX);
 	}
 
-	public double getY() {
-		return this.getValue(Entry.TY);
+	public static double getY() {
+		return getValue(Entry.TY);
 	}
 
-	public double getA() {
-		return this.getValue(Entry.TA);
+	public static double getA() {
+		return getValue(Entry.TA);
 	}
 
-	public double getV() {
-		return this.getValue(Entry.TV);
+	public static double getV() {
+		return getValue(Entry.TV);
 	}
 
-	public boolean isTarget() {
-		return this.getV() == 1;
+	public static boolean isTarget() {
+		return getV() == 1;
 	}
 
-	private void setEntry(Entry entry, int value) {
-		this.getEntry(entry).setNumber(value);
+	private static void setEntry(Entry entry, int value) {
+		getEntry(entry).setNumber(value);
 	}
 
-	public void setPipeline(int value) {
-		this.setEntry(Entry.PIPELINE, value);
+	public static void setPipeline(int value) {
+		setEntry(Entry.PIPELINE, value);
 	}
 
-	public void setLed(LedMode ledMode) {
-		this.setEntry(Entry.LED_MODE, ledMode.value);
+	public static void setLed(LedMode ledMode) {
+		setEntry(Entry.LED_MODE, ledMode.value);
 	}
 
-	public void setCam(CamMode camMode) {
-		this.setEntry(Entry.CAM_MODE, camMode.value);
+	public static void setCam(CamMode camMode) {
+		setEntry(Entry.CAM_MODE, camMode.value);
 	}
 }

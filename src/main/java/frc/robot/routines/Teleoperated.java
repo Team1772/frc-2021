@@ -79,10 +79,7 @@ public class Teleoperated implements IRoutines {
 
   private void commandsBuffer(){
     Robot.buffer.setDefaultCommand(
-      new Feed(
-        Robot.buffer,
-        () -> this.operator.getY(Hand.kRight)
-      )
+      new Feed(Robot.buffer)
     );
   }
 }

@@ -1,4 +1,4 @@
-package frc.core.util.PID;
+package frc.core.util.pid;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -7,10 +7,12 @@ import frc.robot.Constants.PIDTalonConstants;
 
 public class TalonVelocity extends PIDTalon {
 
+  private double velocityUnitsPer100ms;
+
   public TalonVelocity(
     TalonSRX master, 
     boolean isMasterInverted,
-    boolean isFollowerInverted,
+    boolean isFollowersInverted,
     boolean isSensorPhase,
     double nominalOutputForwardValue, 
     double nominalOutputReverseValue, 
@@ -22,7 +24,7 @@ public class TalonVelocity extends PIDTalon {
     super(
       master, 
       isMasterInverted, 
-      isFollowerInverted,
+      isFollowersInverted,
       isSensorPhase,
       nominalOutputForwardValue,
       nominalOutputReverseValue, 
@@ -36,15 +38,16 @@ public class TalonVelocity extends PIDTalon {
   public TalonVelocity(
     TalonSRX master,
     boolean isMasterInverted,
-    boolean isFollowerInverted,
+    boolean isFollowersInverted,
+    boolean isSensorPhase,
     Gains gains,
     TalonSRX... followers
   ) {
     this(
       master,
       isMasterInverted,
-      isFollowerInverted,
-      PIDTalonConstants.isSensorPhase,
+      isFollowersInverted,
+      isSensorPhase,
       PIDTalonConstants.nominalOutputForwardValue,
       PIDTalonConstants.nominalOutputReverseValue,
       PIDTalonConstants.peakOutputForwardValue,
@@ -72,12 +75,28 @@ public class TalonVelocity extends PIDTalon {
       followers
     );
   }
+  
+  private void setVelocity(double velocity, double dutyCycle) {
+    this.velocityUnitsPer100ms = dutyCycle * velocity * 4096 / 600;
 
-  public void setVelocity(double velocity) {
-    super.master.set(ControlMode.Velocity, velocity);
+    super.master.set(ControlMode.Velocity, this.velocityUnitsPer100ms);
+  }
+
+  public void setVelocityRPM(double velocityRPM, double dutyCycle) {
+    this.setVelocity(velocityRPM, dutyCycle);
+  } 
+
+  public void setVelocityMetersPerSecond(double velocityMetersPerSecond, double dutyCycle, double wheelRadius) {
+    var velocityRPM = (velocityMetersPerSecond * 60) / (2 * Math.PI * wheelRadius);
+
+    this.setVelocity(velocityRPM, dutyCycle);
   }
 
   public void stop() {
     super.master.set(ControlMode.PercentOutput, 0);
+  }
+
+  public boolean atSettedVelocity() {
+    return super.master.getSelectedSensorVelocity() >= this.velocityUnitsPer100ms;
   }
 }

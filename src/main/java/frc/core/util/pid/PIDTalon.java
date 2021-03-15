@@ -1,6 +1,10 @@
-package frc.core.util.PID;
+package frc.core.util.pid;
 
+import static frc.core.util.function.For.forWithCounter;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -15,7 +19,7 @@ public abstract class PIDTalon {
 	public PIDTalon(
 		TalonSRX master, 
 		boolean isMasterInverted, 
-		boolean isFollowerInverted, 
+		boolean isFollowersInverted, 
 		boolean isSensorPhase,
 		double nominalOutputForwardValue, 
 		double nominalOutputReverseValue, 
@@ -25,12 +29,15 @@ public abstract class PIDTalon {
 		TalonSRX... followers
 	) {
 		this.master = master;
-		this.setMasterInverted(isMasterInverted);
-
-		this.setFollowers(followers);
-
+		this.followers = Arrays.stream(followers).collect(Collectors.toList());
+		
+		this.configFactoryDefault();
 		this.configSelectedFeedbackSensor();
 		this.setSensorPhase(isSensorPhase);
+		this.configMasterToFollowers();
+		
+		this.setMasterInverted(isMasterInverted);
+		this.setFollowersInverted(isFollowersInverted);
 
 		this.setOutputs(
 			nominalOutputForwardValue, 
@@ -49,35 +56,49 @@ public abstract class PIDTalon {
 		);
 	}
 
-	private void setSensorPhase(boolean isSensorPhase) {
-		this.master.setSensorPhase(isSensorPhase);
-	}
-
-	private void setMasterInverted(boolean isInverted) {
+	public void setMasterInverted(boolean isInverted) {
 		this.master.setInverted(isInverted);
 	}
 
-	public void setFollowers(TalonSRX... followers) {
-		for (TalonSRX follower : followers) {
-			this.followers.add(follower);
-			follower.configFactoryDefault();
-			follower.follow(this.master);
-		}
-	}
-
-	public void setFollowersInverted(Boolean... isInvertedList) {
-		int index = 0;
-		if (isInvertedList.length >= this.followers.size()) {
-			for (TalonSRX follower : followers) {
-				follower.setInverted(isInvertedList[index]);
-				index++;
-			}
+	public void setFollowersInverted(Boolean... isInverted) {
+		if (isInverted.length >= this.followers.size()) {
+			forWithCounter(this.followers, (i, follower) -> {
+				follower.setInverted(isInverted[i]);		
+		 	});
 		} else {
 			DriverStation.reportError(
 				"the length of varags must be equal or higher than the list of followers",
 				new Exception().getStackTrace()
 			);
 		}
+	}
+
+	public void setFollowersInverted(Boolean isInverted) {
+		this.followers.stream().forEach(follower -> follower.setInverted(isInverted));
+	}
+
+	public double getSelectedSensorVelocity() {
+    return this.master.getSelectedSensorVelocity();
+  }
+
+  public double getClosedLoopError() {
+    return this.master.getClosedLoopError();
+  }
+
+	private void configMasterToFollowers() {
+		this.followers.stream()
+								.forEach(follower -> follower.follow(this.master));
+	}
+
+	private void configFactoryDefault() {
+		this.master.configFactoryDefault();
+
+		this.followers.stream()
+								.forEach(follower -> follower.configFactoryDefault());
+	}
+
+	private void setSensorPhase(boolean isSensorPhase) {
+		this.master.setSensorPhase(isSensorPhase);
 	}
 
 	private void setOutputs(

@@ -9,13 +9,16 @@ public final class Constants {
 			motorRightPort = new int[] { 0, 1 },
 			motorLeftPort = new int[] { 2, 3 };
 
+		public static final boolean[]
+			isMotorsInverted = new boolean[] { true, true };
+
 		//encoders
 		public static final int[]
 			encoderRightPort = new int[] { 6, 7 },
 			encoderLeftPort = new int[] { 8, 9 };
 
-		public static final boolean
-			isEncoderRightInverted = true;
+		public static final boolean[]
+			isEcondersInverted = new boolean[] { true, true };
 
 		public static final int 
 			pulsesRight = 498,
@@ -27,27 +30,26 @@ public final class Constants {
 
 		//voltageConstraint
 		public static final double 
-			ksVolts = 0.934, //kS
-			kvVoltSecondsPerMeter = 2.16, //kV
-			kaVoltSecondsSquaredPerMeter = 0.408, //kA
-			kTrackwidthMeters = 2.78,
+			ksVolts = 0.976, //kS
+			kvVoltSecondsPerMeter = 2.21, //kV
+			kaVoltSecondsSquaredPerMeter = 0.726, //kA
+			kTrackwidthMeters = 2.81,
 			differentialDriveVoltageConstraintMaxVoltage = 10;
 
 		public static final DifferentialDriveKinematics
 			kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
 
-		//PID
-		public static final double 
-			kPDriveVelocity = 2.62,
-			kIDriveVelocity = 0,
-			kDDriveVelocity = 0;   
+		public static final class PID {
+			public static final double 
+				kPDriveVelocity = 2.62,
+				kIDriveVelocity = 0,
+				kDDriveVelocity = 0;   
+		}
 	}
 	
 	public static final class IntakeConstants {
-		public static final int
-			motorPort = 3,
-			activatorOne = 0,   
-			activatorTwo = 1;
+		public static final int[]
+			motorsPorts = new int[] { 2, 3 };
 	}
 
 	public static final class PIDTalonConstants{
@@ -65,7 +67,43 @@ public final class Constants {
 
 	public static final class BufferConstants {
 		public static final int
-			motorPort = 4;
+		motorPort = 4;
+
+		public static final int[]
+		sensorsPorts = new int[] { 0, 1, 2 };
+
+		public static final boolean
+		motorInverted = true;
+
+		
+
+
+	}
+
+	public static final class ShooterConstants {
+		public static final int[]
+			motorsPorts = new int[] { 0, 1 },
+			activatorPorts = new int[] { 0, 1 };
+
+		public static final double wheelRadius = 0.0762;
+
+		public static final boolean
+			isMotorsInverted = true,
+			isFollowerInverted = false,
+			isSensorPhase = false;
+
+		public static final class PID {
+			public static final double 
+				kPVelocity = 0.33,
+				kIVelocity = 0.0009,
+				kDVelocity = 13.3, 
+				kFVelocity = 0.034, 
+				kPeakOutputVelocity = 1,
+				dutyCycle = 0.8;
+	
+			public static final int
+				kIZoneVelocity = 210;
+		}
 	}
 
 	public static final class OIConstants {
@@ -85,10 +123,20 @@ public final class Constants {
 	public static final class LimelightConstants {
 		public static final String tableName = "limelight";
 		public static final int pipeline = 0;
-		public static final double kP = 0,
-			minCommand = 0,
-			kpAim = 0,
-			kpDistance = 0,
-			minAimCommand = 0;
+
+		public static final class AimTarget {
+			public static final double kP = 0,
+				minCommand = 0;
+		}
+		
+		public static final class AimAndRangeTarget {
+			public static final double kP = 0,
+				kPDistance = 0,
+				minCommand = 0;
+		}
+
+		public static final class Seeking {
+			public static final double kP = 0;
+		}
 	}
 }

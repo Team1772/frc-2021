@@ -1,33 +1,25 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.core.components.SmartSolenoid;
 import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
-  private VictorSPX motor;
-  private SmartSolenoid activator;
+  private VictorSPX motorLeft, motorRight;
   
   public Intake() {
-    this.motor = new VictorSPX(IntakeConstants.motorPort);
-    this.activator = new SmartSolenoid(IntakeConstants.activatorOne, IntakeConstants.activatorTwo);
+    this.motorLeft = new VictorSPX(IntakeConstants.motorsPorts[0]);
+    this.motorRight = new VictorSPX(IntakeConstants.motorsPorts[1]);
   }
 
-  public void setSpeed(double speed) {
-    this.motor.set(VictorSPXControlMode.PercentOutput, speed);
+  public void setSpeed(double speedY, double speedX) {
+    this.motorLeft.set(ControlMode.PercentOutput, speedY);
+    this.motorRight.set(ControlMode.PercentOutput, speedX);
   }
 
-  public void enable(){
-    this.activator.enable();
-  }
-
-  public void disable(){
-    this.activator.disable();
-  }
-
-  public void toggle(){
-    this.activator.toggle();
+  public void stop() {
+    this.motorLeft.set(ControlMode.PercentOutput, 0);
+    this.motorRight.set(ControlMode.PercentOutput, 0);
   }
 }
