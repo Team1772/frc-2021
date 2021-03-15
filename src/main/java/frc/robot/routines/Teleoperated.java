@@ -7,13 +7,18 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.core.util.DoubleButton;
 import frc.robot.Robot;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.buffer.Feed;
+import frc.robot.commands.buffer.SmartFeed;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
 import frc.robot.commands.intake.CollectPowerCell;
 import frc.robot.commands.intake.ReleasePowerCell;
+import frc.robot.commands.shooter.ShootPowerCellAngle;
+import frc.robot.commands.shooter.ShootPowerCellDefault;
 
 public class Teleoperated implements IRoutines {
   private static Teleoperated teleoperated;
@@ -30,7 +35,7 @@ public class Teleoperated implements IRoutines {
   }
 
   @Override
-  public void init() {}
+  public void init() { }
 
   @Override
   public void periodic() {
@@ -44,6 +49,7 @@ public class Teleoperated implements IRoutines {
     this.commandsIntake();
     this.commandsDrivetrain();
     this.commandsBuffer();
+    this.commandsShooter();
   }
 
   private void commandsIntake() {
@@ -55,6 +61,24 @@ public class Teleoperated implements IRoutines {
     
     axisTriggerLeft
       .whileHeld(new ReleasePowerCell(Robot.intake));
+  }
+
+  private void commandsShooter() {
+    var buttonBumperRight = new JoystickButton(this.operator, Button.kBumperRight.value);
+    
+    Trigger isAtSettedVelocity = new Trigger(() -> Robot.shooter.atSettedVelocity());
+
+    buttonBumperRight
+      .whileHeld(new ShootPowerCellDefault(Robot.shooter))
+      .and(isAtSettedVelocity).whileActiveContinuous(new Feed(Robot.buffer));
+    
+    var doubleButton = new DoubleButton(
+      this.operator,
+      Button.kBumperRight.value,
+      Button.kA.value
+    );
+
+    doubleButton.whileActiveContinuous(new ShootPowerCellAngle(Robot.shooter));
   }
 
   private void commandsDrivetrain() {
@@ -79,7 +103,7 @@ public class Teleoperated implements IRoutines {
 
   private void commandsBuffer(){
     Robot.buffer.setDefaultCommand(
-      new Feed(Robot.buffer)
+      new SmartFeed(Robot.buffer)
     );
   }
 }

@@ -9,12 +9,15 @@ import frc.robot.routines.Autonomous.RobotPath;
 import frc.robot.subsystems.Buffer;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static Intake intake;
   public static Buffer buffer;
+  public static Shooter shooter;
 
+  public static Autonomous autonomous;
   public static TrajectoryBuilder trajectoryBuilder;
 
   @Override
@@ -22,6 +25,9 @@ public class Robot extends TimedRobot {
     drivetrain = new Drivetrain();
     intake = new Intake();
     buffer = new Buffer();
+    shooter = new Shooter();
+
+    autonomous.configOptions();
 
     trajectoryBuilder = new TrajectoryBuilder(drivetrain, RobotPath.get());
   }

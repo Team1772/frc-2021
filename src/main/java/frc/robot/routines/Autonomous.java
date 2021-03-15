@@ -16,11 +16,15 @@ public class Autonomous implements IRoutines {
   private static Autonomous autonomous;
 
   private SendableChooser<Command> chooser = new SendableChooser<>();
-  private Command automonousCommand = this.getAutonomousCommand();
+  private Command automonousCommand;
 
   public enum RobotPath {
     //add all paths here
-    GALACTIC_A("galaticA");
+    GALACTIC_A("galacticA"),
+    GALACTIC_B("galacticB"),
+    SLALOM("slalom"),
+    BOUNCE("bounce"),
+    BARREL("barrel");
   
     public final String fileName;
     private RobotPath(String fileName) {
@@ -48,7 +52,8 @@ public class Autonomous implements IRoutines {
 
   @Override
   public void init() {
-    this.setAutonomousOptions();
+    this.configOptions();
+    this.automonousCommand = this.getAutonomousCommand();
 
     if (nonNull(this.automonousCommand)) this.automonousCommand.schedule();
   }
@@ -65,10 +70,15 @@ public class Autonomous implements IRoutines {
     return this.chooser.getSelected();
   } 
 
-  private void setAutonomousOptions() {
+  public void configOptions() {
     this.chooser.setDefaultOption("Galactic A", new GalacticA(Robot.trajectoryBuilder));
     this.chooser.addOption("Galactic A", new GalacticA(Robot.trajectoryBuilder));
+    // waiting for merge autonomous classes
+    // this.chooser.addOption("Galactic B", new GalacticB(Robot.trajectoryBuilder));
+    // this.chooser.addOption("Slalom", new Slalom(Robot.trajectoryBuilder));
+    // this.chooser.addOption("Bounce", new Bounce(Robot.trajectoryBuilder));
+    // this.chooser.addOption("Barrel", new Barrel(Robot.trajectoryBuilder));
 
-    SmartDashboard.putData("SELECT AUTONOMOUS", this.chooser);
+    SmartDashboard.putData("SELECTED AUTONOMOUS", this.chooser);
   }
 }
