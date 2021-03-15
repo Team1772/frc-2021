@@ -10,7 +10,7 @@ public class Bounce extends SequentialCommandGroup {
 
   public Bounce(TrajectoryBuilder trajectoryBuilder) {
     super.addCommands(
-      trajectoryBuilder.buildTrajectory("bounce")
+      // trajectoryBuilder.build("bounce")
     );
   }
 }

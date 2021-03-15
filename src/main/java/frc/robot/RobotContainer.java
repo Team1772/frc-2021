@@ -46,11 +46,12 @@ public class RobotContainer {
 
     this.trajectoryBuilder = new TrajectoryBuilder(
       this.drivetrain, 
-      "barrel",
-      "slalom", 
+      "autoAwards"
+      // "barrel",
+      // "slalom", 
       // "galacticA",
       // "galacticB",
-      "bounce"
+      // "bounce"
     );
 
     this.configureButtonBindings();

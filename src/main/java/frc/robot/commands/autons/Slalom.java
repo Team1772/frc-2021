@@ -9,7 +9,7 @@ import frc.core.util.TrajectoryBuilder;
 public class Slalom extends SequentialCommandGroup {
   public Slalom(TrajectoryBuilder trajectoryBuilder) {
     super.addCommands(
-      trajectoryBuilder.buildTrajectory("slalom")
+      // trajectoryBuilder.build("slalom")
     );
   }
 }

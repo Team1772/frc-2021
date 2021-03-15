@@ -7,7 +7,7 @@ public class GalacticB extends ParallelCommandGroup {
 
   public GalacticB(TrajectoryBuilder trajectoryBuilder) {
     super.addCommands(
-      trajectoryBuilder.buildTrajectory("galacticB")
+      // trajectoryBuilder.build("galacticB")
     );
   }
 }
