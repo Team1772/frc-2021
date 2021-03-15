@@ -79,19 +79,25 @@ public class TrajectoryBuilder {
 				this.drivetrain::tankDriveVolts, 
 				this.drivetrain
 			);
-
-			this.drivetrain.resetOdometry(trajectory.getInitialPose());
 		}
   }
 
-  public Command buildTrajectory(String fileName) {
+  public Command build(String fileName, boolean updateOdometry) {
 		var trajectory = this.trajectories.get(fileName);
-    this.createRamsete(trajectory);
+		this.createRamsete(trajectory);
+		
+		if (updateOdometry) {
+			this.drivetrain.resetOdometry(trajectory.getInitialPose());
+		}
 
     return this.getRamsete().andThen(
       () -> this.drivetrain.tankDriveVolts(0, 0)
     );
-  }
+	}
+		
+	public Command build(String fileName) {
+		return this.build(fileName, false);
+	}
 
 	private RamseteCommand getRamsete() {
 		return this.ramseteCommand;
