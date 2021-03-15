@@ -46,9 +46,9 @@ public class Shooter extends SubsystemBase {
 		);
 	}
 
-	public void setVelocityRPM(double velocityRPM) {
-		this.shooterPID.setVelocityRPM(
-			velocityRPM, 
+	public void setRPM(double rpm) {
+		this.shooterPID.setRPM(
+			rpm, 
 			ShooterConstants.PID.dutyCycle
 		);
 	}
@@ -60,12 +60,10 @@ public class Shooter extends SubsystemBase {
 
 	public void enableAngle() {
 		this.activator.enable();
-		System.out.println("entrou enable angle");
 	}
 
 	public void disableAngle() {
 		this.activator.disable();
-		System.out.println("entrou disable angle");
 	}
 
 	public void stop() {
