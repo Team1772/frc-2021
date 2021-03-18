@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.core.components.Limelight;
 import frc.core.components.Limelight.LedMode;
 import frc.robot.Constants.LimelightConstants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Drivetrain; 
 
 public class AimTarget extends CommandBase {
   private Drivetrain drivetrain;
@@ -24,8 +24,8 @@ public class AimTarget extends CommandBase {
   @Override
   public void execute() {
     double x = Limelight.getX(),
-     headingError = -(x),
-     adjust = 0;
+      headingError = -(x),
+      adjust = 0;
 
     if (x > 1) {
       adjust = LimelightConstants.AimTarget.kP * 
@@ -38,7 +38,7 @@ public class AimTarget extends CommandBase {
     }
 
     double rightSpeed = 0,
-     leftSpeed = 0;
+      leftSpeed = 0;
 
     rightSpeed -= adjust;
     leftSpeed += adjust;
