@@ -45,7 +45,7 @@ public class RobotContainer {
     this.driver = new XboxController(OIConstants.driverControllerPort);
     this.operator = new XboxController(OIConstants.operatorControllerPort);
 
-    this.trajectoryBuilder = new TrajectoryBuilder(this.drivetrain, "autoAwards_0","autoAwards_1", "autoAwards");
+    this.trajectoryBuilder = new TrajectoryBuilder(this.drivetrain, "autoAwards_0","autoAwards_1", "autoAwards", "slalom", "three", "three_rapidao", "three_rapidao_0", "three_rapidao_1");
 
     this.configureButtonBindings();
     this.configureDefaultCommand();

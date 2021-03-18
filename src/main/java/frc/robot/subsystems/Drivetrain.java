@@ -61,7 +61,7 @@ public class Drivetrain extends SubsystemBase {
 
   //helpers
   public void arcadeDrive(double forward, double rotation) {
-    this.drive.arcadeDrive(forward, -(rotation));
+    this.drive.arcadeDrive(forward, (rotation));
   }
 
   public void curvatureDrive(double forward, double rotation, boolean isQuickTurn) {

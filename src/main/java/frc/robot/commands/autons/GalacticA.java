@@ -7,7 +7,7 @@ public class GalacticA extends SequentialCommandGroup {
 
   public GalacticA(TrajectoryBuilder trajectoryBuilder) {
     super.addCommands(
-      trajectoryBuilder.buildTrajectory("autoAwards")
+      trajectoryBuilder.buildTrajectory("three_rapidao")
     );
   }
 }
