@@ -126,7 +126,8 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new GalacticA(this.trajectoryBuilder);
+    // return new GalacticA(this.trajectoryBuilder);
+    return null;
   }
   
   public void reset() {
