@@ -11,7 +11,6 @@ import frc.robot.subsystems.Intake;
 
 public class GalacticA extends ParallelCommandGroup {
   public GalacticA(TrajectoryBuilder trajectoryBuilder, Buffer buffer, Intake intake) {
-    Limelight.setPipeline(1);
 
     var allianceColor = Limelight.isTarget() ? FieldConstants.red : FieldConstants.blue;
     var path =  String.format("galacticA_%s", allianceColor);

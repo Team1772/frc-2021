@@ -17,7 +17,6 @@ import frc.robot.commands.intake.ReleasePowerCell;
 import frc.robot.commands.shooter.ShootPowerCellAngle;
 import frc.robot.commands.shooter.ShootPowerCellDefault;
 import frc.robot.commands.autons.GalacticA;
-import frc.robot.commands.drivetrain.AimTarget;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
 import frc.robot.commands.buffer.SmartFeed;
@@ -45,24 +44,36 @@ public class RobotContainer {
     this.driver = new XboxController(OIConstants.driverControllerPort);
     this.operator = new XboxController(OIConstants.operatorControllerPort);
 
-    this.trajectoryBuilder = new TrajectoryBuilder(
-      this.drivetrain, 
-      "autoAwards"
-      // "barrel",
-      // "slalom", 
-      // "galacticA",
-      // "galacticB",
-      // "bounce"
-    );
+    this.trajectoryBuilder = new TrajectoryBuilder(this.drivetrain, "autoAwards_0","autoAwards_1", "autoAwards", "galacticA_red");
 
     this.configureButtonBindings();
+    this.configureDefaultCommand();
+  }
+
+  private void configureDefaultCommand() {
+    var buttonBumperLeft = new JoystickButton(this.driver, Button.kBumperLeft.value);
+
+    buttonBumperLeft.whenHeld(
+      new CurvatureDrive(
+        this.drivetrain,
+        () -> this.driver.getY(Hand.kLeft),
+        () -> this.driver.getX(Hand.kRight)
+      )
+    );
+
+    this.drivetrain.setDefaultCommand(
+      new ArcadeDrive(
+        drivetrain, 
+        () -> this.driver.getY(Hand.kLeft), 
+        () -> this.driver.getX(Hand.kRight)
+      )
+    );
   }
 
   private void configureButtonBindings() {
     this.configureButtonBindingsIntake();
     this.configureButtonBindingsBuffer();
     this.configureButtonBindingsShooter();
-    this.configureButtonBindingsDrivetrain();
   }
 
   private void configureButtonBindingsIntake() {
@@ -100,34 +111,8 @@ public class RobotContainer {
     doubleButton.whileActiveContinuous(new ShootPowerCellAngle(this.shooter));
   }
 
-  public void configureButtonBindingsDrivetrain() {
-    var buttonBumperLeft = new JoystickButton(this.driver, Button.kBumperLeft.value);
-
-    buttonBumperLeft.whenHeld(
-      new CurvatureDrive(
-        this.drivetrain,
-        () -> this.driver.getY(Hand.kLeft),
-        () -> this.driver.getX(Hand.kRight)
-      )
-    );
-
-    this.drivetrain.setDefaultCommand(
-      new ArcadeDrive(
-        drivetrain, 
-        () -> this.driver.getY(Hand.kLeft), 
-        () -> this.driver.getX(Hand.kRight)
-      )
-    );
-
-    var buttonBumperRight = new JoystickButton(this.driver, Button.kBumperRight.value);
-    
-    buttonBumperRight
-      .whileHeld(new AimTarget(this.drivetrain));
-  }
-
   public Command getAutonomousCommand() {
-    // return new GalacticA(this.trajectoryBuilder);
-    return null;
+    return new GalacticA(this.trajectoryBuilder, this.buffer, this.intake);
   }
   
   public void reset() {
