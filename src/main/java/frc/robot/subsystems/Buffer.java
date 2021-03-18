@@ -20,7 +20,7 @@ public class Buffer extends SubsystemBase {
   }
 
   @Override
-  public void periodic(){
+  public void periodic() {
     SmartDashboard.putBoolean("[BUFFER] SENSOR BOTTOM", this.isSensorBottom());
     SmartDashboard.putBoolean("[BUFFER] SENSOR TOP", this.isSensorTop());
     SmartDashboard.putBoolean("[BUFFER] SENSOR LINE", this.isSensorQueue());

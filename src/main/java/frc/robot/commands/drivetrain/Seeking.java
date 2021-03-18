@@ -4,12 +4,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.core.components.Limelight;
 import frc.core.components.Limelight.LedMode;
 import frc.robot.Constants.LimelightConstants;
-import frc.robot.subsystems.Drivetrain; 
+import frc.robot.subsystems.Drivetrain;
 
-public class AimTarget extends CommandBase {
+public class Seeking extends CommandBase {
   private Drivetrain drivetrain;
 
-  public AimTarget(Drivetrain drivetrain) {
+  public Seeking(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
 
     addRequirements(this.drivetrain);
@@ -24,24 +24,21 @@ public class AimTarget extends CommandBase {
   @Override
   public void execute() {
     double x = Limelight.getX(),
-      headingError = -(x),
-      adjust = 0;
+      steeringAdjust = 0;
 
-    if (x > 1) {
-      adjust = LimelightConstants.AimTarget.kP * 
-                headingError - 
-                LimelightConstants.AimTarget.minCommand;
-    } else if (x < 1) { 
-      adjust = LimelightConstants.AimTarget.kP * 
-                headingError + 
-                LimelightConstants.AimTarget.minCommand;
+    if (!Limelight.isTarget()) {
+      steeringAdjust = 0.3;
+    } else {
+      double headingError = x;
+
+      steeringAdjust = LimelightConstants.Seeking.kP * headingError;
     }
 
-    double rightSpeed = 0,
-      leftSpeed = 0;
+    double leftSpeed = 0,
+    rightSpeed = 0;
 
-    rightSpeed -= adjust;
-    leftSpeed += adjust;
+    leftSpeed += steeringAdjust;
+    rightSpeed -= steeringAdjust;
 
     this.drivetrain.tankDrive(leftSpeed, rightSpeed);
   }

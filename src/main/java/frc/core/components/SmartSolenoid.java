@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 public class SmartSolenoid {
 	private DoubleSolenoid solenoid;
 
-	public SmartSolenoid(int channelOne, int channelTwo){
+	public SmartSolenoid(int channelOne, int channelTwo) {
 		this.solenoid = new DoubleSolenoid(channelOne, channelTwo);
 	}
 

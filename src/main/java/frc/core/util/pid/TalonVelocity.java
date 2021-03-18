@@ -1,9 +1,10 @@
-package frc.core.util.PID;
+package frc.core.util.pid;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import frc.robot.Constants.PIDTalonConstants;
+import frc.robot.Constants.ShooterConstants;
 
 public class TalonVelocity extends PIDTalon {
 
@@ -75,21 +76,26 @@ public class TalonVelocity extends PIDTalon {
       followers
     );
   }
-  
-  private void setVelocity(double velocity, double dutyCycle) {
-    this.velocityUnitsPer100ms = dutyCycle * velocity * 4096 / 600;
+
+  private void setVelocity(double rpm, double dutyCycle) {
+    dutyCycle = rpm > (ShooterConstants.maxRPM) ? dutyCycle : 1;
+    this.velocityUnitsPer100ms = dutyCycle * rpm * 4096 / 600;
 
     super.master.set(ControlMode.Velocity, this.velocityUnitsPer100ms);
   }
 
-  public void setVelocityRPM(double velocityRPM, double dutyCycle) {
-    this.setVelocity(velocityRPM, dutyCycle);
+  public void setRPM(double rpm, double dutyCycle) {
+    this.setVelocity(rpm, dutyCycle);
   } 
 
+  /*
+   * ------------(2021 Robot)-------------
+   * @param velocityMetersPerSecond = 40 is the most efficient m/s shoot velocity
+   */
   public void setVelocityMetersPerSecond(double velocityMetersPerSecond, double dutyCycle, double wheelRadius) {
-    var velocityRPM = (velocityMetersPerSecond * 60) / (2 * Math.PI * wheelRadius);
+    var rpm = (velocityMetersPerSecond * 60) / (2 * Math.PI * wheelRadius);
 
-    this.setVelocity(velocityRPM, dutyCycle);
+    this.setVelocity(rpm, dutyCycle);
   }
 
   public void stop() {

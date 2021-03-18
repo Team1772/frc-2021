@@ -21,7 +21,6 @@ public class Drivetrain extends SubsystemBase {
   private final SmartNavX navX; 
   private final DifferentialDriveOdometry odometry;
 
-  //constructor
   public Drivetrain() {
     this.motorsRight = new SpeedControllerGroup(
       new VictorSP(DrivetrainConstants.motorRightPort[0]), 
@@ -59,7 +58,6 @@ public class Drivetrain extends SubsystemBase {
     this.resetEncoders();
   }
 
-  //helpers
   public void arcadeDrive(double forward, double rotation) {
     this.drive.arcadeDrive(forward, (rotation));
   }
@@ -105,7 +103,6 @@ public class Drivetrain extends SubsystemBase {
     this.drive.feed();
   }
 
-  //getters
   public double getAverageDistance() {
     var averageDistance = (this.encoderLeft.getDistance() + this.encoderRight.getDistance()) / 2.0;
     
@@ -149,7 +146,6 @@ public class Drivetrain extends SubsystemBase {
     return this.navX.getRate();
   }
 
-  //setters
   public void setMaxOutput(double maxOutput) {
     this.drive.setMaxOutput(maxOutput);
   }
