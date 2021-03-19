@@ -18,6 +18,7 @@ import frc.robot.commands.intake.ReleasePowerCell;
 import frc.robot.commands.shooter.ShootPowerCellAngle;
 import frc.robot.commands.shooter.ShootPowerCellDefault;
 import frc.robot.commands.autons.GalacticA;
+import frc.robot.commands.autons.TesteGroups;
 import frc.robot.commands.drivetrain.AimTarget;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
@@ -54,7 +55,9 @@ public class RobotContainer {
       "galacticA_blue",
       "galacticB_red",
       "galacticB_blue",
-      "bounce"
+      "bounce",
+      "path1",
+      "path2"
     );
 
     this.configureButtonBindings();
