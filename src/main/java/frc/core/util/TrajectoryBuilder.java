@@ -5,6 +5,7 @@ import static java.util.Objects.isNull;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -93,6 +94,7 @@ public class TrajectoryBuilder {
 			.filter(trajectory -> Set.of(filesNames).contains(trajectory.getKey()))
 			.map(trajectory -> trajectory.getValue())
 			.collect(Collectors.toList());
+		Collections.reverse(trajectories);
 
 		var trajectory = this.trajectories.size() > 1 ? 
 			this.concatenate(trajectories)
@@ -106,7 +108,7 @@ public class TrajectoryBuilder {
 	}
 		
 	public Command build(String... filesNames) {
-		return this.build(false, filesNames);
+		return this.build(true, filesNames);
 	}
 
 	private RamseteCommand getRamsete() {
@@ -154,7 +156,7 @@ public class TrajectoryBuilder {
 					)
 				);
 			}
-			
+	
 			trajectory = new Trajectory(states);
 		}	
 
