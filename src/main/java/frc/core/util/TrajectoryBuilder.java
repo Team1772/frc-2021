@@ -5,6 +5,7 @@ import static java.util.Objects.isNull;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,7 +64,7 @@ public class TrajectoryBuilder {
 			    ));
 	}
 	
-	public void createRamsete(Trajectory trajectory) {
+	public void createRamsete(Trajectory trajectory, boolean updateOdometry) {
 		if (isNull(trajectory)) {
 			DriverStation.reportError(
 				"trajectory is null", 
@@ -83,27 +84,32 @@ public class TrajectoryBuilder {
 				this.drivetrain
 			);
 
-			this.drivetrain.resetOdometry(trajectory.getInitialPose());
+			if (updateOdometry) this.drivetrain.resetOdometry(trajectory.getInitialPose());
 		}
   }
 
-  public Command build(String... filesNames) {
+  public Command build(boolean updateOdometry, String... filesNames) {
 		var trajectories = this.trajectories
 			.entrySet().stream()
 			.filter(trajectory -> Set.of(filesNames).contains(trajectory.getKey()))
 			.map(trajectory -> trajectory.getValue())
 			.collect(Collectors.toList());
+		Collections.reverse(trajectories);
 
 		var trajectory = this.trajectories.size() > 1 ? 
 			this.concatenate(trajectories)
 			: trajectories.get(0);
 
-		this.createRamsete(trajectory);
+		this.createRamsete(trajectory, updateOdometry);
 
     return this.getRamsete().andThen(
       () -> this.drivetrain.tankDriveVolts(0, 0)
     );
-  }
+	}
+		
+	public Command build(String... filesNames) {
+		return this.build(true, filesNames);
+	}
 
 	private RamseteCommand getRamsete() {
 		return this.ramseteCommand;
@@ -150,7 +156,7 @@ public class TrajectoryBuilder {
 					)
 				);
 			}
-			
+	
 			trajectory = new Trajectory(states);
 		}	
 
