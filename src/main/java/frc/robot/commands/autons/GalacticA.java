@@ -9,6 +9,9 @@ import frc.robot.commands.intake.CollectPowerCell;
 import frc.robot.subsystems.Buffer;
 import frc.robot.subsystems.Intake;
 
+// speed = 1.5
+// aceleration = 2
+
 public class GalacticA extends ParallelCommandGroup {
   public GalacticA(TrajectoryBuilder trajectoryBuilder, Buffer buffer, Intake intake) {
 
