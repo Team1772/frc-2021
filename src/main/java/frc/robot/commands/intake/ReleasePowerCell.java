@@ -14,7 +14,7 @@ public class ReleasePowerCell extends CommandBase {
 
 	@Override
 	public void execute() {
-		this.intake.setSpeed(-1, 0);
+		this.intake.setSpeed(-0.5, 0);
 	}
 
 	@Override
