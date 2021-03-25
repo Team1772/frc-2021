@@ -15,7 +15,7 @@ public class CollectPowerCell extends CommandBase {
 	
 	@Override
 	public void execute() {
-		this.intake.setSpeed(0.4);
+		this.intake.setSpeed(0.35);
 	}
 
 	@Override
