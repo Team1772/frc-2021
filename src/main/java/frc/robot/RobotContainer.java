@@ -76,9 +76,9 @@ public class RobotContainer {
   }
 
   private void configureButtonBindingsBuffer() {
-    var axisTriggerLeft = new JoystickButton(this.driver, Axis.kLeftTrigger.value);
+    var buttonBumperLeft = new JoystickButton(this.driver, Button.kBumperLeft.value);
 
-    axisTriggerLeft
+    buttonBumperLeft
       .whileHeld(new Feed(this.buffer));
 
     // this.buffer.setDefaultCommand(
@@ -92,9 +92,10 @@ public class RobotContainer {
     //   Button.kBumperRight.value,
     //   Button.kA.value
     // );
-    var buttonY = new JoystickButton(this.driver, Button.kY.value);
+    
+    var axisRightTrigger = new JoystickButton(this.driver, Axis.kRightTrigger.value);
 
-    buttonY.whileActiveContinuous(new ShootPowerCellAngle(this.shooter));
+    axisRightTrigger.whileActiveContinuous(new ShootPowerCellAngle(this.shooter));
 
     var buttonBumperRight = new JoystickButton(this.driver, Button.kBumperRight.value);
     
@@ -124,9 +125,9 @@ public class RobotContainer {
       )
     );
 
-    var buttonX = new JoystickButton(this.driver, Button.kX.value);
+    var axisLeftTrigger = new JoystickButton(this.driver, Axis.kLeftTrigger.value);
 
-    buttonX
+    axisLeftTrigger
       .whileHeld(new AimTarget(this.drivetrain));
   }
 
