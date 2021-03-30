@@ -5,9 +5,11 @@ import frc.robot.subsystems.Shooter;
 
 public class ShootPowerCellAngle extends CommandBase {
 	private final Shooter shooter;
+	private double speed;
 	
-	public ShootPowerCellAngle(Shooter shooter) {
+	public ShootPowerCellAngle(Shooter shooter, double speed) {
 		this.shooter = shooter;
+		this.speed = speed;
 		
 		addRequirements(this.shooter);
 	}
@@ -15,7 +17,7 @@ public class ShootPowerCellAngle extends CommandBase {
 	@Override
 	public void execute() {
 		this.shooter.enableAngle();
-		this.shooter.setVelocityMetersPerSecond(30);
+		this.shooter.setSpeed(this.speed);
 	}
 	
 	@Override

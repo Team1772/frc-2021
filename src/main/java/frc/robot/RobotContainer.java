@@ -1,25 +1,18 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-import frc.core.util.TrajectoryBuilder;
-import frc.core.util.DoubleButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.intake.CollectPowerCell;
 import frc.robot.commands.intake.ReleasePowerCell;
 import frc.robot.commands.shooter.ShootPowerCellAngle;
 import frc.robot.commands.shooter.ShootPowerCellDefault;
-import frc.robot.commands.autons.GalacticA;
-import frc.robot.commands.drivetrain.AimTarget;
 import frc.robot.commands.drivetrain.ArcadeDrive;
-import frc.robot.commands.drivetrain.CurvatureDrive;
 import frc.robot.commands.buffer.Feed;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Buffer;
@@ -31,10 +24,8 @@ public class RobotContainer {
   private final Buffer buffer;
   private final Shooter shooter;
 
-  private final XboxController driver, operator;
-  
-  private TrajectoryBuilder trajectoryBuilder;
-  
+  private final XboxController driver;
+    
   public RobotContainer() {
     this.drivetrain = new Drivetrain();
     this.intake = new Intake();
@@ -42,18 +33,6 @@ public class RobotContainer {
     this.shooter = new Shooter();
 
     this.driver = new XboxController(OIConstants.driverControllerPort);
-    this.operator = new XboxController(OIConstants.operatorControllerPort);
-
-    this.trajectoryBuilder = new TrajectoryBuilder(
-      this.drivetrain, 
-      "autoAwards"
-      // "barrel",
-      // "slalom", 
-      // "galacticA",
-      // "galacticB",
-      // "bounce"
-    );
-
     this.configureButtonBindings();
   }
 
@@ -65,10 +44,10 @@ public class RobotContainer {
   }
 
   private void configureButtonBindingsIntake() {
-    var buttonBumperLeft = new JoystickButton(this.driver, Button.kBumperLeft.value);
+    var buttonX = new JoystickButton(this.driver, Button.kBumperLeft.value);
     var buttonB = new JoystickButton(this.driver, Button.kB.value);
     
-    buttonBumperLeft
+    buttonX
       .whileHeld(new CollectPowerCell(this.intake));
     
     buttonB
@@ -80,11 +59,7 @@ public class RobotContainer {
 
     buttonBumperLeft
       .whileHeld(new Feed(this.buffer));
-
-    // this.buffer.setDefaultCommand(
-    //   new SmartFeed(this.buffer)
-    // );
-  }
+    }
 
   private void configureButtonBindingsShooter() {
     // var doubleButton = new DoubleButton(
@@ -93,30 +68,25 @@ public class RobotContainer {
     //   Button.kA.value
     // );
     
-    var axisRightTrigger = new JoystickButton(this.driver, Axis.kRightTrigger.value);
-
-    axisRightTrigger.whileActiveContinuous(new ShootPowerCellAngle(this.shooter));
-
     var buttonBumperRight = new JoystickButton(this.driver, Button.kBumperRight.value);
-    
-    Trigger isAtSettedVelocity = new Trigger(() -> this.shooter.atSettedVelocity());
 
     buttonBumperRight
-      .whileHeld(new ShootPowerCellDefault(this.shooter))
-      .and(isAtSettedVelocity).whileActiveContinuous(new Feed(this.buffer));
+      .whileHeld(new ShootPowerCellDefault(this.shooter, 0.5));
+
+    var buttonY = new JoystickButton(this.driver, Button.kY.value);
+
+    buttonY
+      .whileHeld(new ShootPowerCellAngle(this.shooter, 0.6));
+
+    var buttonA = new JoystickButton(this.driver, Button.kA.value);
+
+    buttonA
+    .whileHeld(new ShootPowerCellAngle(this.shooter, 0.75));
+
+
   }
 
   public void configureButtonBindingsDrivetrain() {
-    // var buttonBumperLeft = new JoystickButton(this.driver, Button.kBumperLeft.value);
-
-    // buttonBumperLeft.whenHeld(
-    //   new CurvatureDrive(
-    //     this.drivetrain,
-    //     () -> this.driver.getY(Hand.kLeft),
-    //     () -> this.driver.getX(Hand.kRight)
-    //   )
-    // );
-
     this.drivetrain.setDefaultCommand(
       new ArcadeDrive(
         drivetrain, 
@@ -125,10 +95,10 @@ public class RobotContainer {
       )
     );
 
-    var axisLeftTrigger = new JoystickButton(this.driver, Axis.kLeftTrigger.value);
+    // var axisLeftTrigger = new JoystickButton(this.driver, Axis.kLeftTrigger.value);
 
-    axisLeftTrigger
-      .whileHeld(new AimTarget(this.drivetrain));
+    // axisLeftTrigger
+    //   .whileHeld(new AimTarget(this.drivetrain));
   }
 
   public Command getAutonomousCommand() {

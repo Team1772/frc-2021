@@ -5,16 +5,18 @@ import frc.robot.subsystems.Shooter;
 
 public class ShootPowerCellDefault extends CommandBase {
 	private final Shooter shooter;
+	private double speed;
 	
-	public ShootPowerCellDefault(Shooter shooter) {
+	public ShootPowerCellDefault(Shooter shooter, double speed) {
 		this.shooter = shooter;
+		this.speed = speed;
 		
 		addRequirements(this.shooter);
 	}
-	
+
 	@Override
 	public void execute() {
-		this.shooter.setVelocityMetersPerSecond(30);
+		this.shooter.setSpeed(this.speed);
 	}
 
 	@Override
