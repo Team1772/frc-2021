@@ -43,6 +43,9 @@ public class AimTarget extends CommandBase {
     rightSpeed -= adjust;
     leftSpeed += adjust;
 
+    System.out.println(leftSpeed);
+    System.out.println(rightSpeed);
+
     this.drivetrain.tankDrive(leftSpeed, rightSpeed);
   }
 

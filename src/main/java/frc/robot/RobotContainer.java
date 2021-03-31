@@ -14,7 +14,7 @@ import frc.core.util.DoubleButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.intake.CollectPowerCell;
 import frc.robot.commands.intake.ReleasePowerCell;
-import frc.robot.commands.shooter.ShootPowerCellAngle;
+// import frc.robot.commands.shooter.ShootPowerCellAngle;
 import frc.robot.commands.shooter.ShootPowerCellDefault;
 import frc.robot.commands.autons.GalacticA;
 import frc.robot.commands.drivetrain.AimTarget;
@@ -76,9 +76,9 @@ public class RobotContainer {
   }
 
   private void configureButtonBindingsBuffer() {
-    var buttonBumperLeft = new JoystickButton(this.driver, Button.kBumperLeft.value);
+    var buttonA = new JoystickButton(this.driver, Button.kA.value);
 
-    buttonBumperLeft
+    buttonA
       .whileHeld(new Feed(this.buffer));
 
     // this.buffer.setDefaultCommand(
@@ -94,12 +94,12 @@ public class RobotContainer {
     // );
     
     var axisRightTrigger = new JoystickButton(this.driver, Axis.kRightTrigger.value);
+    Trigger isAtSettedVelocity = new Trigger(() -> this.shooter.atSettedVelocity());
 
-    axisRightTrigger.whileActiveContinuous(new ShootPowerCellAngle(this.shooter));
+    // axisRightTrigger.whileActiveContinuous(new ShootPowerCellAngle(this.shooter)).and(isAtSettedVelocity).whileActiveContinuous(new Feed(this.buffer));
 
     var buttonBumperRight = new JoystickButton(this.driver, Button.kBumperRight.value);
     
-    Trigger isAtSettedVelocity = new Trigger(() -> this.shooter.atSettedVelocity());
 
     buttonBumperRight
       .whileHeld(new ShootPowerCellDefault(this.shooter))
@@ -125,9 +125,9 @@ public class RobotContainer {
       )
     );
 
-    var axisLeftTrigger = new JoystickButton(this.driver, Axis.kLeftTrigger.value);
+    var buttonY = new JoystickButton(this.driver, Button.kY.value);
 
-    axisLeftTrigger
+    buttonY
       .whileHeld(new AimTarget(this.drivetrain));
   }
 
