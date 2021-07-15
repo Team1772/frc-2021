@@ -88,10 +88,6 @@ public class TalonVelocity extends PIDTalon {
     this.setVelocity(rpm, dutyCycle);
   } 
 
-  /*
-   * ------------(2021 Robot)-------------
-   * @param velocityMetersPerSecond = 40 is the most efficient m/s shoot velocity
-   */
   public void setVelocityMetersPerSecond(double velocityMetersPerSecond, double dutyCycle, double wheelRadius) {
     var rpm = (velocityMetersPerSecond * 60) / (2 * Math.PI * wheelRadius);
 
