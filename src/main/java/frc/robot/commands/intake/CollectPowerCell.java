@@ -9,12 +9,13 @@ public class CollectPowerCell extends CommandBase {
 	public CollectPowerCell(Intake intake) {
 		this.intake = intake;
 		
+
 		addRequirements(this.intake);
 	}
 	
 	@Override
 	public void execute() {
-		this.intake.setSpeed(0.4, 1);
+		this.intake.setSpeed(0.35);
 	}
 
 	@Override

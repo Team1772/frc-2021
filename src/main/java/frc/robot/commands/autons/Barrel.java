@@ -10,7 +10,7 @@ public class Barrel extends SequentialCommandGroup {
 
   public Barrel(TrajectoryBuilder trajectoryBuilder) {
     super.addCommands(
-      // trajectoryBuilder.build("barrel")
+      trajectoryBuilder.build("barrel")
     );
   }
 }

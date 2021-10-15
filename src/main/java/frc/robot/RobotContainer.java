@@ -1,3 +1,4 @@
+
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -17,6 +18,8 @@ import frc.robot.commands.intake.ReleasePowerCell;
 import frc.robot.commands.shooter.ShootPowerCellAngle;
 import frc.robot.commands.shooter.ShootPowerCellDefault;
 import frc.robot.commands.autons.GalacticA;
+import frc.robot.commands.autons.GalacticB;
+import frc.robot.commands.autons.TesteGroups;
 import frc.robot.commands.drivetrain.AimTarget;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
@@ -47,12 +50,15 @@ public class RobotContainer {
 
     this.trajectoryBuilder = new TrajectoryBuilder(
       this.drivetrain, 
-      "autoAwards"
-      // "barrel",
-      // "slalom", 
-      // "galacticA",
-      // "galacticB",
-      // "bounce"
+      "barrel",
+      "slalom", 
+      "galacticA_red",
+      "galacticA_blue",
+      "galacticB_red",
+      "galacticB_blue",
+      "bounce",
+      "path1",
+      "path2"
     );
 
     this.configureButtonBindings();
@@ -126,7 +132,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new GalacticA(this.trajectoryBuilder);
+    return new GalacticB(this.trajectoryBuilder, this.buffer, this.intake);
   }
   
   public void reset() {
