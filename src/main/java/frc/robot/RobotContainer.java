@@ -12,7 +12,6 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.intake.CollectPowerCell;
 import frc.robot.commands.intake.ReleasePowerCell;
 import frc.robot.commands.autons.GalacticA;
-import frc.robot.commands.drivetrain.AimTarget;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
 import frc.robot.commands.buffer.SmartFeed;
@@ -25,7 +24,7 @@ public class RobotContainer {
   private final Intake intake;
   private final Buffer buffer;
 
-  private final XboxController driver, operator;
+  private final XboxController driver;
   
   private TrajectoryBuilder trajectoryBuilder;
   
@@ -35,7 +34,6 @@ public class RobotContainer {
     this.buffer = new Buffer();
 
     this.driver = new XboxController(OIConstants.driverControllerPort);
-    this.operator = new XboxController(OIConstants.operatorControllerPort);
 
     this.trajectoryBuilder = new TrajectoryBuilder(
       this.drivetrain, 
@@ -43,6 +41,15 @@ public class RobotContainer {
     );
 
     this.configureButtonBindings();
+
+    /* CONTROLS:
+
+       Left Stick & Right Stick - Drive the robot
+       Left Bumper - Smooth Curve (NEEDS TO BE FIXED)
+       Right Bumper - Collect Powercell
+       Right Trigger - Release Powercell
+
+    */
   }
 
   private void configureButtonBindings() {
@@ -52,13 +59,13 @@ public class RobotContainer {
   }
 
   private void configureButtonBindingsIntake() {
-    var buttonBumperLeft = new JoystickButton(this.operator, Button.kBumperLeft.value);
-    var axisTriggerLeft = new JoystickButton(this.operator, Axis.kLeftTrigger.value);
+    var buttonBumperRight = new JoystickButton(this.driver, Button.kBumperRight.value);
+    var axisTriggerRight = new JoystickButton(this.driver, Axis.kRightTrigger.value);
 
-    buttonBumperLeft
+    buttonBumperRight
       .whileHeld(new CollectPowerCell(this.intake));
     
-    axisTriggerLeft
+    axisTriggerRight
       .whileHeld(new ReleasePowerCell(this.intake));
   }
 
@@ -81,16 +88,11 @@ public class RobotContainer {
 
     this.drivetrain.setDefaultCommand(
       new ArcadeDrive(
-        drivetrain, 
+        this.drivetrain, 
         () -> this.driver.getY(Hand.kLeft), 
         () -> this.driver.getX(Hand.kRight)
       )
     );
-
-    var buttonBumperRight = new JoystickButton(this.driver, Button.kBumperRight.value);
-    
-    buttonBumperRight
-      .whileHeld(new AimTarget(this.drivetrain));
   }
 
   public Command getAutonomousCommand() {
