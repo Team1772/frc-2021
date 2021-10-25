@@ -10,7 +10,7 @@ public final class Constants {
 			motorLeftPort = new int[] { 2, 3 };
 
 		public static final boolean[]
-			isMotorsInverted = new boolean[] { true, true };
+			isMotorsInverted = new boolean[] { false, false };
 
 		//encoders
 		public static final int[]
@@ -18,7 +18,7 @@ public final class Constants {
 			encoderLeftPort = new int[] { 8, 9 };
 
 		public static final boolean[]
-			isEcondersInverted = new boolean[] { true, true };
+			isEcondersInverted = new boolean[] { false, true };
 
 		public static final int 
 			pulsesRight = 498,
@@ -30,10 +30,10 @@ public final class Constants {
 
 		//voltageConstraint
 		public static final double 
-			ksVolts = 0.976, //kS
-			kvVoltSecondsPerMeter = 2.21, //kV
-			kaVoltSecondsSquaredPerMeter = 0.726, //kA
-			kTrackwidthMeters = 2.81,
+			ksVolts = 0.88, //kS
+			kvVoltSecondsPerMeter = 3.5, //kV
+			kaVoltSecondsSquaredPerMeter = 0.387, //kA
+			kTrackwidthMeters = 2.28,
 			differentialDriveVoltageConstraintMaxVoltage = 10;
 
 		public static final DifferentialDriveKinematics

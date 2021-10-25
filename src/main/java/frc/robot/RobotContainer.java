@@ -12,6 +12,9 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.intake.CollectPowerCell;
 import frc.robot.commands.intake.ReleasePowerCell;
 import frc.robot.commands.autons.GalacticA;
+import frc.robot.commands.autons.PercursoA;
+import frc.robot.commands.autons.PercursoB;
+import frc.robot.commands.autons.PercursoC;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.CurvatureDrive;
 import frc.robot.subsystems.Drivetrain;
@@ -33,7 +36,11 @@ public class RobotContainer {
 
     this.trajectoryBuilder = new TrajectoryBuilder(
       this.drivetrain, 
-      "test"
+      "test",
+      "test2",
+      "percurso-a",
+      "percurso-b",
+      "percurso-c"
     );
 
     this.configureButtonBindings();
@@ -53,16 +60,16 @@ public class RobotContainer {
     this.configureButtonBindingsDrivetrain();
   }
 
-  private void configureButtonBindingsIntake() {
-    var buttonBumperRight = new JoystickButton(this.driver, Button.kBumperRight.value);
-    var axisTriggerRight = new JoystickButton(this.driver, Axis.kRightTrigger.value);
+   private void configureButtonBindingsIntake() {
+     var buttonBumperRight = new JoystickButton(this.driver, Button.kBumperRight.value);
+     var axisTriggerRight = new JoystickButton(this.driver, Axis.kRightTrigger.value);
 
-    buttonBumperRight
-      .whileHeld(new CollectPowerCell(this.intake));
+     buttonBumperRight
+       .whileHeld(new CollectPowerCell(this.intake));
     
-    axisTriggerRight
-      .whileHeld(new ReleasePowerCell(this.intake));
-  }
+     axisTriggerRight
+       .whileHeld(new ReleasePowerCell(this.intake));
+   }
 
   public void configureButtonBindingsDrivetrain() {
     var buttonBumperLeft = new JoystickButton(this.driver, Button.kBumperLeft.value);
@@ -85,7 +92,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new GalacticA(this.trajectoryBuilder);
+    return new PercursoC(this.trajectoryBuilder);
   }
   
   public void reset() {

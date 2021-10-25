@@ -3,11 +3,12 @@ package frc.robot.commands.autons;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.core.util.TrajectoryBuilder;
 
-public class GalacticA extends ParallelCommandGroup {
+public class PercursoA extends ParallelCommandGroup {
 
-  public GalacticA(TrajectoryBuilder trajectoryBuilder) {
+  public PercursoA(TrajectoryBuilder trajectoryBuilder) {
     super.addCommands(
-      trajectoryBuilder.build("test2")
+      trajectoryBuilder.build("percurso-a")
     );
   }
 }
+

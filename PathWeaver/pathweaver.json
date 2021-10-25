@@ -1,9 +1,9 @@
 {
   "lengthUnit": "Meter",
   "exportUnit": "Always Meters",
-  "maxVelocity": 1.5,
-  "maxAcceleration": 1.5,
-  "trackWidth": 0.585,
-  "gameName": "Barrel Racing Path",
+  "maxVelocity": 3.3,
+  "maxAcceleration": 3.3,
+  "wheelBase": 0.585,
+  "gameName": "OFF-SEASON: Percurso C",
   "outputDir": "../src/main/deploy/paths"
 }
