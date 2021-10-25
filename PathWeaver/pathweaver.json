@@ -3,7 +3,7 @@
   "exportUnit": "Always Meters",
   "maxVelocity": 3.3,
   "maxAcceleration": 3.3,
-  "wheelBase": 0.585,
-  "gameName": "OFF-SEASON: Percurso C",
+  "trackWidth": 0.585,
+  "gameName": "OFF-SEASON: Percurso A",
   "outputDir": "../src/main/deploy/paths"
 }
