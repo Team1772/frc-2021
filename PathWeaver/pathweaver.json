@@ -1,9 +1,9 @@
 {
   "lengthUnit": "Meter",
   "exportUnit": "Always Meters",
-  "maxVelocity": 3.3,
-  "maxAcceleration": 3.3,
+  "maxVelocity": 1.5,
+  "maxAcceleration": 1.5,
   "trackWidth": 0.585,
-  "gameName": "OFF-SEASON: Percurso A",
+  "gameName": "Galactic Search A",
   "outputDir": "../src/main/deploy/paths"
 }
