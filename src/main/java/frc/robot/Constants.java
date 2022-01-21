@@ -137,4 +137,10 @@ public final class Constants {
 			public static final double kP = 0;
 		}
 	}
+
+	public static final class FieldConstants {
+		public static final String
+			red = "red",
+			blue = "blue";
+	}
 }

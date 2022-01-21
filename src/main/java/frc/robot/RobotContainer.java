@@ -1,3 +1,4 @@
+
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -47,11 +48,13 @@ public class RobotContainer {
 
     this.trajectoryBuilder = new TrajectoryBuilder(
       this.drivetrain, 
-      "autoAwards"
+      "autoAwards",
       // "barrel",
       // "slalom", 
-      // "galacticA",
-      // "galacticB",
+      "galacticA_red"
+      // "galacticA_blue",
+      // "galacticB_red",
+      // "galacticB_blue",
       // "bounce"
     );
 
@@ -126,7 +129,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new GalacticA(this.trajectoryBuilder);
+    return new GalacticA(this.trajectoryBuilder, this.buffer, this.intake);
   }
   
   public void reset() {
